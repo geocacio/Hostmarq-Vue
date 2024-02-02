@@ -111,7 +111,11 @@ const dropdownOptions = [
             <div class="body-content">
 
                 <div class="card">
-                    <InputComponent type="text" placeholder="Search" />
+                    <div class="row mt-5">
+                        <div class="col-6">
+                            <InputComponent type="text" placeholder="Search" />
+                        </div>
+                    </div>
                 </div>
 
             </div>
