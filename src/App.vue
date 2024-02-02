@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import IconComponent from './components/IconComponent.vue';
 </script>
 
 <template>
@@ -11,7 +11,7 @@ import HelloWorld from './components/HelloWorld.vue'
             <div class="header-sidebar">
                 <div class="logo"></div>
                 <button class="toggle-menu">
-                    <i class="bx bx-home-alt"></i>
+                    <IconComponent name="arrow-left" />
                 </button>
             </div>
 
