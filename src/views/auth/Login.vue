@@ -26,6 +26,8 @@
 </template>
 
 <script setup lang="ts">
+import DropdownComponent from '@/components/DropdownComponent.vue';
 import InputComponent from '@/components/form/InputComponent.vue';
 import LabelComponent from '@/components/form/LabelComponent.vue';
+
 </script>
