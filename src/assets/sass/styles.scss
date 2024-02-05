@@ -90,6 +90,14 @@ a{
                                 text-decoration: none;
                                 background: rgb(255 255 255 / 12%);
                             }
+                            .nav-text{
+                                display: none;
+                            }
+                            &.dropdown-toggle{
+                                &:after{
+                                    display: none;
+                                }
+                            }
                         }
                         &.dropdown{
                             .dropdown-menu{
@@ -100,8 +108,15 @@ a{
                                 transform: none!important;
                                 .dropdown-item{
                                     margin-bottom: 10px;
+                                    padding: 0;
+                                    display: none;
                                     &:last-child{
                                         margin-bottom: 0;
+                                    }
+                                    &:hover{
+                                        color: #fff;
+                                        text-decoration: none;
+                                        background: rgb(255 255 255 / 12%);
                                     }
                                     .dropdown-link{
                                         position: relative;
@@ -126,7 +141,7 @@ a{
                                         }
                                         &::before{
                                             content: '';
-                                            display: block;
+                                            display: none;
                                             width: 10px;
                                             height: 10px;
                                             border-radius: 50%;
@@ -138,6 +153,7 @@ a{
                         }
                     }
                     .nav-item-label{
+                        display: none;
                         padding: 20px 15px 10px 5px;
                         color: #b0afaf;
                         text-transform: uppercase;
@@ -146,6 +162,42 @@ a{
                     }
                 }
             }
+        }
+        &.show{
+            .main-menu{
+                .nav-menu{
+                    .nav-item{
+                        .nav-link{
+                            .nav-text{
+                                display: block;
+                            }
+                            &.dropdown-toggle{
+                                &:after{
+                                    display: block;
+                                }
+                            }
+                        }
+                        &.dropdown{
+                            .dropdown-menu{
+                                .dropdown-item{
+                                    display: block;
+                                    padding: 0.25rem 1rem;
+                                    .dropdown-link{
+                                        &:hover{
+                                            background-color: transparent;
+                                            color: inherit;
+                                        }
+                                        &:before{
+                                            display: block;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        
         }
     }
     .main-content{

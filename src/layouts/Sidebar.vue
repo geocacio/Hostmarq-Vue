@@ -1,9 +1,9 @@
 <template>
-    <div class="sidebar" :class="{ 'show': isOpen }">
+    <div class="sidebar" :class="{ 'show': shouldShowMenu() }" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
 
         <div class="header-sidebar">
             <div class="logo">
-                <img src="./assets/images/logo_small.png" alt="logo" />
+                <img src="@/assets/images/logo_small.png" alt="logo" />
             </div>
             <button class="toggle-menu" @click="isOpen = !isOpen">
                 <IconComponent name="arrow-left" />
@@ -81,6 +81,16 @@ import IconComponent from '@/components/IconComponent.vue';
 import { ref } from 'vue';
 
 const isOpen = ref(true);
+const isHovered = ref(false);
 
+const handleMouseEnter = () => {
+    isHovered.value = true;
+};
+
+const handleMouseLeave = () => {
+    isHovered.value = false;
+};
+
+const shouldShowMenu = () => isOpen.value || (!isOpen.value && isHovered.value);
 
 </script>
