@@ -68,9 +68,19 @@
                 </tbody>
             </table>
         </div>
+
+        <div class="table-footer">
+            <PaginationComponent :totalPages="10" :currentPage="1" />
+        </div>
     </div>
 </template>
 <script setup lang="ts">
 import ButtonComponent from './ButtonComponent.vue';
 import IconComponent from './IconComponent.vue';
+import PaginationComponent from './PaginationComponent.vue';
+import { ref } from 'vue';
+
+const totalPages = ref(10);
+const currentPage = ref(1);
+
 </script>

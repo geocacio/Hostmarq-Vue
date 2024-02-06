@@ -530,3 +530,31 @@ a{
         }
     }
 }
+
+.pagination-default{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    .btn-pagination{
+        width: 42px;
+        height: 42px;
+        display: flex;
+        align-items: center;
+        color: #6b7280;
+        justify-content: center;
+        border-radius: 50%;
+        background-color: transparent;
+        border: none;
+        margin: 0.143rem;
+        transition: box-shadow 0.2s;
+        &:hover{
+            background-color: #f3f4f6;
+        }
+        &.active{
+            background-color: #172b4d;
+            border-color: #172b4d;
+            color: #fff;
+        }
+    }
+}
