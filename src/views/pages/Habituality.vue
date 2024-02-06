@@ -1,12 +1,14 @@
 <template>
     <div class="card">
         <div class="row mt-5">
-            <div class="col-6">
-                <InputComponent type="text" placeholder="Search" />
+            <div class="col-12">
+                <TableComponent />
             </div>
         </div>
 
     </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import TableComponent from '@/components/TableComponent.vue'
+</script>

@@ -1,17 +1,19 @@
 <template>
-    <button type="button" class="btn" :class="`btn-${type}`">
-        <i :class="icon" v-if="icon"></i>
-        {{ text ?? '' }}
-    </button>
+    <button type="button" class="btn btn-component" :class="buttonClass">
+    <IconComponent class="svg" :name="icon ?? ''" />
+    {{ text ?? '' }}
+</button>
 </template>
 
 <script setup lang="ts">
     import { defineProps } from 'vue'
+    import IconComponent from './IconComponent.vue'
 
     const props = defineProps({
-        type: String,
+        buttonClass: String,
         text: String,
-        icon: String
+        icon: String,
+        light: Boolean
     });
     
 </script>
