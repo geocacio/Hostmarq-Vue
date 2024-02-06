@@ -1,3 +1,9 @@
+//Importar a font roboto que está em src/assets/fonts
+@font-face {
+    font-family: 'Roboto';
+    src: url('../fonts/Roboto/Roboto-Regular.ttf') format('truetype');
+}
+
 :root{
     --semi-dark: #12181a;
     --semi-light: #F0F3F8;
@@ -7,5 +13,6 @@
     --font-roboto: 'Roboto', sans-serif;
     --quick-silver: #9ea4aa;
     --dark-taupe: #413c3c;
+    --font-roboto: 'Roboto', sans-serif;
 }
 

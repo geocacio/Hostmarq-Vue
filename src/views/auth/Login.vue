@@ -9,15 +9,29 @@
                         <span class="description">Por favor faça login na sua conta</span>
                     </div>
                     <div class="form-body">
-                        <div class="form-group mb-4">
+                        <div class="mb-3">
                             <LabelComponent text="Usuário" />
                             <InputComponent type="text" placeholder="Usuário" />
                         </div>
 
-                        <div class="form-group">
+                        <div class="mb-3">
                             <LabelComponent text="Senha" />
                             <InputComponent type="password" placeholder="Senha" />
                         </div>
+
+                        <div class="mb-3 flex-horizontal">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                                <label class="form-check-label" for="flexSwitchCheckDefault">Manter conectado</label>
+                            </div>
+
+                            <a href="#" class="forgot-password text-primary">Esqueceu a senha?</a>
+                        </div>
+
+                        <div class="mb-3">
+                            <button class="btn btn-primary w-100">Login</button>
+                        </div>
+
                     </div>
                 </div>
             </div>
