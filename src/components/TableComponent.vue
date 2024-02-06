@@ -33,6 +33,7 @@
                             <ButtonComponent buttonClass="light blue" icon="edit" />
                             <ButtonComponent buttonClass="light orange" icon="eye" />
                             <ButtonComponent buttonClass="light red" icon="trash" />
+                            <ButtonComponent buttonClass="light green" icon="settings" />
                         </td>
                     </tr>
                     <tr>
@@ -48,6 +49,7 @@
                             <ButtonComponent buttonClass="light blue" icon="edit" />
                             <ButtonComponent buttonClass="light orange" icon="eye" />
                             <ButtonComponent buttonClass="light red" icon="trash" />
+                            <ButtonComponent buttonClass="light green" icon="settings" />
                         </td>
                     </tr>
                     <tr>
@@ -63,6 +65,7 @@
                             <ButtonComponent buttonClass="light blue" icon="edit" />
                             <ButtonComponent buttonClass="light orange" icon="eye" />
                             <ButtonComponent buttonClass="light red" icon="trash" />
+                            <ButtonComponent buttonClass="light green" icon="settings" />
                         </td>
                     </tr>
                 </tbody>
