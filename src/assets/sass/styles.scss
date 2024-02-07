@@ -26,10 +26,12 @@ a{
         flex: 1;
         &.show{
             max-width: 250px;
+            left: 0;
         }
         background-color: var(--semi-dark);
         border-right: 1px solid #e4e4e400;
         box-shadow: 0 0.1rem 0.7rem rgb(0 0 0 / 32%);
+        width: 100%;
         max-width: 61px;
         z-index: 996;
         transition: all 0.3s;
@@ -37,7 +39,12 @@ a{
         scrollbar-width: thin;
         scrollbar-color: #aab7cf transparent;
         height: 100vh;
-        @media screen and (min-width: 1200px) {
+        //style for mobile
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: -300px;
+        @media screen and (min-width: 992px) {
             left: 0px;
         }
         .header-sidebar{

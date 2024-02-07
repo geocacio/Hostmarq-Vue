@@ -78,9 +78,9 @@
 
 <script setup lang="ts">
 import IconComponent from '@/components/IconComponent.vue';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
-const isOpen = ref(true);
+const isOpen = ref(false);
 const isHovered = ref(false);
 
 const handleMouseEnter = () => {
@@ -92,5 +92,12 @@ const handleMouseLeave = () => {
 };
 
 const shouldShowMenu = () => isOpen.value || (!isOpen.value && isHovered.value);
+
+onMounted(() => {
+    // if (window.innerWidth < 992) {
+    //     isOpen.value = false;
+    // }
+    isOpen.value = window.innerWidth > 992 ? true : false;
+});
 
 </script>
