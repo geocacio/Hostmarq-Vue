@@ -1,4 +1,7 @@
 <template>
+
+    <ModalComponent />
+
     <div class="row row-gap-15">
 
         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
@@ -243,5 +246,6 @@
 <script setup lang="ts">
 import ButtonComponent from '@/components/ButtonComponent.vue';
 import IconComponent from '@/components/IconComponent.vue';
+import ModalComponent from '@/components/ModalComponent.vue';
 import TableComponent from '@/components/TableComponent.vue'
 </script>

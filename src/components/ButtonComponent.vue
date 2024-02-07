@@ -1,5 +1,5 @@
 <template>
-    <button type="button" class="btn btn-component" :class="buttonClass">
+    <button type="button" class="btn btn-component" :class="buttonClass" :title="title">
     <IconComponent class="svg" :name="icon ?? ''" />
     {{ text ?? '' }}
 </button>
@@ -13,7 +13,8 @@
         buttonClass: String,
         text: String,
         icon: String,
-        light: Boolean
+        light: Boolean,
+        title: String,
     });
     
 </script>

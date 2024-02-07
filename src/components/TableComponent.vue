@@ -72,9 +72,9 @@
             </table>
         </div>
 
-        <div class="table-footer">
-            <PaginationComponent :totalPages="10" :currentPage="1" />
-        </div>
+        <!-- <div class="table-footer">
+            <PaginationComponent :totalPages="5" :currentPage="1" />
+        </div> -->
     </div>
 </template>
 <script setup lang="ts">

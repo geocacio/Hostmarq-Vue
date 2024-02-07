@@ -590,6 +590,12 @@ a{
             display: block;
         }
     }
+    &.person-modal{
+        padding: 0;
+        border: none;
+        border-bottom: 1px solid #dee2e6;
+        border-radius: 0;
+    }
 }
 
 .bg-facebook{
@@ -626,4 +632,20 @@ a{
 
 .row-gap-15{
     row-gap: 15px;
+}
+
+.modal-default{
+    .modal-dialog{
+        .modal-content{
+            background-color: #f8f9fe;
+        }
+    }
+}
+
+.person-actions-menu{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 15px;
 }
