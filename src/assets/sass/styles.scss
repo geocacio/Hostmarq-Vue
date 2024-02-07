@@ -221,8 +221,11 @@ a{
     box-shadow: 0 0 2rem 0 rgba(136, 152, 170, 0.15);
     display: flex;
     align-items: center;
-    justify-content: flex-end;
     padding: 0 15px;
+    justify-content: space-between;
+    @media screen and (min-width: 992px) {
+        justify-content: flex-end;
+    }
 }
 
 .body-content{
@@ -276,7 +279,18 @@ a{
         height: 40px;
         border-radius: 100px;
         object-fit: cover;
-        margin-right: 10px;
+        @media screen and (min-width: 992px){
+            margin-right: 10px;
+        }
+    }
+    &::after{
+        display: none;
+    }
+    .text{
+        display: none;
+        @media screen and (min-width: 992px) {
+            display: block;
+        }
     }
     &:hover, &:active{
         color: var(--dark-taupe);
@@ -655,4 +669,12 @@ a{
     align-items: center;
     justify-content: flex-start;
     gap: 15px;
+}
+
+.toggle-menu-mobile{
+    display: block;
+    border: none!important;
+    @media screen and (min-width: 992px) {
+        display: none;
+    }
 }

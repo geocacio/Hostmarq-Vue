@@ -1,13 +1,10 @@
 <template>
     <div class="wrapper">
-        <Sidebar />
+        <Sidebar :openSidebar="openSidebar" />
 
         <div class="main-content">
 
-            <header class="header-top">
-                <DropdownComponent :options="dropdownOptions"
-                    image="https://sistema.hostmarq.com.br//fotos/07032023_foto3.PNG" text="Magno Carlos" />
-            </header>
+            <Header @toggleMenu="openSidebar = $event" />
 
             <div class="body-content">
 
@@ -21,26 +18,11 @@
 </template>
 
 <script setup lang="ts">
+import Header from '@/layouts/Header.vue';
 import Sidebar from '@/layouts/Sidebar.vue';
 import Footer from '@/layouts/Footer.vue';
-import DropdownComponent from '@/components/DropdownComponent.vue';
+import { ref } from 'vue';
 
-const dropdownOptions = [
-    {
-        text: 'Profile',
-        icon: 'fa-regular fa-user',
-        type: 'link',
-        url: '#'
-    },
-    {
-        text: 'Settings',
-        type: 'link',
-        url: '#'
-    },
-    {
-        text: 'Logout',
-        icon: 'fa-solid fa-right-from-bracket',
-        type: 'button'
-    },
-];
+const openSidebar = ref(false);
+
 </script>

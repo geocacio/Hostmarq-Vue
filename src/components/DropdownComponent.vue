@@ -4,7 +4,7 @@
             aria-expanded="false">
             <i :class="icon" v-if="icon"></i>
             <img v-if="image" :src="image" class="img-fluid" />
-            {{ text ?? '' }}
+            <span class="text">{{ text ?? '' }}</span>
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
             <template v-for="(item, index) in options" :key="index">

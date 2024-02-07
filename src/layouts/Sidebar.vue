@@ -78,7 +78,15 @@
 
 <script setup lang="ts">
 import IconComponent from '@/components/IconComponent.vue';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, defineProps, watch } from 'vue';
+
+const props = defineProps({
+    openSidebar: Boolean
+});
+
+watch(() => props.openSidebar, (value) => {
+    isOpen.value = true;
+});
 
 const isOpen = ref(false);
 const isHovered = ref(false);
@@ -94,9 +102,6 @@ const handleMouseLeave = () => {
 const shouldShowMenu = () => isOpen.value || (!isOpen.value && isHovered.value);
 
 onMounted(() => {
-    // if (window.innerWidth < 992) {
-    //     isOpen.value = false;
-    // }
     isOpen.value = window.innerWidth > 992 ? true : false;
 });
 
