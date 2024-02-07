@@ -558,3 +558,72 @@ a{
         }
     }
 }
+
+.person-item{
+    border: 1px solid #dee2e6;
+    border-radius: 15px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    .avatar{
+        box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+        width: 110px;
+        object-fit: cover;
+        height: 110px;
+        border-radius: 50%;
+    }
+    .person-info{
+        .name{
+            font-size: 1.25rem;
+            font-weight: 500;
+            line-height: 1.2;
+            color: var(--blue);
+            text-align: center;
+        }
+        .description{
+            font-size: 0.875rem;
+            letter-spacing: .5px;
+            color: var(--gray);
+            text-align: center;
+            display: block;
+        }
+    }
+}
+
+.bg-facebook{
+    background-color: #3b5998;
+}
+
+.bg-twitter{
+    background-color: #1da1f2;
+}
+
+.bg-instagram{
+    background-color: #c32aa3;
+}
+
+.social-networks{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    .social-network{
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        color: #fff;
+        transition: all 0.3s;
+        &:hover{
+            opacity: 0.8;
+        }
+    }
+}
+
+.row-gap-15{
+    row-gap: 15px;
+}
