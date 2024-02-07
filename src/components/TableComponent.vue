@@ -80,7 +80,7 @@
 <script setup lang="ts">
 import ButtonComponent from './ButtonComponent.vue';
 import IconComponent from './IconComponent.vue';
-import PaginationComponent from './PaginationComponent.vue';
+// import PaginationComponent from './PaginationComponent.vue';
 import { ref } from 'vue';
 
 const totalPages = ref(10);

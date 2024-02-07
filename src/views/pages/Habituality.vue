@@ -230,7 +230,9 @@
 
     </div>
 
-    <div class="card">
+    <PaginationComponent class="mt-5" :totalPages="5" :currentPage="1" />
+
+    <!-- <div class="card">
         <div class="row mt-5">
             <div class="col-3">
 
@@ -240,12 +242,18 @@
             </div>
         </div>
 
-    </div>
+    </div> -->
 </template>
 
 <script setup lang="ts">
 import ButtonComponent from '@/components/ButtonComponent.vue';
 import IconComponent from '@/components/IconComponent.vue';
 import ModalComponent from '@/components/ModalComponent.vue';
-import TableComponent from '@/components/TableComponent.vue'
+import PaginationComponent from '@/components/PaginationComponent.vue';
+// import TableComponent from '@/components/TableComponent.vue'
+import { ref } from 'vue';
+
+const totalPages = ref(10);
+const currentPage = ref(1);
+
 </script>

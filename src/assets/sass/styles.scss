@@ -45,7 +45,8 @@ a{
         bottom: 0;
         left: -300px;
         @media screen and (min-width: 992px) {
-            left: 0px;
+            position: relative;
+            left: 0;
         }
         .header-sidebar{
             border-bottom: 1px solid rgb(255 255 255 / 15%);
@@ -455,10 +456,9 @@ a{
                 color: #4b5563;
             }
             .td-actions{
-                display: flex;
-                align-items: center;
-                justify-content: flex-start;
-                gap: 10px;
+                .btn{
+                    margin: 0.25rem;
+                }
             }
         }
     }
