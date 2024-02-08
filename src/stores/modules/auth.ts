@@ -8,10 +8,10 @@ const router = useRouter();
 export const useAuthStore = defineStore({
   id: "auth",
 
-  state: (): Auth => ({
-    token: localStorage.getItem("authToken") || null,
-    user: JSON.parse(localStorage.getItem("userData") || null),
-  }),
+state: (): Auth => ({
+    token: localStorage.getItem("authToken") || "",
+    user: JSON.parse(localStorage.getItem("userData") ?? ""),
+}),
 
   getters: {
     isAuthenticated: (state) => !!state.token,
@@ -21,11 +21,11 @@ export const useAuthStore = defineStore({
 
     setToken(token: string | null) {
       localStorage.setItem("authToken", token || "");
-      this.token = localStorage.getItem("authToken") || null;
+      this.token = localStorage.getItem("authToken") || "";
     },
 
     logout() {
-      this.token = null;
+      this.token = "";
       this.user = null;
       localStorage.removeItem("userData");
       localStorage.removeItem("authToken");

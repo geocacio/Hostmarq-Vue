@@ -1,4 +1,4 @@
 export interface Auth{
-    token:      string | null;
+    token:      string;
     user:       object | null;
 }
