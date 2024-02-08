@@ -1,12 +1,6 @@
 <template>
 
-    <div class="breadcrumb-container">
-        <h3 class="title">Habitualidades</h3>
-        <ul class="breadcrumb">
-            <li class="item"><a href="#" class="link">Dashboard</a></li>
-            <li class="item">Habitualidades</li>
-        </ul>
-    </div>
+    <BreadcrumbComponent title="Habitualidade" />
 
     <div class="dashboard-header flex-horizontal">
         <div class="search-container">
@@ -30,6 +24,7 @@
 </template>
 
 <script setup lang="ts">
+import BreadcrumbComponent from '@/components/BreadcrumbComponent.vue';
 import ButtonComponent from '@/components/ButtonComponent.vue';
 import PaginationComponent from '@/components/PaginationComponent.vue';
 import PersonComponent from '@/components/PersonComponent.vue';
