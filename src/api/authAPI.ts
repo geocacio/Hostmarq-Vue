@@ -1,8 +1,7 @@
 import axios from "axios";
-import { BASE_URL } from "@/config";
 
 const authAPI = axios.create({
-  baseURL: BASE_URL,
+  baseURL: import.meta.env.VITE_BASE_URL || "http://127.0.0.1:8000/api",
 });
 
 export const login = async (email: string, password: string) => {

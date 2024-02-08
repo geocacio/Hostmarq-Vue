@@ -11,7 +11,7 @@
                     <div class="form-body needs-validation">
                         <div class="mb-3">
                             <LabelComponent text="Usuário" />
-                            <InputComponent type="text" placeholder="Usuário" v-model="form.username" :validation="true" :error="errors.username" :error-message="'Por favor, insira um nome de usuário.'" @input="errors.username = false" />
+                            <InputComponent type="text" placeholder="Usuário" v-model="form.email" :validation="true" :error="errors.email" :error-message="'Por favor, insira um nome de usuário.'" @input="errors.email = false" />
                         </div>
 
                         <div class="mb-3">
@@ -44,28 +44,31 @@ import InputComponent from '@/components/form/InputComponent.vue';
 import LabelComponent from '@/components/form/LabelComponent.vue';
 import PasswordComponent from '@/components/form/PasswordComponent.vue';
 import { ref, reactive } from 'vue';
+import { useAuthStore } from '@/stores/modules/auth';
+
+const authStore = useAuthStore();
 
 const form = reactive({
-    username: '',
+    email: '',
     password: '',
 });
 
 const errors = reactive({
-    username: false,
+    email: false,
     password: false,
 });
 
 const validateForm = () => {
-    errors.username = !form.username;
+    errors.email = !form.email;
     errors.password = !form.password;
 
-    return !errors.username && !errors.password;
+    return !errors.email && !errors.password;
 };
 
-const submit = () => {
+const submit = async () => {
 
     if (validateForm()) {
-        console.log('deu boa')
+        const result = await authStore.login(form.email, form.password);
     }
 };
 

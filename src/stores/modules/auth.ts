@@ -1,6 +1,9 @@
 import type { Auth } from "@/types/authType";
 import { defineStore } from "pinia";
 import { login } from "@/api/authAPI";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 export const useAuthStore = defineStore({
   id: "auth",
@@ -26,7 +29,8 @@ export const useAuthStore = defineStore({
       this.user = null;
       localStorage.removeItem("userData");
       localStorage.removeItem("authToken");
-      return true;
+
+      router.push({ name: "Login" });
     },
     
     async login(email: string, password: string) {
@@ -36,7 +40,8 @@ export const useAuthStore = defineStore({
             this.setToken(token);
             localStorage.setItem("userData", JSON.stringify(response.user));
             this.user = response.user;
-            return "ok";
+
+            router.push({ name: "Dashboard" });
         } catch (error) {
             return error;
         }

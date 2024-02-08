@@ -12,6 +12,9 @@
 import ButtonComponent from '@/components/ButtonComponent.vue';
 import DropdownComponent from '@/components/DropdownComponent.vue';
 import { defineEmits, ref } from 'vue';
+import { useAuthStore } from '@/stores/modules/auth';
+
+const auth = useAuthStore();
 
 const dropdownOptions = [
     {
@@ -28,7 +31,10 @@ const dropdownOptions = [
     {
         text: 'Logout',
         icon: 'fa-solid fa-right-from-bracket',
-        type: 'button'
+        type: 'button',
+        action: () => {
+            auth.logout();
+        }
     },
 ];
 
