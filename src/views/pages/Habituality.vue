@@ -1,5 +1,21 @@
 <template>
-    <!-- <ModalComponent /> -->
+
+    <div class="breadcrumb-container">
+        <h3 class="title">Habitualidades</h3>
+        <ul class="breadcrumb">
+            <li class="item"><a href="#" class="link">Dashboard</a></li>
+            <li class="item">Habitualidades</li>
+        </ul>
+    </div>
+
+    <div class="dashboard-header flex-horizontal">
+        <div class="search-container">
+            <InputComponent type="text" placeholder="Pesquisar" />
+        </div>
+        <div class="dashboard-actions">
+            <ButtonComponent buttonClass="dark-blue" text="Novo" />
+        </div>
+    </div>
 
     <div class="row row-gap-15">
 
@@ -14,10 +30,10 @@
 </template>
 
 <script setup lang="ts">
-// import ModalComponent from '@/components/ModalComponent.vue';
+import ButtonComponent from '@/components/ButtonComponent.vue';
 import PaginationComponent from '@/components/PaginationComponent.vue';
 import PersonComponent from '@/components/PersonComponent.vue';
-// import TableComponent from '@/components/TableComponent.vue'
+import InputComponent from '@/components/form/InputComponent.vue';
 import { ref } from 'vue';
 
 const totalPages = ref(10);
