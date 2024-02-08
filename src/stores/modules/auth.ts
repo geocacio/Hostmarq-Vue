@@ -3,15 +3,13 @@ import { defineStore } from "pinia";
 import { login } from "@/api/authAPI";
 import { useRouter } from "vue-router";
 
-const router = useRouter();
-
 export const useAuthStore = defineStore({
   id: "auth",
 
 state: (): Auth => ({
     token: localStorage.getItem("authToken") || "",
-    user: JSON.parse(localStorage.getItem("userData") ?? ""),
-}),
+    user: localStorage.getItem("userData") ? JSON.parse(localStorage.getItem("userData")!) : "",
+  }),
 
   getters: {
     isAuthenticated: (state) => !!state.token,
@@ -30,7 +28,8 @@ state: (): Auth => ({
       localStorage.removeItem("userData");
       localStorage.removeItem("authToken");
 
-      router.push({ name: "Login" });
+      const router = useRouter();
+      router.push({ path: "login" });
     },
     
     async login(email: string, password: string) {
@@ -41,6 +40,7 @@ state: (): Auth => ({
             localStorage.setItem("userData", JSON.stringify(response.user));
             this.user = response.user;
 
+            const router = useRouter();
             router.push({ name: "Dashboard" });
         } catch (error) {
             return error;

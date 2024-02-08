@@ -12,7 +12,7 @@
                     <i :class="item.icon" v-if="item.icon"></i>
                     {{ item.text }}
                 </router-link>
-                <button class="dropdown-item" v-else>
+                <button class="dropdown-item" v-else @click="item.action">
                     <i :class="item.icon" v-if="item.icon"></i>
                     {{ item.text }}
                 </button>

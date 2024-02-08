@@ -6,4 +6,5 @@ export interface Dropdown{
     text?:      string;
     count?:     number;
     isOpen?: boolean;
+    action?: () => void;
 }
