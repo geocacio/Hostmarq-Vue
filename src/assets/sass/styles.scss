@@ -565,12 +565,13 @@ a{
         color: #6b7280;
         justify-content: center;
         border-radius: 50%;
-        background-color: transparent;
+        background-color: #fff;
         border: none;
         margin: 0.143rem;
         transition: box-shadow 0.2s;
         &:hover{
-            background-color: #f3f4f6;
+            background-color: #172b4d;
+            color: #fff;
         }
         &.active{
             background-color: #172b4d;

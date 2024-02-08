@@ -10,7 +10,7 @@
 
             <div class="social-networks mt-3 mb-3">
                 <template v-for="(media, index) in data?.social_networks" :key="index">
-                    <a :href="media.url" :class="`social-network bg-${media.name.toLowerCase()}`">
+                    <a :href="media.url" target="_blank" :class="`social-network bg-${media.name.toLowerCase()}`">
                         <IconComponent :name="media.name.toLowerCase()" />
                     </a>
                 </template>
