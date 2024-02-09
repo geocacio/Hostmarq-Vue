@@ -1,7 +1,7 @@
 <template>
     <div class="input-group">
         <input :type="currentType" class="form-control" :value="modelValue"
-            @input="updateValue(($event.target as HTMLInputElement)?.value)" :placeholder="placeholder" :required="required"
+            @input="updateValue(($event.target as HTMLInputElement)?.value)" @keypress="$emit('keypress', $event)" :placeholder="placeholder" :required="required"
             :disabled="disabled" />
         <button class="btn" type="button" @click.prevent="togglePasswordVisibility">
             <IconComponent :name="currentIcon" />
@@ -30,7 +30,7 @@ const props = defineProps({
     errorMessage: String,
 });
 
-const emit = defineEmits(['update:modelValue', 'update:error', 'input']);
+const emit = defineEmits(['update:modelValue', 'update:error', 'input', 'keypress']);
 
 const updateValue = (value: string) => {
     emit('update:modelValue', value);

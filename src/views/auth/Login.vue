@@ -16,7 +16,7 @@
 
                         <div class="mb-3">
                             <LabelComponent text="Senha" />
-                            <PasswordComponent v-model="form.password" placeholder="Senha" :validation="true" :error="errors.password" :error-message="'Por favor, insira sua senha.'" @input="errors.password = false" />
+                            <PasswordComponent v-model="form.password" placeholder="Senha" @keypress.enter="submit" :validation="true" :error="errors.password" :error-message="'Por favor, insira sua senha.'" @input="errors.password = false" />
                         </div>
 
                         <div class="mb-3 flex-horizontal">
@@ -69,7 +69,7 @@ const validateForm = () => {
 };
 
 const submit = async () => {
-
+    
     if (validateForm()) {
         const result = await authStore.login(form.email, form.password);
 
