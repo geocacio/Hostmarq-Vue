@@ -4,17 +4,17 @@
 
     <TableComponent class="mt-5" :data="user" />
 
-    <PaginationComponent class="mt-5" :totalPages="2" :currentPage="1" />
+    <!-- <PaginationComponent class="mt-5" :totalPages="2" :currentPage="1" /> -->
 
 </template>
 
 <script setup lang="ts">
 import BreadcrumbComponent from '@/components/BreadcrumbComponent.vue';
-import PaginationComponent from '@/components/PaginationComponent.vue';
+// import PaginationComponent from '@/components/PaginationComponent.vue';
 import TableComponent from '@/components/TableComponent.vue';
 import { ref } from 'vue';
 
-const totalPages = ref(2);
+const totalPages = ref(1);
 const currentPage = ref(1);
 
 const user = [

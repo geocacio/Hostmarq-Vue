@@ -10,8 +10,8 @@ export const useAuthStore = defineStore({
 state: (): Auth => ({
     token: localStorage.getItem("authToken") || "",
     user: localStorage.getItem("userData") ? JSON.parse(localStorage.getItem("userData")!) : "",
-    userRoles: [],
-    userPermissions: [],
+    userRoles: localStorage.getItem("userRoles") ? JSON.parse(localStorage.getItem("userRoles")!) : [],
+    userPermissions: localStorage.getItem("userPermissions") ? JSON.parse(localStorage.getItem("userPermissions")!) : [],
   }),
 
   getters: {
@@ -47,6 +47,10 @@ state: (): Auth => ({
             // Extrair roles e permissões do usuário
             this.userRoles = response.user.roles.map((role: Role) => role.name);
             this.userPermissions = response.user.roles.flatMap((role: Role) => role.permissions.map((permission: Permission) => permission.name));
+
+            // Armazenar roles e permissões do usuário no localStorage
+            localStorage.setItem("userRoles", JSON.stringify(this.userRoles));
+            localStorage.setItem("userPermissions", JSON.stringify(this.userPermissions));
 
             return true
         } catch (error) {
