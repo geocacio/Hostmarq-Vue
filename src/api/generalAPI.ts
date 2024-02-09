@@ -3,18 +3,18 @@ import { useToast } from 'vue-toastification'
 
 const toast = useToast()
 
-export const getAll = async (url: string) => {
+export const index = async (url: string) => {
     try{
-        const response = await axiosInstance.get(`/api/companies/${url}`);
+        const response = await axiosInstance.get(`/api/${url}`);
         return response.data;
     }catch(error){
         throw error;
     }
 };
 
-export const create = async (url: string, TypeData: any) => {
+export const store = async (url: string, TypeData: any) => {
     try {
-        let link = url != '' ? `/api/companies/${url}` : `/api/companies`;
+        let link = url != '' ? `/api/${url}` : `/api`;
         const response = await axiosInstance.post(link, TypeData);
 
         if(response.data.success){
@@ -30,7 +30,7 @@ export const create = async (url: string, TypeData: any) => {
 
 export const update = async (url: string, updatedData: any) => {
     try {
-        const response = await axiosInstance.put(`/api/companies/${url}`, updatedData);
+        const response = await axiosInstance.put(`/api/${url}`, updatedData);
 
         if(response.data.success){
             toast.success(response.data.success);
@@ -44,7 +44,7 @@ export const update = async (url: string, updatedData: any) => {
 
 export const show = async (url: string, feedback = false) => {
     try {
-        const response = await axiosInstance.get(`/api/companies/${url}`);
+        const response = await axiosInstance.get(`/api/${url}`);
 
         if(feedback && response.data.success){
             toast.success(response.data.success);
@@ -59,7 +59,7 @@ export const show = async (url: string, feedback = false) => {
 
 export const destroy = async (url: string) => {
     try {
-        const response = await axiosInstance.delete(`/api/companies/${url}`);
+        const response = await axiosInstance.delete(`/api/${url}`);
 
         if(response.data.success){
             toast.success(response.data.success);

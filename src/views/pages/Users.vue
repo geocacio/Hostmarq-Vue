@@ -13,7 +13,7 @@
 
     <div class="row row-gap-15">
 
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3" v-for="(person, index) in user" :key="index">
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3" v-for="(person, index) in users" :key="index">
             <PersonComponent :data="person" />
         </div>
 
@@ -29,7 +29,12 @@ import ButtonComponent from '@/components/ButtonComponent.vue';
 import PaginationComponent from '@/components/PaginationComponent.vue';
 import PersonComponent from '@/components/PersonComponent.vue';
 import InputComponent from '@/components/form/InputComponent.vue';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { useUserStore } from '@/stores/modules/user';
+import type { User } from '@/types/userType';
+
+const userStore = useUserStore();
+const users = ref<User[]>([]);
 
 const totalPages = ref(10);
 const currentPage = ref(1);
@@ -141,5 +146,14 @@ const user = [
         ],
     }
 ]
+
+onMounted( async () => {
+    try {
+        const response = await userStore.fetchUsers();
+        users.value = userStore.getUsers;
+    } catch (error) {
+        console.error(error);
+    }
+});
 
 </script>
