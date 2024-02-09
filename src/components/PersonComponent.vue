@@ -47,22 +47,22 @@
 
                             <div class="mb-3">
                                 <LabelComponent text="Matrícula" />
-                                <InputComponent type="text" placeholder="Matrícula" />
+                                <InputComponent type="text" v-model="form.registration" placeholder="Matrícula" />
                             </div>
 
                             <div class="mb-3">
                                 <LabelComponent text="Nome" />
-                                <InputComponent type="text" placeholder="Nome" />
+                                <InputComponent type="text" v-model="form.name" placeholder="Nome" />
                             </div>
 
                             <div class="mb-3">
                                 <LabelComponent text="Email" />
-                                <InputComponent type="email" placeholder="Email" />
+                                <InputComponent type="email" v-model="form.email" placeholder="Email" />
                             </div>
 
                             <div class="mb-3">
                                 <LabelComponent text="Telefone" />
-                                <InputComponent type="text" placeholder="Telefone" />
+                                <InputComponent type="text" v-model="form.phone" placeholder="Telefone" />
                             </div>
 
                             <div class="mt-3 text-center">
@@ -97,13 +97,27 @@
 <script setup lang="ts">
 import ButtonComponent from './ButtonComponent.vue';
 import IconComponent from './IconComponent.vue';
-import { defineProps } from 'vue';
+import { defineProps, ref, onMounted } from 'vue';
 import ModalComponent from './ModalComponent.vue';
 import LabelComponent from './form/LabelComponent.vue';
 import InputComponent from './form/InputComponent.vue';
+import type { Person } from '@/types/personType';
 
 const props = defineProps({
     data: Object
+});
+
+const form = ref<Person>({
+    registration: '',
+    name: '',
+    email: '',
+    phone: '',
+});
+
+onMounted(() => {
+    if (props.data){
+        form.value = props.data as Person;
+    }
 });
 
 </script>

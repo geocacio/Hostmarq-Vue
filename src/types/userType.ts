@@ -21,4 +21,5 @@ export interface User {
   club: Club;
   roles: Role[];
   social_networks: SocialNetwork[];
+  phone: string;
 }
