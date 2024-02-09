@@ -31,6 +31,13 @@
                         </li>
 
                         <li class="nav-item">
+                            <router-link to="/habituality" class="nav-link">
+                                <IconComponent name="award" />
+                                <span class="nav-text">Habitualities</span>
+                            </router-link>
+                        </li>
+
+                        <li class="nav-item">
                             <a class="nav-link" href="#">
                                 <IconComponent name="aperture" />
                                 <span class="nav-text">Home</span>

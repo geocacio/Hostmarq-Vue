@@ -2,22 +2,7 @@
 
     <BreadcrumbComponent title="Habitualidade" />
 
-    <div class="dashboard-header flex-horizontal">
-        <div class="search-container">
-            <InputComponent type="text" placeholder="Pesquisar" />
-        </div>
-        <div class="dashboard-actions">
-            <ButtonComponent buttonClass="dark-blue" text="Novo" />
-        </div>
-    </div>
-
-    <div class="row row-gap-15">
-
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3" v-for="(person, index) in user" :key="index">
-            <PersonComponent :data="person" />
-        </div>
-
-    </div>
+    <TableComponent class="mt-5" :data="user" />
 
     <PaginationComponent class="mt-5" :totalPages="2" :currentPage="1" />
 
@@ -25,13 +10,11 @@
 
 <script setup lang="ts">
 import BreadcrumbComponent from '@/components/BreadcrumbComponent.vue';
-import ButtonComponent from '@/components/ButtonComponent.vue';
 import PaginationComponent from '@/components/PaginationComponent.vue';
-import PersonComponent from '@/components/PersonComponent.vue';
-import InputComponent from '@/components/form/InputComponent.vue';
+import TableComponent from '@/components/TableComponent.vue';
 import { ref } from 'vue';
 
-const totalPages = ref(10);
+const totalPages = ref(2);
 const currentPage = ref(1);
 
 const user = [

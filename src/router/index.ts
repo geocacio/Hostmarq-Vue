@@ -29,7 +29,7 @@ const router = createRouter({
           path: 'habituality',
           name: 'Habitualidade',
           component: () => import('@/views/pages/Habituality.vue'),
-          meta: { requiresAuth: true },
+          meta: { requiresAuth: true, requiresRole:['Master', 'Admin', 'ClubMaster', 'ClubAdmin', 'User'] },
         }
       ]
     }
