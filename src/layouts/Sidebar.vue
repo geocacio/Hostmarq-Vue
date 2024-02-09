@@ -1,5 +1,6 @@
 <template>
-    <div class="sidebar" :class="{ 'show': shouldShowMenu() }" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
+    <div class="sidebar" :class="{ 'show': shouldShowMenu() }" @mouseenter="handleMouseEnter"
+        @mouseleave="handleMouseLeave">
 
         <div class="header-sidebar">
             <div class="logo">
@@ -16,10 +17,17 @@
                     <ul class="nav-menu navbar-nav me-auto mb-2 mb-lg-0">
 
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">
+                            <router-link to="/dashboard" class="nav-link">
                                 <IconComponent name="home" />
-                                <span class="nav-text">Home</span>
-                            </a>
+                                <span class="nav-text">Dashboard</span>
+                            </router-link>
+                        </li>
+
+                        <li class="nav-item">
+                            <router-link to="/users" class="nav-link">
+                                <IconComponent name="users" />
+                                <span class="nav-text">Associados</span>
+                            </router-link>
                         </li>
 
                         <li class="nav-item">
