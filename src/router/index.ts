@@ -23,7 +23,7 @@ const router = createRouter({
           path: 'users',
           name: 'Users',
           component: () => import('@/views/pages/Users.vue'),
-          meta: { requiresAuth: true },
+          meta: { requiresAuth: true, requiresRole: ['Master', 'Admin', 'ClubMaster', 'ClubAdmin'] },
         },
         {
           path: 'habituality',
@@ -36,6 +36,14 @@ const router = createRouter({
   ]
 });
 
+declare module 'vue-router' {
+    interface RouteMeta {
+      requiresAuth?: boolean;
+      requiresRole?: string[];
+      requiresPermission?: string[];
+    }
+  }
+
 router.beforeEach((to, from, next) => {
     const authStore = useAuthStore()
 
@@ -45,9 +53,9 @@ router.beforeEach((to, from, next) => {
             const payload = JSON.parse(atob(token.split('.')[1]));
             const expirationDate = new Date(payload.exp * 1000);
             if(expirationDate <= new Date()){
-            authStore.logout();
-            next({ name: 'Login' });
-            return;
+                authStore.logout();
+                next({ name: 'Login' });
+                return;
             }
         } catch (error){
             console.error("Erro ao decodificar o token", error);
@@ -57,7 +65,13 @@ router.beforeEach((to, from, next) => {
     if(to.meta.requiresAuth && !authStore.isAuthenticated){
         next({ name: 'Login' });
         return;
-    }else{
+    } else if (to.meta.requiresRole && !to.meta.requiresRole.some(role => authStore.userRoles.includes(role))) {
+        next({ name: 'Unauthorized' }); // redirecionar para uma página de "Não autorizado"
+        return;
+    } else if (to.meta.requiresPermission && !to.meta.requiresPermission.some(permission => authStore.userPermissions.includes(permission))) {
+        next({ name: 'Unauthorized' }); // redirecionar para uma página de "Não autorizado"
+        return;
+    } else {
         next();
     }
 });
