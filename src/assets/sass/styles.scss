@@ -212,6 +212,7 @@ a{
     .main-content{
         flex: 1;
         background-color: var(--semi-light);
+        width: 100%;
     }
 }
 
@@ -444,6 +445,7 @@ a{
                 color: #374151;
                 background: #f9fafb;
                 border: 1px solid #e5e7eb;
+                white-space: nowrap;
             }
         }
         tbody{
@@ -455,6 +457,7 @@ a{
                 font-size: 1rem;
                 font-weight: 400;
                 color: #4b5563;
+                white-space: nowrap;
             }
             .td-actions{
                 .btn{

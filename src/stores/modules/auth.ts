@@ -14,48 +14,48 @@ state: (): Auth => ({
     userPermissions: localStorage.getItem("userPermissions") ? JSON.parse(localStorage.getItem("userPermissions")!) : [],
   }),
 
-  getters: {
-    isAuthenticated: (state) => !!state.token,
-  },
-
-  actions: {
-
-    setToken(token: string | null) {
-      localStorage.setItem("authToken", token || "");
-      this.token = localStorage.getItem("authToken") || "";
+    getters: {
+        isAuthenticated: (state) => !!state.token,
     },
 
-    logout() {
-      this.token = "";
-      this.user = null;
-      this.userRoles = [];
-      this.userPermissions = [];
-      localStorage.removeItem("userData");
-      localStorage.removeItem("authToken");
+    actions: {
 
-      return true;
-    },
-    
-    async login(email: string, password: string) {
-        try {
-            const response = await login(email, password);
-            const token = response.access_token;
-            this.setToken(token);
-            localStorage.setItem("userData", JSON.stringify(response.user));
-            this.user = response.user;
+        setToken(token: string | null) {
+            localStorage.setItem("authToken", token || "");
+            this.token = localStorage.getItem("authToken") || "";
+        },
 
-            // Extrair roles e permissões do usuário
-            this.userRoles = response.user.roles.map((role: Role) => role.name);
-            this.userPermissions = response.user.roles.flatMap((role: Role) => role.permissions.map((permission: Permission) => permission.name));
+        logout() {
+            this.token = "";
+            this.user = null;
+            this.userRoles = [];
+            this.userPermissions = [];
+            localStorage.removeItem("userData");
+            localStorage.removeItem("authToken");
 
-            // Armazenar roles e permissões do usuário no localStorage
-            localStorage.setItem("userRoles", JSON.stringify(this.userRoles));
-            localStorage.setItem("userPermissions", JSON.stringify(this.userPermissions));
+            return true;
+        },
 
-            return true
-        } catch (error) {
-            return error;
+        async login(email: string, password: string) {
+            try {
+                const response = await login(email, password);
+                const token = response.access_token;
+                this.setToken(token);
+                localStorage.setItem("userData", JSON.stringify(response.user));
+                this.user = response.user;
+
+                // Extrair roles e permissões do usuário
+                this.userRoles = response.user.roles.map((role: Role) => role.name);
+                this.userPermissions = response.user.roles.flatMap((role: Role) => role.permissions.map((permission: Permission) => permission.name));
+
+                // Armazenar roles e permissões do usuário no localStorage
+                localStorage.setItem("userRoles", JSON.stringify(this.userRoles));
+                localStorage.setItem("userPermissions", JSON.stringify(this.userPermissions));
+
+                return true
+            } catch (error) {
+                return error;
+            }
         }
-    }
-  },
+    },
 });
