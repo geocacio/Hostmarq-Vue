@@ -13,6 +13,9 @@ import ButtonComponent from '@/components/ButtonComponent.vue';
 import DropdownComponent from '@/components/DropdownComponent.vue';
 import { defineEmits, ref } from 'vue';
 import { useAuthStore } from '@/stores/modules/auth';
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const auth = useAuthStore();
 
@@ -32,8 +35,13 @@ const dropdownOptions = [
         text: 'Logout',
         icon: 'fa-solid fa-right-from-bracket',
         type: 'button',
-        action: () => {
-            auth.logout();
+        action: async () => {
+            const success = await auth.logout();
+            if (success) {
+                router.push({ name: "Login" });
+            } else {
+                // Trate o erro aqui
+            }
         }
     },
 ];

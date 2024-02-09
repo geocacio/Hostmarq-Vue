@@ -45,6 +45,9 @@ import LabelComponent from '@/components/form/LabelComponent.vue';
 import PasswordComponent from '@/components/form/PasswordComponent.vue';
 import { ref, reactive } from 'vue';
 import { useAuthStore } from '@/stores/modules/auth';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const authStore = useAuthStore();
 
@@ -69,6 +72,10 @@ const submit = async () => {
 
     if (validateForm()) {
         const result = await authStore.login(form.email, form.password);
+
+        if (result) {
+            router.push({ name: 'Dashboard' });
+        }
     }
 };
 
