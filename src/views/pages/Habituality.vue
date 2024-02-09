@@ -2,7 +2,7 @@
 
     <BreadcrumbComponent title="Habitualidade" />
 
-    <TableComponent class="mt-5" :data="user" />
+    <TableComponent class="mt-5" :items="user" />
 
     <!-- <PaginationComponent class="mt-5" :totalPages="2" :currentPage="1" /> -->
 
@@ -124,5 +124,36 @@ const user = [
         ],
     }
 ]
+
+// const actions = {
+//   edit: {
+//     action: (item) => {
+//       console.log('Edit', item);
+//     },
+//     icon: 'edit',
+//     class: 'light blue',
+//   },
+//   view: {
+//     action: (item) => {
+//       // Código para a ação "Visualizar"
+//     },
+//     icon: 'eye',
+//     class: 'light orange',
+//   },
+//   delete: {
+//     action: (item) => {
+//       // Código para a ação "Excluir"
+//     },
+//     icon: 'trash',
+//     class: 'light red',
+//   },
+//   settings: {
+//     action: (item) => {
+//       // Código para a ação "Configurações"
+//     },
+//     icon: 'settings',
+//     class: 'light green',
+//   },
+// };
 
 </script>

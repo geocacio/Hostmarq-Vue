@@ -1,6 +1,6 @@
 <template>
     <div class="table-container">
-        <div class="table-header flex-horizontal">
+        <!-- <div class="table-header flex-horizontal">
             <div class="search-default">
                 <IconComponent name="search" />
                 <input type="text" class="form-control" placeholder="Pesquisar..." />
@@ -8,35 +8,45 @@
             
             <ButtonComponent buttonClass="dark-blue" text="Novo" />
 
-        </div>
+        </div> -->
         <div class="table-responsive table-default">
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Column 1</th>
-                        <th>Column 2</th>
-                        <th>Column 3</th>
-                        <th>Ações</th>
+                        <th v-for="(value, key) in items[0]" :key="key">{{ key }}</th>
+                        <th v-if="actions && actions.length > 0">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>
+                    <tr v-for="(item, index) in items" :key="index">
+                        <!-- <td>
                             <div class="image-with-name">
                                 <img src="https://primefaces.org/cdn/primevue/images/avatar/ionibowcher.png" alt="Placeholder" />
                                 <span>Row 1 Data 1</span>
                             </div>
                         </td>
                         <td>Row 1 Data 2</td>
-                        <td>Row 1 Data 3</td>
-                        <td class="td-actions">
+                        <td>Row 1 Data 3</td> -->
+
+                        <td v-for="(value, key) in item" :key="key">{{ value }}</td>
+                        <td class="td-actions" v-if="actions && actions.length > 0">
+                            <ButtonComponent 
+                                v-for="(action, key) in actions" 
+                                :key="key" 
+                                :buttonClass="action.class" 
+                                :icon="action.icon" 
+                                @click="action.action(item)" 
+                            />
+                        </td>
+                        <!-- <td class="td-actions">
                             <ButtonComponent buttonClass="light blue" icon="edit" />
                             <ButtonComponent buttonClass="light orange" icon="eye" />
                             <ButtonComponent buttonClass="light red" icon="trash" />
                             <ButtonComponent buttonClass="light green" icon="settings" />
-                        </td>
+                        </td> -->
                     </tr>
-                    <tr>
+
+                    <!-- <tr>
                         <td>
                             <div class="image-with-name">
                                 <img src="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" alt="Placeholder" />
@@ -67,23 +77,27 @@
                             <ButtonComponent buttonClass="light red" icon="trash" />
                             <ButtonComponent buttonClass="light green" icon="settings" />
                         </td>
-                    </tr>
+                    </tr> -->
+
                 </tbody>
             </table>
         </div>
 
-        <!-- <div class="table-footer">
-            <PaginationComponent :totalPages="5" :currentPage="1" />
-        </div> -->
     </div>
 </template>
 <script setup lang="ts">
 import ButtonComponent from './ButtonComponent.vue';
-import IconComponent from './IconComponent.vue';
-// import PaginationComponent from './PaginationComponent.vue';
-import { ref } from 'vue';
+import { ref, defineProps } from 'vue';
 
-const totalPages = ref(10);
-const currentPage = ref(1);
+const props = defineProps({
+    items: {
+        type: Array,
+        required: true,
+    },
+    actions: {
+        type: Array,
+        default: () => [],
+    },
+});
 
 </script>
