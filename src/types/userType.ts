@@ -3,7 +3,7 @@ import type { SocialNetwork } from "./socialNetworkType";
 import type { Club } from "./clubType";
 
 export interface User {
-  id: number;
+  id: number | string;
   club_id: number;
   registration: string;
   name: string;
@@ -22,4 +22,5 @@ export interface User {
   roles: Role[];
   social_networks: SocialNetwork[];
   phone: string;
+  password: string;
 }

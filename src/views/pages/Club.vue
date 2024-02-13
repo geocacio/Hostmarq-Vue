@@ -1,6 +1,6 @@
 <template>
 
-    <BreadcrumbComponent title="Habitualidade" />
+    <BreadcrumbComponent title="Clubes" />
 
     <div class="dashboard-header flex-horizontal">
         <div class="search-container">

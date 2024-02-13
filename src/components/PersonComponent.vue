@@ -16,7 +16,7 @@
                 </template>
             </div>
 
-            <ModalComponent :id="data?.id">
+            <ModalComponent :id="data?.id" buttonText="Ver">
                 <div class="row row-gap-15">
 
                     <div class="col-sm-5 col-md-4 col-lg-3">

@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia';
-import { index } from '@/api/generalAPI';
+import { index, store } from '@/api/generalAPI';
 import type { User } from '@/types/userType';
 
 const endpoint = {
     index: 'users',
+    register: 'register',
 }
 
 export const useUserStore = defineStore('user', {
@@ -17,12 +18,20 @@ export const useUserStore = defineStore('user', {
 
     actions: {
         async fetchUsers() {
-        try {
-            this.users = await index(endpoint.index);
-        } catch (error) {
-            throw error;
-        }
+            try {
+                this.users = await index(endpoint.index);
+            } catch (error) {
+                throw error;
+            }
         },
+
+        async createUser(form: User) {
+            try {
+                this.users = await store(endpoint.register, form);
+            } catch (error) {
+                throw error;
+            }
+        }
     },
 
 });

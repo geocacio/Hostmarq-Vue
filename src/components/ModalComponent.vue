@@ -1,6 +1,6 @@
 <template>
     <!-- Button trigger modal -->
-    <ButtonComponent buttonClass="dark-blue w-100" text="Ver" data-bs-toggle="modal" :data-bs-target="`#modal-${id}`" />
+    <ButtonComponent buttonClass="dark-blue w-100" :text="buttonText" data-bs-toggle="modal" :data-bs-target="`#modal-${id}`" />
 
     <!-- Modal -->
     <div class="modal fade modal-default" :id="`modal-${id}`" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -26,6 +26,7 @@ import ButtonComponent from './ButtonComponent.vue';
 import { defineProps } from 'vue';
 
 const props = defineProps({
-    id: Number,
+    id: String,
+    buttonText: String,
 });
 </script>

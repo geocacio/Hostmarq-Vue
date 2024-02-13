@@ -1,13 +1,46 @@
 <template>
-
-    <BreadcrumbComponent title="Habitualidade" />
+    <BreadcrumbComponent title="Associados" />
 
     <div class="dashboard-header flex-horizontal">
         <div class="search-container">
             <InputComponent type="text" placeholder="Pesquisar" />
         </div>
         <div class="dashboard-actions">
-            <ButtonComponent buttonClass="dark-blue" text="Novo" />
+            <!-- <ButtonComponent buttonClass="dark-blue" text="Novo" /> -->
+
+            <ModalComponent id="new-user" buttonText="Novo">
+
+                <div class="mb-3">
+                    <LabelComponent text="Nome" />
+                    <InputComponent type="text" placeholder="Nome" v-model="form.name" :validation="true" :error="errors.name" :error-message="'Por favor, insira um nome de usuário.'" @input="errors.name = false" />
+                </div>
+
+                <div class="mb-3">
+                    <LabelComponent text="Tipo de usuário" />
+                    <select class="form-control" v-model="form.role_id">
+                        <option value="">Selecione o tipo de usuário</option>
+                        <option value="2">Admin</option>
+                        <option value="3">Dono de um clube(ClubMaster)</option>
+                        <option value="4">Funcionario do clube(ClubAdmin)</option>
+                        <option value="5">Usuário</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <LabelComponent text="E-mail" />
+                    <InputComponent type="email" placeholder="E-mail" v-model="form.email" :validation="true" :error="errors.email" :error-message="'Por favor, insira um e-mail para o usuário.'" @input="errors.email = false" />
+                </div>
+
+                <div class="mb-3">
+                    <LabelComponent text="Senha" />
+                    <PasswordComponent placeholder="Senha" v-model="form.password" @keypress="submit" :validation="true" :error="errors.password" :error-message="'Por favor, insira sua senha.'" @input="errors.password = false" />
+                </div>
+
+                <div class="mb-3 text-center">
+                    <ButtonComponent buttonClass="dark-blue" @click="submit" text="Criar" />
+                </div>
+
+            </ModalComponent>
         </div>
     </div>
 
@@ -20,18 +53,20 @@
     </div>
 
     <PaginationComponent class="mt-5" :totalPages="2" :currentPage="1" />
-
 </template>
 
 <script setup lang="ts">
 import BreadcrumbComponent from '@/components/BreadcrumbComponent.vue';
-import ButtonComponent from '@/components/ButtonComponent.vue';
 import PaginationComponent from '@/components/PaginationComponent.vue';
 import PersonComponent from '@/components/PersonComponent.vue';
 import InputComponent from '@/components/form/InputComponent.vue';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, reactive } from 'vue';
 import { useUserStore } from '@/stores/modules/user';
 import type { User } from '@/types/userType';
+import ModalComponent from '@/components/ModalComponent.vue';
+import LabelComponent from '@/components/form/LabelComponent.vue';
+import PasswordComponent from '@/components/form/PasswordComponent.vue';
+import ButtonComponent from '@/components/ButtonComponent.vue';
 
 const userStore = useUserStore();
 const users = ref<User[]>([]);
@@ -39,115 +74,21 @@ const users = ref<User[]>([]);
 const totalPages = ref(10);
 const currentPage = ref(1);
 
-const user = [
-    {
-        "id": 1,
-        "club_id": null,
-        "registration": null,
-        "name": "Master",
-        "email": "master@hostmarq.com",
-        "email_verified_at": null,
-        "created_at": "2024-01-30T19:52:18.000000Z",
-        "updated_at": "2024-01-30T19:52:18.000000Z",
-        "cnh": null,
-        "cnh_issue_date": null,
-        "cnh_expiration_date": null,
-        "sisgcorp_password": null,
-        "blood_type": null,
-        "dispatcher": null,
-        "status": null,
-        "gender": null,
-        "marital_status": null,
-        "birthplace": null,
-        "nationality": null,
-        "birth_date": null,
-        "profession": null,
-        "instagram": null,
-        "phone": null,
-        "father": null,
-        "mother": null,
-        "cpf": null,
-        "identity": null,
-        "issuing_authority": null,
-        "identity_issue_date": null,
-        "voter_registration": null,
-        "image": 'https://codervent.com/gum/nikon/demo/vertical/ltr/assets/images/avatars/avatar-1.png',
-        "roles": [
-            {
-                "id": 1,
-                "name": "Master",
-                "description": "master",
-                "created_at": "2024-01-30T19:52:17.000000Z",
-                "updated_at": "2024-01-30T19:52:17.000000Z",
-                "pivot": {
-                    "user_id": 1,
-                    "role_id": 1
-                },
-                "permissions": []
-            }
-        ],
-        "social_networks": [
-            {
-                "id": 1,
-                "name": "Facebook",
-                "url": "https://www.facebook.com/",
-            },
-            {
-                "id": 2,
-                "name": "Twitter",
-                "url": "https://www.twitter.com/",
-            },
-            {
-                "id": 3,
-                "name": "Instagram",
-                "url": "https://www.instagram.com/",
-            }
-        ],
-        "club": null
-    },
-    {
-        "id": 2,
-        "club_id": null,
-        "registration": "0001",
-        "name": "Carcará",
-        "email": "carcara@email.com",
-        "email_verified_at": null,
-        "created_at": "2024-01-30T19:53:13.000000Z",
-        "updated_at": "2024-01-30T19:53:13.000000Z",
-        "cnh": null,
-        "cnh_issue_date": null,
-        "cnh_expiration_date": null,
-        "sisgcorp_password": null,
-        "blood_type": null,
-        "dispatcher": null,
-        "status": null,
-        "gender": null,
-        "marital_status": null,
-        "birthplace": null,
-        "nationality": null,
-        "birth_date": null,
-        "profession": null,
-        "instagram": null,
-        "phone": null,
-        "father": null,
-        "mother": null,
-        "cpf": null,
-        "identity": null,
-        "issuing_authority": null,
-        "identity_issue_date": null,
-        "voter_registration": null,
-        "image": 'https://codervent.com/gum/nikon/demo/vertical/ltr/assets/images/avatars/avatar-2.png',
-        "social_networks": [
-            {
-                "id": 1,
-                "name": "Facebook",
-                "url": "https://www.facebook.com/",
-            },
-        ],
-    }
-]
+interface Form {
+    name: string;
+    email: string;
+    password: string;
+    role_id: string;
+}
 
-onMounted( async () => {
+const form = reactive<Form>({
+    name: 'Geovane',
+    email: 'geovane@hostmarq.com',
+    password: 'password',
+    role_id: '',
+});
+
+onMounted(async () => {
     try {
         const response = await userStore.fetchUsers();
         users.value = userStore.getUsers;
@@ -155,5 +96,33 @@ onMounted( async () => {
         console.error(error);
     }
 });
+
+const errors = reactive({
+    name: false,
+    email: false,
+    password: false,
+});
+
+const validateForm = () => {
+    errors.name = !form.name;
+    errors.email = !form.email;
+    errors.password = !form.password;
+
+    return !errors.name && !errors.email && !errors.password;
+};
+
+const submit = async () => {
+
+    if (validateForm()) {
+        try {
+            const newUser = await userStore.createUser(form);
+            //adicionar o usuário criado na lista de usuários
+            users.value.push(newUser);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+};
 
 </script>

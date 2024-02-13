@@ -16,8 +16,9 @@ export const store = async (url: string, TypeData: any) => {
     try {
         let link = url != '' ? `/api/${url}` : `/api`;
         const response = await axiosInstance.post(link, TypeData);
-
         if(response.data.success){
+            console.log('passou aqui');
+            console.log(response.data.success);
             toast.success(response.data.success);
         }
 
