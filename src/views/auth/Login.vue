@@ -52,8 +52,8 @@ const router = useRouter();
 const authStore = useAuthStore();
 
 const form = reactive({
-    // email: 'master@hostmarq.com',
-    email: 'carcara@email.com',
+    email: 'master@hostmarq.com',
+    // email: 'carcara@email.com',
     password: 'password',
 });
 

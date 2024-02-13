@@ -94,7 +94,7 @@ a{
                             border-radius: 0.25rem;
                             transition: all .3s ease-out;
                             font-family: var(--font-roboto);
-                            &:hover{
+                            &:hover, &.active{
                                 color: #fff;
                                 text-decoration: none;
                                 background: rgb(255 255 255 / 12%);

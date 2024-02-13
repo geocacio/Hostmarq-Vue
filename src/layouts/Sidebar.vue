@@ -17,21 +17,28 @@
                     <ul class="nav-menu navbar-nav me-auto mb-2 mb-lg-0">
 
                         <li class="nav-item">
-                            <router-link to="/dashboard" class="nav-link">
+                            <router-link to="/dashboard" class="nav-link" active-class="active">
                                 <IconComponent name="home" />
                                 <span class="nav-text">Dashboard</span>
                             </router-link>
                         </li>
 
                         <li class="nav-item">
-                            <router-link to="/users" class="nav-link">
+                            <router-link to="/clubs" class="nav-link" v-if="userHasRole('Master') || userHasRole('Admin')" active-class="active">
+                                <IconComponent name="home" />
+                                <span class="nav-text">Clubs</span>
+                            </router-link>
+                        </li>
+
+                        <li class="nav-item">
+                            <router-link to="/users" class="nav-link" active-class="active">
                                 <IconComponent name="users" />
                                 <span class="nav-text">Associados</span>
                             </router-link>
                         </li>
 
                         <li class="nav-item">
-                            <router-link to="/habituality" class="nav-link">
+                            <router-link to="/habituality" class="nav-link" active-class="active">
                                 <IconComponent name="award" />
                                 <span class="nav-text">Habitualities</span>
                             </router-link>
@@ -94,6 +101,11 @@
 <script setup lang="ts">
 import IconComponent from '@/components/IconComponent.vue';
 import { onMounted, ref, defineProps, watch } from 'vue';
+import { useAuthStore } from '@/stores/modules/auth'
+
+const authStore = useAuthStore()
+
+const userHasRole = (role: any) => authStore.userRoles.includes(role)
 
 const props = defineProps({
     openSidebar: Boolean
