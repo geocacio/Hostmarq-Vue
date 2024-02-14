@@ -81,7 +81,7 @@ interface Form {
     role_id: string;
 }
 
-const form = reactive<Form>({
+const form = reactive<User>({
     name: 'Geovane',
     email: 'geovane@hostmarq.com',
     password: 'password',
@@ -115,9 +115,12 @@ const submit = async () => {
 
     if (validateForm()) {
         try {
-            const newUser = await userStore.createUser(form);
+            const newUser: any = await userStore.createUser(form);
             //adicionar o usuário criado na lista de usuários
-            users.value.push(newUser);
+            document.getElementById('closeModal-new-user')?.click();
+            if (newUser){
+                users.value.push(newUser);
+            }
         } catch (error) {
             console.error(error);
         }

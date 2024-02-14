@@ -1,7 +1,8 @@
 <template>
     <div class="card">
         <div class="person-item">
-            <img :src="data?.image" class="avatar">
+            <img src="https://sistema.hostmarq.com.br//fotos/07032023_foto3.PNG" class="avatar">
+            <!-- <img :src="data?.image" class="avatar"> -->
 
             <div class="person-info mt-5">
                 <h3 class="name">{{ data?.name }}</h3>
@@ -22,7 +23,8 @@
                     <div class="col-sm-5 col-md-4 col-lg-3">
                         <div class="card">
                             <div class="person-item person-modal">
-                                <img :src="data?.image" class="avatar">
+                                <img src="https://sistema.hostmarq.com.br//fotos/07032023_foto3.PNG" class="avatar">
+                                <!-- <img :src="data?.image" class="avatar"> -->
 
                                 <div class="person-info mt-5">
                                     <h3 class="name">{{ data?.name }}</h3>
