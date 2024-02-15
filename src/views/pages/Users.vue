@@ -52,7 +52,8 @@
 
     </div>
 
-    <PaginationComponent class="mt-5" :links="users.links" :currentPage="users.current_page" @update:pageUrl="fetchPage" />
+    <!-- <PaginationComponent class="mt-5" :links="users.links" :currentPage="users.current_page" @update:pageUrl="fetchPage" /> -->
+    <PaginationComponent class="mt-5" :data="users" @update:pageUrl="fetchPage" />
 </template>
 
 <script setup lang="ts">

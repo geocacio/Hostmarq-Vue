@@ -585,6 +585,9 @@ a{
             border-color: #172b4d;
             color: #fff;
         }
+        &:disabled{
+            opacity: 0.7;
+        }
     }
 }
 
