@@ -5,10 +5,7 @@ const authStore = useAuthStore();
 
 // Configuração do Axios
 const axiosInstance = axios.create({
-  //baseURL: import.meta.env.VUE_APP_BASE_URL,
-  //baseURL: process.env.VUE_APP_BASE_URL,
-  baseURL:  'http://127.0.0.1:8000/',
-  //baseURL:  'https://api-teste.ddns.net/',
+  baseURL: import.meta.env.VITE_BASE_URL || "http://127.0.0.1:8000/api",
 });
 
 // Interceptor para adicionar o token de autorização a cada solicitação

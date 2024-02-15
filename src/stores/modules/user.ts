@@ -17,9 +17,9 @@ export const useUserStore = defineStore('user', {
     },
 
     actions: {
-        async fetchUsers() {
+        async fetchUsers(links: string = '') {
             try {
-                this.users = await index(endpoint.index);
+                this.users = await index(links != '' ? links : endpoint.index);
             } catch (error) {
                 throw error;
             }

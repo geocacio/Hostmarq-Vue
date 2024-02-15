@@ -24,4 +24,5 @@ export interface User {
   phone?: string;
   password?: string;
   role_id?: number | string;
+  links?: any;
 }

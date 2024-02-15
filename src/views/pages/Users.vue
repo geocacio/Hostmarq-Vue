@@ -46,13 +46,13 @@
 
     <div class="row row-gap-15">
 
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3" v-for="(person, index) in users" :key="index">
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3" v-for="(person, index) in users.data" :key="index">
             <PersonComponent :data="person" />
         </div>
 
     </div>
 
-    <PaginationComponent class="mt-5" :totalPages="2" :currentPage="1" />
+    <PaginationComponent class="mt-5" :links="users.links" :currentPage="users.current_page" @update:pageUrl="fetchPage" />
 </template>
 
 <script setup lang="ts">
@@ -88,13 +88,26 @@ const form = reactive<User>({
     role_id: '',
 });
 
-onMounted(async () => {
+const fetchPage = async (label: string) => {
+    let url = `users?page=${label}`;
     try {
-        const response = await userStore.fetchUsers();
+        await userStore.fetchUsers(url);
         users.value = userStore.getUsers;
     } catch (error) {
         console.error(error);
     }
+};
+
+onMounted(async () => {
+    try {
+        await userStore.fetchUsers('users');
+        users.value = userStore.getUsers;
+    } catch (error) {
+        console.error(error);
+    }
+    
+    let url = `users?page=${currentPage.value}`;
+    fetchPage(url);
 });
 
 const errors = reactive({

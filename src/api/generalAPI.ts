@@ -4,8 +4,9 @@ import { useToast } from 'vue-toastification'
 const toast = useToast()
 
 export const index = async (url: string) => {
+    console.log('passou aqui', url);
     try{
-        const response = await axiosInstance.get(`/api/${url}`);
+        const response = await axiosInstance.get(`${url}`);
         return response.data;
     }catch(error){
         throw error;
@@ -14,7 +15,7 @@ export const index = async (url: string) => {
 
 export const store = async (url: string, TypeData: any) => {
     try {
-        let link = url != '' ? `/api/${url}` : `/api`;
+        let link = url != '' ? `${url}` : ``;
         const response = await axiosInstance.post(link, TypeData);
         if(response.data.success){
             console.log('passou aqui');
@@ -31,7 +32,7 @@ export const store = async (url: string, TypeData: any) => {
 
 export const update = async (url: string, updatedData: any) => {
     try {
-        const response = await axiosInstance.put(`/api/${url}`, updatedData);
+        const response = await axiosInstance.put(`${url}`, updatedData);
 
         if(response.data.success){
             toast.success(response.data.success);
@@ -45,7 +46,7 @@ export const update = async (url: string, updatedData: any) => {
 
 export const show = async (url: string, feedback = false) => {
     try {
-        const response = await axiosInstance.get(`/api/${url}`);
+        const response = await axiosInstance.get(`${url}`);
 
         if(feedback && response.data.success){
             toast.success(response.data.success);
@@ -60,7 +61,7 @@ export const show = async (url: string, feedback = false) => {
 
 export const destroy = async (url: string) => {
     try {
-        const response = await axiosInstance.delete(`/api/${url}`);
+        const response = await axiosInstance.delete(`${url}`);
 
         if(response.data.success){
             toast.success(response.data.success);
