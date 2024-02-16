@@ -3,10 +3,9 @@
 
     <div class="dashboard-header flex-horizontal">
         <div class="search-container">
-            <InputComponent type="text" placeholder="Pesquisar" @input="search" />
+            <InputComponent type="text" placeholder="Pesquisar" v-model="search" @input="searchSubmit" />
         </div>
         <div class="dashboard-actions">
-            <!-- <ButtonComponent buttonClass="dark-blue" text="Novo" /> -->
 
             <ModalComponent id="new-user" buttonText="Novo">
 
@@ -86,8 +85,11 @@ const form = reactive<User>({
     role_id: '',
 });
 
+const search = ref('');
+
 const fetchPage = async (label: string) => {
     let url = `users?page=${label}`;
+    url = search ? `${url}&search=${search.value}` : url;
     try {
         await userStore.fetchUsers(url);
         users.value = userStore.getUsers;
@@ -103,9 +105,6 @@ onMounted(async () => {
     } catch (error) {
         console.error(error);
     }
-    
-    // let url = `users?page=${users.value.current_page}`;
-    // fetchPage(url);
 });
 
 const errors = reactive({
@@ -139,12 +138,12 @@ const submit = async () => {
 
 };
 
-const search = async (event: any) => {
+const searchSubmit = async (event: any) => {
     //buscar somente se tiver mais de 3 caracteres, a não ser que seja para apagar a busca
     if (event.target.value.length < 3 && event.target.value.length > 0) {
         return;
     }
-    
+
     const url = `users?page=${users.value.current_page}&search=${event.target.value}`;
 
     try {
