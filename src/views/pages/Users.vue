@@ -46,7 +46,7 @@
     <div class="row row-gap-15">
 
         <div class="col-12 col-sm-6 col-md-4 col-lg-3" v-for="(person, index) in users.data" :key="index">
-            <PersonComponent :data="person" />
+            <PersonComponent :data="person" @update="updateuser" />
         </div>
 
     </div>
@@ -149,6 +149,14 @@ const searchSubmit = async (event: any) => {
     try {
         await userStore.fetchUsers(url);
         users.value = userStore.getUsers;
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+const updateuser = async (user: User) => {
+    try {
+        await userStore.updateUser(user);
     } catch (error) {
         console.error(error);
     }

@@ -68,7 +68,7 @@
                             </div>
 
                             <div class="mt-3 text-center">
-                                <ButtonComponent buttonClass="dark-blue" text="Salvar" />
+                                <ButtonComponent buttonClass="dark-blue" text="Salvar" @click="updateUser" />
                             </div>
 
                         </div>
@@ -99,7 +99,7 @@
 <script setup lang="ts">
 import ButtonComponent from './ButtonComponent.vue';
 import IconComponent from './IconComponent.vue';
-import { defineProps, ref, onMounted } from 'vue';
+import { defineProps, ref, onMounted, defineEmits } from 'vue';
 import ModalComponent from './ModalComponent.vue';
 import LabelComponent from './form/LabelComponent.vue';
 import InputComponent from './form/InputComponent.vue';
@@ -121,5 +121,11 @@ onMounted(() => {
         form.value = props.data as Person;
     }
 });
+
+const emits = defineEmits(['update']);
+
+const updateUser = () => {
+    emits('update', form.value);
+};
 
 </script>
