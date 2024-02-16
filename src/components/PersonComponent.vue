@@ -80,7 +80,7 @@
                                 <ButtonComponent buttonClass="light blue" icon="dollar" title="Compras" />
                                 <ButtonComponent buttonClass="light orange" icon="eye" />
                                 <ButtonComponent buttonClass="light red" icon="email" title="E-mail" />
-                                <ButtonComponent buttonClass="light red" icon="trash" />
+                                <ButtonComponent buttonClass="light red" icon="trash" title="Remover usuário" @click="removeUser" />
                                 <ButtonComponent buttonClass="light green" icon="settings" />
 
                             </div>
@@ -122,10 +122,14 @@ onMounted(() => {
     }
 });
 
-const emits = defineEmits(['update']);
+const emits = defineEmits(['update', 'delete']);
 
 const updateUser = () => {
     emits('update', form.value);
+};
+
+const removeUser = () => {
+    emits('delete', form.value);
 };
 
 </script>

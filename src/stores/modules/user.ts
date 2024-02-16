@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia';
-import { index, store, update } from '@/api/generalAPI';
+import { index, store, update, destroy } from '@/api/generalAPI';
 import type { User } from '@/types/userType';
 
 const endpoint = {
     index: 'users',
-    update: 'users/{userId}',
+    single: 'users/{userId}',
     register: 'register',
 }
 
@@ -37,7 +37,15 @@ export const useUserStore = defineStore('user', {
         async updateUser(form: User) {
             try {
                 const userId = form.id?.toString() ?? '';
-                this.users = await update(endpoint.update.replace('{userId}', userId), form);
+                this.users = await update(endpoint.single.replace('{userId}', userId), form);
+            } catch (error) {
+                throw error;
+            }
+        },
+
+        async deleteUser(userId: string) {
+            try {
+                this.users = await destroy(endpoint.single.replace('{userId}', userId));
             } catch (error) {
                 throw error;
             }
