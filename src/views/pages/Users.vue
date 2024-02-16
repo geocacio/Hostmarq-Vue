@@ -3,7 +3,7 @@
 
     <div class="dashboard-header flex-horizontal">
         <div class="search-container">
-            <InputComponent type="text" placeholder="Pesquisar" />
+            <InputComponent type="text" placeholder="Pesquisar" @input="search" />
         </div>
         <div class="dashboard-actions">
             <!-- <ButtonComponent buttonClass="dark-blue" text="Novo" /> -->
@@ -72,9 +72,6 @@ import ButtonComponent from '@/components/ButtonComponent.vue';
 const userStore = useUserStore();
 const users = ref<User[]>([]);
 
-const totalPages = ref(10);
-const currentPage = ref(1);
-
 interface Form {
     name: string;
     email: string;
@@ -107,8 +104,8 @@ onMounted(async () => {
         console.error(error);
     }
     
-    let url = `users?page=${currentPage.value}`;
-    fetchPage(url);
+    // let url = `users?page=${users.value.current_page}`;
+    // fetchPage(url);
 });
 
 const errors = reactive({
@@ -140,6 +137,22 @@ const submit = async () => {
         }
     }
 
+};
+
+const search = async (event: any) => {
+    //buscar somente se tiver mais de 3 caracteres, a não ser que seja para apagar a busca
+    if (event.target.value.length < 3 && event.target.value.length > 0) {
+        return;
+    }
+    
+    const url = `users?page=${users.value.current_page}&search=${event.target.value}`;
+
+    try {
+        await userStore.fetchUsers(url);
+        users.value = userStore.getUsers;
+    } catch (error) {
+        console.error(error);
+    }
 };
 
 </script>
