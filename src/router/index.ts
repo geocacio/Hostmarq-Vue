@@ -22,8 +22,14 @@ const router = createRouter({
         {
           path: 'clubs',
           name: 'Clubs',
-          component: () => import('@/views/pages/Club.vue'),
+          component: () => import('@/views/pages/Clubs.vue'),
           meta: { requiresAuth: true, requiresRole: ['Master', 'Admin'] },
+        },
+        {
+          path: 'club',
+          name: 'Club',
+          component: () => import('@/views/pages/Club.vue'),
+          meta: { requiresAuth: true, requiresRole: ['Master', 'Admin', 'ClubMaster'] },
         },
         {
           path: 'users',

@@ -30,6 +30,12 @@ const dropdownOptions = [
         url: '#'
     },
     {
+        text: 'Clube',
+        icon: 'fa-regular fa-user',
+        type: 'link',
+        url: 'club'
+    },
+    {
         text: 'Settings',
         type: 'link',
         url: '#'
@@ -57,8 +63,5 @@ const toggleMenu = () => {
     changeMenu.value = !changeMenu.value;
     emit('toggleMenu', changeMenu.value);
 };
-
-
-
 
 </script>

@@ -1,44 +1,79 @@
 <template>
-
-    <BreadcrumbComponent title="Clubes" />
-
-    <div class="dashboard-header flex-horizontal">
-        <div class="search-container">
-            <InputComponent type="text" placeholder="Pesquisar" />
-        </div>
-        <div class="dashboard-actions">
-            <ButtonComponent buttonClass="dark-blue" text="Novo" />
-        </div>
-    </div>
-
-    <div class="row row-gap-15">
-
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3" v-for="(person, index) in clubs" :key="index">
-            <ClubComponent :data="person" />
-        </div>
-
-    </div>
-
-    <PaginationComponent class="mt-5" :totalPages="2" :currentPage="1" />
-
+    <!-- <BreadcrumbComponent :title="$t('My club')" /> -->
+    <BreadcrumbComponent title="Meu clube" />
 </template>
 
 <script setup lang="ts">
-import BreadcrumbComponent from '@/components/BreadcrumbComponent.vue';
-import ButtonComponent from '@/components/ButtonComponent.vue';
-import PaginationComponent from '@/components/PaginationComponent.vue';
-import ClubComponent from '@/components/ClubComponent.vue';
-import InputComponent from '@/components/form/InputComponent.vue';
-import type { Club } from '@/types/clubType';
-import { ref, onMounted } from 'vue';
+import { reactive } from 'vue';
 import { useClubStore } from '@/stores/modules/club';
+import type { Club } from '@/types/clubType';
+import BreadcrumbComponent from '@/components/BreadcrumbComponent.vue';
 
-const clubs = ref<Club[]>([]);
+const clubeStore = useClubStore();
 
-const clubStore = useClubStore();
-
-onMounted( async () => {
-    await clubStore.fetchClubs();
-    clubs.value = clubStore.clubs;
+const form = reactive<Club>({
+    name: "Clube Fictício",
+    acronym: "CF",
+    cnpj: "12.345.678/0001-90",
+    address: "Rua Fictícia, 123",
+    phone: "(11) 1234-5678",
+    email: "contato@clubeficticio.com.br",
+    email_om: "om@clubeficticio.com.br",
+    url: "http://www.clubeficticio.com.br",
+    app_url: "http://app.clubeficticio.com.br",
+    logo: "http://www.clubeficticio.com.br/logo.png",
+    favicon: "http://www.clubeficticio.com.br/favicon.ico",
+    logo_rodape: "http://www.clubeficticio.com.br/logo_rodape.png",
+    country: "Brasil",
+    city: "São Paulo"
 });
+
+const errors = reactive({
+    name: false,
+    acronym: false,
+    cnpj: false,
+    address: false,
+    phone: false,
+    email: false,
+    email_om: false,
+    url: false,
+    app_url: false,
+    logo: false,
+    favicon: false,
+    logo_rodape: false,
+    country: false,
+    city: false
+});
+
+const validateForm = () => {
+    errors.name = !form.name;
+    errors.acronym = !form.acronym;
+    errors.cnpj = !form.cnpj;
+    errors.address = !form.address;
+    errors.phone = !form.phone;
+    errors.email = !form.email;
+    errors.email_om = !form.email_om;
+    errors.url = !form.url;
+    errors.app_url = !form.app_url;
+    errors.logo = !form.logo;
+    errors.favicon = !form.favicon;
+    errors.logo_rodape = !form.logo_rodape;
+    errors.country = !form.country;
+    errors.city = !form.city;
+
+    return Object.values(errors).every(error => !error);
+};
+
+const submit = () => {
+    if (validateForm()) {
+        console.log(form);
+
+        try{
+            const newClub: any = clubeStore.createClub(form);
+        }catch(error){
+            console.error(error);
+        }
+    }
+};
+
 </script>

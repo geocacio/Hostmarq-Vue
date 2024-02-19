@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { index } from '@/api/generalAPI';
+import { index, store, update } from '@/api/generalAPI';
 import type { Club } from '@/types/clubType';
 
 const endpoint = {
@@ -17,12 +17,21 @@ export const useClubStore = defineStore('club', {
 
     actions: {
         async fetchClubs() {
-        try {
-            this.clubs = await index(endpoint.index);
-        } catch (error) {
-            throw error;
-        }
+            try {
+                this.clubs = await index(endpoint.index);
+            } catch (error) {
+                throw error;
+            }
         },
+
+        async createClub(form: Club) {
+            try {
+                this.clubs = await store(endpoint.index, form);
+            } catch (error) {
+                throw error;
+            }
+        }
+
     },
 
 });
