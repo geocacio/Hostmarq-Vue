@@ -4,6 +4,7 @@ import type { Club } from '@/types/clubType';
 
 const endpoint = {
     index: 'clubs',
+    user: 'my-club',
 }
 
 export const useClubStore = defineStore('club', {
@@ -26,7 +27,7 @@ export const useClubStore = defineStore('club', {
 
         async createClub(form: Club) {
             try {
-                this.clubs = await store(endpoint.index, form);
+                this.clubs = await store(endpoint.user, form);
             } catch (error) {
                 throw error;
             }
