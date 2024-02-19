@@ -81,7 +81,7 @@
                     </div>
 
                     <div class="mb-3 text-center">
-                        <ButtonComponent buttonClass="dark-blue" @click="submit" text="Salvar" />
+                        <ButtonComponent buttonClass="dark-blue" @click="submit" :text="buttonTextSubmit()" />
                     </div>
 
 
@@ -93,7 +93,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { reactive, onMounted } from 'vue';
 import { useClubStore } from '@/stores/modules/club';
 import type { Club } from '@/types/clubType';
 import BreadcrumbComponent from '@/components/BreadcrumbComponent.vue';
@@ -104,20 +104,20 @@ import ButtonComponent from '@/components/ButtonComponent.vue';
 const clubeStore = useClubStore();
 
 const form = reactive<Club>({
-    name: "Clube Fictício",
-    acronym: "CF",
-    cnpj: "12.345.678/0001-90",
-    address: "Rua Fictícia, 123",
-    phone: "(11) 1234-5678",
-    email: "contato@clubeficticio.com.br",
-    email_om: "om@clubeficticio.com.br",
-    url: "http://www.clubeficticio.com.br",
-    app_url: "http://app.clubeficticio.com.br",
-    logo: "http://www.clubeficticio.com.br/logo.png",
-    favicon: "http://www.clubeficticio.com.br/favicon.ico",
-    logo_rodape: "http://www.clubeficticio.com.br/logo_rodape.png",
-    country: "Brasil",
-    city: "São Paulo"
+    name: "",
+    acronym: "",
+    cnpj: "",
+    address: "",
+    phone: "",
+    email: "",
+    email_om: "",
+    url: "",
+    app_url: "",
+    logo: "",
+    favicon: "",
+    logo_rodape: "",
+    country: "",
+    city: ""
 });
 
 const errors = reactive({
@@ -159,12 +159,23 @@ const validateForm = () => {
 const submit = () => {
     if (validateForm()) {
         try{
-            const newClub: any = clubeStore.createClub(form);
-            Object.assign(form, newClub);
+            if (form.id) {
+                clubeStore.updateClub(form);
+            } else {
+                const newClub: any = clubeStore.createClub(form);
+                Object.assign(form, newClub);
+            }
         }catch(error){
             console.error(error);
         }
     }
 };
+
+const buttonTextSubmit = () => form.id ? "Atualizar" : "Cadastrar";
+
+onMounted( async () => {
+    await clubeStore.fetchClub();
+    Object.assign(form, clubeStore.getClub);
+});
 
 </script>
