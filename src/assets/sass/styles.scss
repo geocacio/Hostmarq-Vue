@@ -743,3 +743,35 @@ a{
         }
     }
 }
+
+.custom-nav-pills{
+    .nav-link{
+        color: var(--semi-dark);
+        opacity: 0.8;
+        transition: all 0.3s;
+        margin-bottom: 15px;
+        &:hover{
+            opacity: 1;
+        }
+        &.active{
+            opacity: 1;
+            background-color: var(--semi-dark);
+        }
+    }
+}
+
+.custom-tab-content{
+    .show-grid{
+        height: calc(100vh - 365px);
+        overflow-y: auto;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 15px;
+        @media screen and (min-width: 768px) {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        @media screen and (min-width: 992px) {
+            grid-template-columns: repeat(3, 1fr);  
+        }
+    }
+}

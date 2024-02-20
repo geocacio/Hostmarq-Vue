@@ -1,7 +1,7 @@
 <template>
     <div class="form-check form-switch">
-        <input class="form-check-input" type="checkbox" :id="`switch-${id}`" @click="toggleSwitch(id)">
-        <label class="form-check-label" :for="`switch-${id}`">{{ text }}</label>
+        <input class="form-check-input cursor-pointer" type="checkbox" :id="`switch-${id}`" @click="toggleSwitch(id)">
+        <label class="form-check-label cursor-pointer" :for="`switch-${id}`">{{ text }}</label>
     </div>
 </template>
 
