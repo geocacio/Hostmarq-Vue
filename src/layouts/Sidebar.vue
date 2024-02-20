@@ -26,14 +26,14 @@
                         <li class="nav-item">
                             <router-link to="/clubs" class="nav-link" v-if="userHasRole('Master') || userHasRole('Admin')" active-class="active">
                                 <IconComponent name="home" />
-                                <span class="nav-text">Clubs</span>
+                                <span class="nav-text">Clubes</span>
                             </router-link>
                         </li>
 
                         <li class="nav-item">
                             <router-link to="/users" class="nav-link" active-class="active">
                                 <IconComponent name="users" />
-                                <span class="nav-text">Associados</span>
+                                <span class="nav-text">Usuários</span>
                             </router-link>
                         </li>
 
