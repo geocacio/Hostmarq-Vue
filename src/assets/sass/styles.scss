@@ -767,6 +767,8 @@ a{
         display: grid;
         grid-template-columns: 1fr;
         gap: 15px;
+        scrollbar-width: thin;
+        scrollbar-color: var(--semi-dark) transparent;
         @media screen and (min-width: 768px) {
             grid-template-columns: repeat(2, 1fr);
         }
