@@ -3,6 +3,7 @@ import { index, store, update } from '@/api/generalAPI';
 
 const endpoint = {
     index: 'roles',
+    togglePermission: 'roles/{roleId}/add-permission'
 }
 
 export const useRoleStore = defineStore('role', {
@@ -22,6 +23,14 @@ export const useRoleStore = defineStore('role', {
                 throw error;
             }
         },
+
+        async addPermission(roleId: number, payload: object) {
+            try {
+                await store(endpoint.togglePermission.replace('{roleId}', roleId.toString()), payload);
+            } catch (error) {
+                throw error;
+            }
+        }
     },
 
 });

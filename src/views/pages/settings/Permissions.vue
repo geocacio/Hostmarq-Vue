@@ -11,7 +11,7 @@
 
                 <div class="card-body">
 
-                    <NavTabComponent :tabs="roles" :content="permissions" />
+                    <NavTabComponent :tabs="roles" :content="permissions" @togglePermission="togglePermission" />
 
                 </div>
 
@@ -42,5 +42,13 @@ onMounted( async () => {
     roles.value = roleStore.getRoles;
     permissions.value = permissionStore.getPermissions;
 });
+
+const togglePermission = (roleId: number, permissionId: number) => {
+    const payload = {
+        'permission_id': permissionId,
+    };
+    
+    roleStore.addPermission(roleId, payload);
+};
 
 </script>
