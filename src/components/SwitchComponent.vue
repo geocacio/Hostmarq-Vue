@@ -1,7 +1,7 @@
 <template>
     <div class="form-check form-switch">
-        <input class="form-check-input cursor-pointer" type="checkbox" :id="`switch-${id}`" @click="toggleSwitch(id)" :checked="checked">
-        <label class="form-check-label cursor-pointer" :for="`switch-${id}`" @click="checked = !checked">{{ text }}</label>
+        <input class="form-check-input cursor-pointer" type="checkbox" :id="`switch-${id}`" @change="toggleSwitch(id)" :checked="isChecked" ref="checkbox">
+        <label class="form-check-label cursor-pointer" :for="`switch-${id}`" @click.prevent="labelClicked">{{ text }}</label>
     </div>
 </template>
 
@@ -23,12 +23,15 @@ const props = defineProps({
     },
 });
 
-const checked = ref(props.isChecked);
-
 const emits = defineEmits(['toggle']);
 
 const toggleSwitch = (id: number) => {
     emits('toggle', id);
+};
+
+const checkbox = ref<any>(null);
+const labelClicked = () => {
+    checkbox.value.click();
 };
 
 </script>

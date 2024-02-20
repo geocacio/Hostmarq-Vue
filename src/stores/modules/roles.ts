@@ -26,7 +26,8 @@ export const useRoleStore = defineStore('role', {
 
         async addPermission(roleId: number, payload: object) {
             try {
-                await store(endpoint.togglePermission.replace('{roleId}', roleId.toString()), payload);
+                const response = await store(endpoint.togglePermission.replace('{roleId}', roleId.toString()), payload);
+                this.roles = response.data;
             } catch (error) {
                 throw error;
             }

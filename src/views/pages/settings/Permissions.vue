@@ -43,12 +43,13 @@ onMounted( async () => {
     permissions.value = permissionStore.getPermissions;
 });
 
-const togglePermission = (roleId: number, permissionId: number) => {
+const togglePermission = async (roleId: number, permissionId: number) => {
     const payload = {
         'permission_id': permissionId,
     };
     
-    roleStore.addPermission(roleId, payload);
+    await roleStore.addPermission(roleId, payload);
+    permissions.value = permissionStore.getPermissions;
 };
 
 </script>

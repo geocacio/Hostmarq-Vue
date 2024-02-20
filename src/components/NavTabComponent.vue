@@ -47,10 +47,12 @@ const getCurrentRole = (roleId: number) => {
 const emits = defineEmits(['togglePermission']);
 
 const toggleSwitch = (permissionId: number) => {
-    emits('togglePermission', currentRole.value, permissionId);
+    let roleId = currentRole.value == undefined ? props.tabs[0].id : currentRole.value;
+    emits('togglePermission', roleId, permissionId);
 };
 
 const isChecked = (roleId: number, permission: Permission) => {
+    console.log('is checked', roleId, permission);
     return permission.roles.some(role => role.id === roleId);
 };
 
