@@ -42,7 +42,29 @@ const router = createRouter({
           name: 'Habitualidade',
           component: () => import('@/views/pages/Habituality.vue'),
           meta: { requiresAuth: true, requiresRole:['Master', 'Admin', 'ClubMaster', 'ClubAdmin', 'User'] },
-        }
+        },
+        {
+          path: 'permissions',
+          name: 'Permissions',
+          component: () => import('@/views/pages/settings/Permissions.vue'),
+          meta: { requiresAuth: true, requiresRole: ['Master', 'Admin'] },
+        },
+        // {
+        //   path: 'settings',
+        //   name: 'Settings',
+        //   component: { template: '<router-view />' },
+        //   meta: { requiresAuth: true, requiresRole: ['Master', 'Admin'] },
+        //   children: [
+        //     {
+        //       path: 'permissions',
+        //       name: 'Permissions',
+        //       component: () => import('@/views/pages/settings/Permissions.vue'),
+        //       meta: { requiresAuth: true, requiresRole: ['Master', 'Admin'] },
+        //     },
+            
+        //   ]
+        // }
+
       ]
     }
   ]

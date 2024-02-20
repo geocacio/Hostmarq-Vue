@@ -45,6 +45,13 @@
                         </li>
 
                         <li class="nav-item">
+                            <router-link to="/permissions" class="nav-link" active-class="active">
+                                <IconComponent name="home" />
+                                <span class="nav-text">Permissões</span>
+                            </router-link>
+                        </li>
+
+                        <li class="nav-item">
                             <a class="nav-link" href="#">
                                 <IconComponent name="aperture" />
                                 <span class="nav-text">Home</span>
@@ -56,14 +63,14 @@
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">
                                 <IconComponent name="alert-circle" />
-                                <span class="nav-text">Home</span>
+                                <span class="nav-text">Configurações</span>
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li class="dropdown-item">
-                                    <a class="dropdown-link" href="#">
-                                        <span class="nav-text">Home</span>
-                                    </a>
-                                </li>
+                                <!-- <li class="dropdown-item">
+                                <router-link to="/settings/permissions" class="dropdown-link" active-class="active">
+                                    <span class="nav-text">Permissões</span>
+                                </router-link>
+                                </li> -->
                                 <li class="dropdown-item">
                                     <a class="dropdown-link" href="#">
                                         <span class="nav-text">Teste</span>
