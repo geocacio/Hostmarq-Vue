@@ -47,7 +47,7 @@ const router = createRouter({
           path: 'permissions',
           name: 'Permissions',
           component: () => import('@/views/pages/settings/Permissions.vue'),
-          meta: { requiresAuth: true, requiresRole: ['Master', 'Admin'] },
+          meta: { requiresAuth: true, requiresPermission: ['view-Permission'] },
         },
         // {
         //   path: 'settings',
@@ -94,6 +94,11 @@ router.beforeEach((to, from, next) => {
         } catch (error){
             console.error("Erro ao decodificar o token", error);
         }
+    }
+
+    if (authStore.userRoles.includes('Master')) {
+        next();
+        return;
     }
 
     if(to.meta.requiresAuth && !authStore.isAuthenticated){

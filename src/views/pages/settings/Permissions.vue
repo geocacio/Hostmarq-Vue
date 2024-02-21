@@ -28,12 +28,33 @@ import { onMounted, ref } from 'vue';
 import type { Role } from '@/types/rolesType';
 import type { Permission } from '@/types/permissionType';
 import { usePermissionStore } from '@/stores/modules/permissions';
+import { useAuthStore } from '@/stores/modules/auth';
+import { useToast } from 'vue-toastification';
+
+const toast = useToast();
 
 const roleStore = useRoleStore();
 const roles = ref<Role[]>([]);
 
 const permissionStore = usePermissionStore();
 const permissions = ref<Permission[]>([]);
+
+const authStore = useAuthStore();
+const userHasPermission = (permission: any) => authStore.userPermissions.includes(permission);
+
+const togglePermission = async (roleId: number, permissionId: number) => {
+    if (!userHasPermission('toggle-permission')) {
+        toast.error("Você não tem permissão para realizar esta ação.");
+        return;
+    }
+
+    const payload = {
+        'permission_id': permissionId,
+    };
+    
+    await roleStore.addPermission(roleId, payload);
+    permissions.value = permissionStore.getPermissions;
+};
 
 onMounted( async () => {
     await roleStore.fetchRoles();
@@ -43,13 +64,13 @@ onMounted( async () => {
     permissions.value = permissionStore.getPermissions;
 });
 
-const togglePermission = async (roleId: number, permissionId: number) => {
-    const payload = {
-        'permission_id': permissionId,
-    };
+// const togglePermission = async (roleId: number, permissionId: number) => {
+//     const payload = {
+//         'permission_id': permissionId,
+//     };
     
-    await roleStore.addPermission(roleId, payload);
-    permissions.value = permissionStore.getPermissions;
-};
+//     await roleStore.addPermission(roleId, payload);
+//     permissions.value = permissionStore.getPermissions;
+// };
 
 </script>
