@@ -47,7 +47,7 @@ const router = createRouter({
           path: 'permissions',
           name: 'Permissions',
           component: () => import('@/views/pages/settings/Permissions.vue'),
-          meta: { requiresAuth: true, requiresPermission: ['view-Permission'] },
+          meta: { requiresAuth: true, requiresPermission: ['toggle-Permission'] },
         },
         // {
         //   path: 'settings',

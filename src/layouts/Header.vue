@@ -4,19 +4,19 @@
         <ButtonComponent class="toggle-menu-mobile text-dark" icon="menu" @click="toggleMenu()" />
 
         <DropdownComponent :options="dropdownOptions" image="https://sistema.hostmarq.com.br//fotos/07032023_foto3.PNG"
-            :text="injectedUser.name" />
+            :text="user?.name" />
     </header>
 </template>
 
 <script setup lang="ts">
 import ButtonComponent from '@/components/ButtonComponent.vue';
 import DropdownComponent from '@/components/DropdownComponent.vue';
-import { defineEmits, inject, ref } from 'vue';
+import { defineEmits, onMounted, ref } from 'vue';
 import { useAuthStore } from '@/stores/modules/auth';
 import { useRouter } from "vue-router";
 import type { User } from '@/types/userType';
 
-const injectedUser = inject('auth') as User;
+const user = ref<User>();
 
 const router = useRouter();
 
@@ -63,5 +63,11 @@ const toggleMenu = () => {
     changeMenu.value = !changeMenu.value;
     emit('toggleMenu', changeMenu.value);
 };
+
+onMounted(() => {
+    if (auth.user) {
+        user.value = auth.user;
+    }
+});
 
 </script>

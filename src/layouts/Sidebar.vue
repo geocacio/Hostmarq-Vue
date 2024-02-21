@@ -44,7 +44,7 @@
                             </router-link>
                         </li>
 
-                        <li class="nav-item">
+                        <li class="nav-item" v-if="userHasRole('Master') || userHasPermission('toggle-Permission')">
                             <router-link to="/permissions" class="nav-link" active-class="active">
                                 <IconComponent name="home" />
                                 <span class="nav-text">Permissões</span>
@@ -112,7 +112,8 @@ import { useAuthStore } from '@/stores/modules/auth'
 
 const authStore = useAuthStore()
 
-const userHasRole = (role: any) => authStore.userRoles.includes(role)
+const userHasRole = (role: any) => authStore.userRoles.includes(role);
+const userHasPermission = (permission: any) => authStore.userPermissions.includes(permission);
 
 const props = defineProps({
     openSidebar: Boolean

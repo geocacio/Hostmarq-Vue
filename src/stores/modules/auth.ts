@@ -30,8 +30,7 @@ state: (): Auth => ({
             this.user = null;
             this.userRoles = [];
             this.userPermissions = [];
-            localStorage.removeItem("userData");
-            localStorage.removeItem("authToken");
+            localStorage.clear();
 
             return true;
         },
