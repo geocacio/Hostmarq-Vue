@@ -28,7 +28,11 @@ export const useUserStore = defineStore('user', {
 
         async createUser(form: User) {
             try {
-                this.users = await store(endpoint.register, form);
+                //adicionar novo usuário no state users
+                const newUser = await store(endpoint.register, form);
+                this.users = [...this.users.data, newUser.user];
+
+                return newUser.user;
             } catch (error) {
                 throw error;
             }

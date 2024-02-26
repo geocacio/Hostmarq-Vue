@@ -129,7 +129,7 @@ const submit = async () => {
             //adicionar o usuário criado na lista de usuários
             document.getElementById('closeModal-new-user')?.click();
             if (newUser){
-                users.value.push(newUser);
+                users.value.data.push(newUser);
             }
         } catch (error) {
             console.error(error);
