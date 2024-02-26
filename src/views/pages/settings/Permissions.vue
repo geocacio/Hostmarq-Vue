@@ -27,20 +27,17 @@ import { useRoleStore } from '@/stores/modules/roles';
 import { onMounted, ref } from 'vue';
 import type { Role } from '@/types/rolesType';
 import type { Permission } from '@/types/permissionType';
-import { usePermissionStore } from '@/stores/modules/permissions';
 
 const roleStore = useRoleStore();
 const roles = ref<Role[]>([]);
 
-const permissionStore = usePermissionStore();
 const permissions = ref<Permission[]>([]);
 
 onMounted( async () => {
     await roleStore.fetchRoles();
-    await permissionStore.fetchPermissions();
 
     roles.value = roleStore.getRoles;
-    permissions.value = permissionStore.getPermissions;
+    permissions.value = roles.value.permissions;
 });
 
 const togglePermission = async (roleId: number, permissionId: number) => {
@@ -49,7 +46,6 @@ const togglePermission = async (roleId: number, permissionId: number) => {
     };
     
     await roleStore.addPermission(roleId, payload);
-    permissions.value = permissionStore.getPermissions;
 };
 
 </script>

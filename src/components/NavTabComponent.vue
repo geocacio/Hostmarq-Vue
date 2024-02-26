@@ -53,6 +53,7 @@ const toggleSwitch = (permissionId: number) => {
 
 const isChecked = (roleId: number, permission: Permission) => {
     return permission.roles.some(role => role.id === roleId);
+    return false;
 };
 
 </script>
