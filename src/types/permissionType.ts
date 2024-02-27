@@ -8,5 +8,5 @@ export interface Permission{
         role_id: number;
         permission_id: number;
     };
-    roles: Role[];
+    roles?: Role[];
 }

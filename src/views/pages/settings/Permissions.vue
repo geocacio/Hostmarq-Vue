@@ -16,7 +16,7 @@
                         <template v-slot:header>
                             <div class="mb-3">
                                 <LabelComponent text="Clubes" />
-                                <MultipleSelectComponent :options="options" @update:selectedOptions="handleSelectedOptions" placeholder="Selecione um ou mais Clubes" />
+                                <MultipleSelectComponent :options="clubList" @update:selectedOptions="handleSelectedOptions" placeholder="Selecione um ou mais Clubes" />
                             </div>
                         </template>
 
@@ -38,17 +38,29 @@ import type { Role } from '@/types/rolesType';
 import type { Permission } from '@/types/permissionType';
 import MultipleSelectComponent from '@/components/MultipleSelectComponent.vue';
 import LabelComponent from '@/components/form/LabelComponent.vue';
+import { useClubStore } from '@/stores/modules/club';
+import type { Club } from '@/types/clubType';
 
 const roleStore = useRoleStore();
 const roles = ref<Role[]>([]);
+const clubStore = useClubStore();
+
+const clubs = ref<Club[]>([]);
 
 const permissions = ref<Permission[]>([]);
 
+const clubList = ref([]);
+
 onMounted( async () => {
     await roleStore.fetchRoles();
-
+    await clubStore.fetchClubs();
+    
     roles.value = roleStore.getRoles;
     permissions.value = roles.value.permissions;
+
+    clubs.value = clubStore.getClubs;
+
+    clubList.value = clubs.value.map(club => ({ code: club.id, name: club.name }));
 });
 
 const togglePermission = async (roleId: number, permissionId: number) => {

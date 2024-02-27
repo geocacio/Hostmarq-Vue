@@ -22,7 +22,8 @@ export const useClubStore = defineStore('club', {
     actions: {
         async fetchClubs() {
             try {
-                this.clubs = await index(endpoint.index);
+                let clubData = await index(endpoint.index);
+                this.clubs = clubData.data;
             } catch (error) {
                 throw error;
             }

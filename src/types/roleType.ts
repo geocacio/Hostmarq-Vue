@@ -1,3 +1,5 @@
+import type {Permission} from './permissionType';
+
 export interface Role{
     id: number;
     name: string;
@@ -8,5 +10,5 @@ export interface Role{
         user_id: number;
         role_id: number;
     };
-    permissions: [];
+    permissions?: Permission[];
 }
