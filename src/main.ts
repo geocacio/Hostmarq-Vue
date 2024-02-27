@@ -9,8 +9,10 @@ import router from './router'
 import './assets/sass/styles.scss'
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
+import Multiselect from 'vue-multiselect';
 
 const app = createApp(App)
+app.component('multiselect', Multiselect);
 
 app.use(createPinia())
 app.use(Toast);

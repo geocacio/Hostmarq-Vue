@@ -11,12 +11,8 @@
     <div class="tab-content custom-tab-content">
         <div class="tab-pane fade" :id="`nav-${tab.name}`" role="tabpanel" :aria-labelledby="`nav-${tab.id}`" v-for="(tab, index) in tabs" :key="tab.id" :class="{ 'active show' : index == 0}">
             <!-- slot exclusivo para permissões de usuários (selecionar o clube) -->
-            <slot name="header" v-if="showSelectClubs && tab.name != 'Admin'">
-                <div class="mb-3">
-                    <LabelComponent text="Clube" />
-                    <SelectComponent :options="clubsOptions" />
-                </div>
-            </slot>
+            <slot name="header" v-if="showSelectClubs && tab.name != 'Admin'"></slot>
+            
             <div class="show-grid">
                 <SwitchComponent v-for="(permission) in content" :key="permission.id" :id="permission.id" :text="permission.name" @toggle="toggleSwitch" :isChecked="isChecked(tab.id!, permission)" />
             </div>

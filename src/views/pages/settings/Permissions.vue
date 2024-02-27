@@ -8,10 +8,19 @@
                 <div class="card-header">
                     <h4 class="card-title">Lista de Permissões</h4>
                 </div>
-
+                
                 <div class="card-body">
+                    
+                    <NavTabComponent :tabs="roles" :content="permissions" @togglePermission="togglePermission" :showSelectClubs="true" >
+                        
+                        <template v-slot:header>
+                            <div class="mb-3">
+                                <LabelComponent text="Clubes" />
+                                <MultipleSelectComponent :options="options" @update:selectedOptions="handleSelectedOptions" placeholder="Selecione um ou mais Clubes" />
+                            </div>
+                        </template>
 
-                    <NavTabComponent :tabs="roles" :content="permissions" @togglePermission="togglePermission" :showSelectClubs="true" />
+                    </NavTabComponent>
 
                 </div>
 
@@ -27,6 +36,8 @@ import { useRoleStore } from '@/stores/modules/roles';
 import { onMounted, ref } from 'vue';
 import type { Role } from '@/types/rolesType';
 import type { Permission } from '@/types/permissionType';
+import MultipleSelectComponent from '@/components/MultipleSelectComponent.vue';
+import LabelComponent from '@/components/form/LabelComponent.vue';
 
 const roleStore = useRoleStore();
 const roles = ref<Role[]>([]);
@@ -46,6 +57,23 @@ const togglePermission = async (roleId: number, permissionId: number) => {
     };
     
     await roleStore.addPermission(roleId, payload);
+};
+
+const options = ref([
+    { code: 1, name: 'Opção 1' },
+    { code: 2, name: 'Opção 2' },
+    { code: 3, name: 'Opção 3' },
+    { code: 4, name: 'Opção 4' },
+    { code: 5, name: 'Opção 5' },
+    { code: 6, name: 'Opção 6' },
+    { code: 7, name: 'Opção 7' },
+    { code: 8, name: 'Opção 8' },
+    { code: 9, name: 'Opção 9' },
+    { code: 10, name: 'Opção 10' },
+]);
+
+const handleSelectedOptions = (selectedOptions: any) => {
+    console.log(selectedOptions);
 };
 
 </script>
