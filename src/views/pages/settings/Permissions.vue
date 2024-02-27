@@ -11,7 +11,7 @@
 
                 <div class="card-body">
 
-                    <NavTabComponent :tabs="roles" :content="permissions" @togglePermission="togglePermission" />
+                    <NavTabComponent :tabs="roles" :content="permissions" @togglePermission="togglePermission" :showSelectClubs="true" />
 
                 </div>
 
