@@ -40,6 +40,9 @@ import MultipleSelectComponent from '@/components/MultipleSelectComponent.vue';
 import LabelComponent from '@/components/form/LabelComponent.vue';
 import { useClubStore } from '@/stores/modules/club';
 import type { Club } from '@/types/clubType';
+import { useAuthStore } from '@/stores/modules/auth';
+
+const authStore = useAuthStore();
 
 const roleStore = useRoleStore();
 const roles = ref<Role[]>([]);
@@ -51,6 +54,9 @@ const permissions = ref<Permission[]>([]);
 
 const clubList = ref([]);
 
+let roleList = ['Master', 'Admin'];
+const role = ref('');
+
 onMounted( async () => {
     await roleStore.fetchRoles();
     await clubStore.fetchClubs();
@@ -59,9 +65,19 @@ onMounted( async () => {
     permissions.value = roles.value.permissions;
 
     clubs.value = clubStore.getClubs;
+    
+    role.value = authStore.getRole;
+    
+    if(roleList.includes(role.value[0])){
+        clubList.value = clubs.value.map(club => ({ code: club.id, name: club.name }));
+    }else{
+        clubList.value = [{ code: 0, name: 'Todos' }];
+    }
+    
 
-    clubList.value = clubs.value.map(club => ({ code: club.id, name: club.name }));
 });
+
+// const showAllClubs = () => roleList.includes(role.value[0]);
 
 const togglePermission = async (roleId: number, permissionId: number) => {
     const payload = {
