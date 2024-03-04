@@ -14,7 +14,7 @@
             <slot name="header" v-if="showSelectClubs && tab.name != 'Admin'"></slot>
             
             <div class="show-grid">
-                <SwitchComponent v-for="(permission) in content" :key="permission.id" :id="permission.id" :text="permission.name" @toggle="toggleSwitch" :isChecked="isChecked(tab.id!, permission)" />
+                <SwitchComponent v-for="(permission) in content" :key="permission.id" :id="permission.id" :text="permission.name" @toggle="toggleSwitch" :isChecked="isChecked(tab, permission)" />
             </div>
 
         </div>
@@ -28,8 +28,6 @@ import { defineProps, defineEmits, ref } from 'vue';
 import type { Role } from '@/types/rolesType';
 import type { Permission } from '@/types/permissionType';
 import SwitchComponent from './SwitchComponent.vue';
-import SelectComponent from './form/SelectComponent.vue';
-import LabelComponent from './form/LabelComponent.vue';
 
 const props = defineProps({
     tabs: {
@@ -59,7 +57,6 @@ const toggleSwitch = (permissionId: number, isChecked: boolean) => {
     emits('togglePermission', roleId, permissionId, isChecked);
 };
 
-const isChecked = (roleId: number, permission: Permission) => {
-    return permission.roles.some(role => role.id === roleId);
-};
+const isChecked = (role: any, permission: Permission) => role.permissions.some((p: Permission) => p.id === permission.id);
+
 </script>
