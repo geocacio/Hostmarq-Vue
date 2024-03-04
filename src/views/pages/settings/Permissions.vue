@@ -52,10 +52,16 @@ const clubs = ref<Club[]>([]);
 
 const permissions = ref<Permission[]>([]);
 
-const clubList = ref([]);
+interface clubList {
+    code?: number;
+    name?: string;
+}
+const clubList = ref<clubList[]>([]);
 
 let roleList = ['Master', 'Admin'];
 const role = ref('');
+
+let clubsId = [] as number[];
 
 onMounted( async () => {
     await roleStore.fetchRoles();
@@ -65,39 +71,23 @@ onMounted( async () => {
         clubs.value = clubStore.getClubs;
         clubList.value = clubs.value.map(club => ({ code: club.id, name: club.name }));
     }else{
-        clubList.value = [{ code: authStore.getUser.club.id }];
+        clubList.value = [{ code: authStore.getUser?.club?.id }];
     }
 
     roles.value = roleStore.getRoles;
     permissions.value = authStore.getPermissions;
-    // permissions.value = roles.value.permissions;
 });
 
-// const showAllClubs = () => roleList.includes(role.value[0]);
-
-const togglePermission = async (roleId: number, permissionId: number) => {
+const togglePermission = async (roleId: number, permissionId: number, isChecked) => {
     const payload = {
+        'clubs_id': clubsId,
         'permission_id': permissionId,
+        'action': isChecked ? 'attach' : 'detach'
     };
     
     await roleStore.addPermission(roleId, payload);
 };
 
-const options = ref([
-    { code: 1, name: 'Opção 1' },
-    { code: 2, name: 'Opção 2' },
-    { code: 3, name: 'Opção 3' },
-    { code: 4, name: 'Opção 4' },
-    { code: 5, name: 'Opção 5' },
-    { code: 6, name: 'Opção 6' },
-    { code: 7, name: 'Opção 7' },
-    { code: 8, name: 'Opção 8' },
-    { code: 9, name: 'Opção 9' },
-    { code: 10, name: 'Opção 10' },
-]);
-
-const handleSelectedOptions = (selectedOptions: any) => {
-    console.log(selectedOptions);
-};
+const handleSelectedOptions = (selectedOptions: any) => clubsId = selectedOptions.map((option: any) => option.code);
 
 </script>

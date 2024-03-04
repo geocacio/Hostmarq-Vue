@@ -54,22 +54,12 @@ const getCurrentRole = (roleId: number) => {
 
 const emits = defineEmits(['togglePermission']);
 
-const toggleSwitch = (permissionId: number) => {
+const toggleSwitch = (permissionId: number, isChecked: boolean) => {
     let roleId = currentRole.value == undefined ? props.tabs[0].id : currentRole.value;
-    emits('togglePermission', roleId, permissionId);
+    emits('togglePermission', roleId, permissionId, isChecked);
 };
 
 const isChecked = (roleId: number, permission: Permission) => {
     return permission.roles.some(role => role.id === roleId);
 };
-
-const clubsOptions = ref([
-    { value: 0, text: 'Todos' },
-    { value: 1, text: 'Clube 1' },
-    { value: 2, text: 'Clube 2' },
-    { value: 3, text: 'Clube 3' },
-    { value: 4, text: 'Clube 4' },
-    { value: 5, text: 'Clube 5' },
-]);
-
 </script>

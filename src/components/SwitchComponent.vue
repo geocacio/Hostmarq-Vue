@@ -26,7 +26,9 @@ const props = defineProps({
 const emits = defineEmits(['toggle']);
 
 const toggleSwitch = (id: number) => {
-    emits('toggle', id);
+    //pegar o checked do input
+    let checked = checkbox.value.checked;
+    emits('toggle', id, checked);
 };
 
 const checkbox = ref<any>(null);
