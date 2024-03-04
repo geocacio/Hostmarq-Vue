@@ -17,6 +17,8 @@ state: (): Auth => ({
     getters: {
         isAuthenticated: (state) => !!state.token,
         getRole: (state) => state.userRoles,
+        getUser: (state) => state.user,
+        getPermissions: (state) => state.user.roles[0].permissions,
     },
 
     actions: {

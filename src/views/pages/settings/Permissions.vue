@@ -13,7 +13,7 @@
                     
                     <NavTabComponent :tabs="roles" :content="permissions" @togglePermission="togglePermission" :showSelectClubs="true" >
                         
-                        <template v-slot:header>
+                        <template v-if="roleList.includes(authStore.getRole[0])" v-slot:header>
                             <div class="mb-3">
                                 <LabelComponent text="Clubes" />
                                 <MultipleSelectComponent :options="clubList" @update:selectedOptions="handleSelectedOptions" placeholder="Selecione um ou mais Clubes" />
@@ -59,22 +59,18 @@ const role = ref('');
 
 onMounted( async () => {
     await roleStore.fetchRoles();
-    await clubStore.fetchClubs();
     
-    roles.value = roleStore.getRoles;
-    permissions.value = roles.value.permissions;
-
-    clubs.value = clubStore.getClubs;
-    
-    role.value = authStore.getRole;
-    
-    if(roleList.includes(role.value[0])){
+    if(roleList.includes(authStore.getRole[0])){
+        await clubStore.fetchClubs();
+        clubs.value = clubStore.getClubs;
         clubList.value = clubs.value.map(club => ({ code: club.id, name: club.name }));
     }else{
-        clubList.value = [{ code: 0, name: 'Todos' }];
+        clubList.value = [{ code: authStore.getUser.club.id }];
     }
-    
 
+    roles.value = roleStore.getRoles;
+    permissions.value = authStore.getPermissions;
+    // permissions.value = roles.value.permissions;
 });
 
 // const showAllClubs = () => roleList.includes(role.value[0]);
