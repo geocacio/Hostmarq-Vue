@@ -16,7 +16,7 @@
                         <template v-if="roleList.includes(authStore.getRole[0])" v-slot:header>
                             <div class="mb-3">
                                 <LabelComponent text="Clubes" />
-                                <MultipleSelectComponent :options="clubList" @update:selectedOptions="handleSelectedOptions" placeholder="Selecione um ou mais Clubes" />
+                                <MultipleSelectComponent :options="permissions" @update:selectedOptions="handleSelectedOptions" placeholder="Selecione um ou mais Clubes" />
                             </div>
                         </template>
 
@@ -38,25 +38,25 @@ import type { Role } from '@/types/rolesType';
 import type { Permission } from '@/types/permissionType';
 import MultipleSelectComponent from '@/components/MultipleSelectComponent.vue';
 import LabelComponent from '@/components/form/LabelComponent.vue';
-import { useClubStore } from '@/stores/modules/club';
-import type { Club } from '@/types/clubType';
+// import { useClubStore } from '@/stores/modules/club';
+// import type { Club } from '@/types/clubType';
 import { useAuthStore } from '@/stores/modules/auth';
 
 const authStore = useAuthStore();
 
 const roleStore = useRoleStore();
 const roles = ref<Role[]>([]);
-const clubStore = useClubStore();
+// const clubStore = useClubStore();
 
-const clubs = ref<Club[]>([]);
+// const clubs = ref<Club[]>([]);
 
 const permissions = ref<Permission[]>([]);
 
-interface clubList {
-    code?: number;
-    name?: string;
-}
-const clubList = ref<clubList[]>([]);
+// interface clubList {
+//     code?: number;
+//     name?: string;
+// }
+// const clubList = ref<clubList[]>([]);
 
 let roleList = ['Master', 'Admin'];
 const role = ref('');
@@ -65,17 +65,20 @@ let clubsId = [] as number[];
 
 onMounted( async () => {
     await roleStore.fetchRoles();
+    let dataRoles = roleStore.getRoles;
+    roles.value = dataRoles.roles;
+    permissions.value = dataRoles.permissions;
     
-    if(roleList.includes(authStore.getRole[0])){
-        await clubStore.fetchClubs();
-        clubs.value = clubStore.getClubs;
-        clubList.value = clubs.value.map(club => ({ code: club.id, name: club.name }));
-    }else{
-        clubList.value = [{ code: authStore.getUser?.club?.id }];
-    }
+    // if(roleList.includes(authStore.getRole[0])){
+    //     await clubStore.fetchClubs();
+    //     clubs.value = clubStore.getClubs;
+    //     clubList.value = clubs.value.map(club => ({ code: club.id, name: club.name }));
+    // }else{
+    //     clubList.value = [{ code: authStore.getUser?.club?.id }];
+    // }
 
-    roles.value = roleStore.getRoles;
-    permissions.value = authStore.getPermissions;
+    // roles.value = roleStore.getRoles;
+    // permissions.value = authStore.getPermissions;
 });
 
 const togglePermission = async (roleId: number, permissionId: number, isChecked) => {

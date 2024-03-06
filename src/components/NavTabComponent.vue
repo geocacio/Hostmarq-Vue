@@ -14,7 +14,7 @@
             <slot name="header" v-if="showSelectClubs && tab.name != 'Admin'"></slot>
             
             <div class="show-grid">
-                <SwitchComponent v-for="(permission) in content" :key="permission.id" :id="permission.id" :text="permission.name" @toggle="toggleSwitch" :isChecked="isChecked(tab, permission)" />
+                <SwitchComponent v-for="(permission) in content" :key="permission.id" :id="permission.id" :text="permission.name" @toggle="toggleSwitch" :isChecked="isChecked(tab.id!, permission)" />
             </div>
 
         </div>
@@ -52,11 +52,14 @@ const getCurrentRole = (roleId: number) => {
 
 const emits = defineEmits(['togglePermission']);
 
-const toggleSwitch = (permissionId: number, isChecked: boolean) => {
+const toggleSwitch = (permissionId: number) => {
     let roleId = currentRole.value == undefined ? props.tabs[0].id : currentRole.value;
-    emits('togglePermission', roleId, permissionId, isChecked);
+    emits('togglePermission', roleId, permissionId);
 };
 
-const isChecked = (role: any, permission: Permission) => role.permissions.some((p: Permission) => p.id === permission.id);
+const isChecked = (roleId: number, permission: Permission) => {
+    return permission.roles?.some(role => role.id === roleId) ?? false;
+};
+
 
 </script>

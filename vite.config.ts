@@ -3,7 +3,8 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
-// https://vitejs.dev/config/
+const VITE_APP_BASE_URL = process.env.VITE_APP_BASE_URL;
+
 export default defineConfig({
   plugins: [
     vue(),
@@ -16,8 +17,7 @@ export default defineConfig({
   server: {
     proxy: {
       '^/api': {
-        target: "http://127.0.0.1:8000/api",
-        // target: "http://192.168.0.106:8000/api",
+        target: VITE_APP_BASE_URL,
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
         // pathRewrite: { '^/api': '/api' },
