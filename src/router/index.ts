@@ -59,6 +59,11 @@ const router = createRouter({
           name: 'Tipos de Armas',
           component: () => import('@/views/pages/WeaponTypes.vue'),
         },
+        {
+          path: 'weapon-models',
+          name: 'Modelos de Armas',
+          component: () => import('@/views/pages/WeaponModels.vue'),
+        },
         // {
         //   path: 'settings',
         //   name: 'Settings',
