@@ -49,6 +49,11 @@ const router = createRouter({
           component: () => import('@/views/pages/settings/Permissions.vue'),
           meta: { requiresAuth: true, requiresPermission: ['toggle-Permission'] },
         },
+        {
+          path: 'calibers',
+          name: 'Calibers',
+          component: () => import('@/views/pages/settings/Calibers.vue'),
+        },
         // {
         //   path: 'settings',
         //   name: 'Settings',
