@@ -20,9 +20,11 @@ export const store = async (url: string, TypeData: any) => {
         const response = await axiosInstance.post(link, TypeData);
         if(response.data.success){
             
-            toast.success(response.data.success);
+            toast.success(response.data.message);
+        }else{
+            toast.error(response.data.message);
         }
-
+        
         return response.data;
     } catch (error: any) {
         toast.error(error.response.data.error);
