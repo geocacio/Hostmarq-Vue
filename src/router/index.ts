@@ -52,7 +52,7 @@ const router = createRouter({
         {
           path: 'calibers',
           name: 'Calibers',
-          component: () => import('@/views/pages/settings/Calibers.vue'),
+          component: () => import('@/views/pages/Calibers.vue'),
         },
         // {
         //   path: 'settings',
