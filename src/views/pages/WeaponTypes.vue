@@ -26,10 +26,6 @@
 
         <TableComponent :items="dataTable" :actions="actions"/>
 
-        <!-- <div class="col-12 col-sm-6 col-md-4 col-lg-3" v-for="(person, index) in users.data" :key="index">
-            <PersonComponent :data="person" @update="updateuser" @delete="deleteUser" />
-        </div> -->
-
     </div>
 
     <!-- <PaginationComponent class="mt-5" :links="users.links" :currentPage="users.current_page" @update:pageUrl="fetchPage" /> -->
@@ -41,7 +37,6 @@ import BreadcrumbComponent from '@/components/BreadcrumbComponent.vue';
 import PaginationComponent from '@/components/PaginationComponent.vue';
 import InputComponent from '@/components/form/InputComponent.vue';
 import { ref, onMounted, reactive } from 'vue';
-import type { User } from '@/types/userType';
 import ModalComponent from '@/components/ModalComponent.vue';
 import LabelComponent from '@/components/form/LabelComponent.vue';
 import ButtonComponent from '@/components/ButtonComponent.vue';
@@ -67,17 +62,6 @@ const form = reactive<Form>({
 
 const search = ref('');
 
-// const fetchPage = async (label: string) => {
-//     let url = `users?page=${label}`;
-//     url = search ? `${url}&search=${search.value}` : url;
-//     try {
-//         await userStore.fetchUsers(url);
-//         users.value = userStore.getUsers;
-//     } catch (error) {
-//         console.error(error);
-//     }
-// };
-
 const actions: Action[] = [
     {
         name: 'edit',
@@ -87,14 +71,6 @@ const actions: Action[] = [
         icon: 'edit',
         class: 'light blue',
     },
-    // {
-    //     name: 'view',
-    //     action: (item) => {
-    //         // Código para a ação "Visualizar"
-    //     },
-    //     icon: 'eye',
-    //     class: 'light orange',
-    // },
     {
         name: 'delete',
         action: (item: any) => {
@@ -103,14 +79,6 @@ const actions: Action[] = [
         icon: 'trash',
         class: 'light red',
     },
-    // {
-    //     name: 'settings',
-    //     action: (item) => {
-    //         // Código para a ação "Configurações"
-    //     },
-    //     icon: 'settings',
-    //     class: 'light green',
-    // },
 ];
 
 const removeWeaponType = async(itemSlug: string) => {
@@ -181,22 +149,5 @@ const searchSubmit = async (event: any) => {
         console.error(error);
     }
 };
-
-// const updateuser = async (user: User) => {
-//     try {
-//         await userStore.updateUser(user);
-//     } catch (error) {
-//         console.error(error);
-//     }
-// };
-
-// const deleteUser = async (user: User) => {
-//     let userId = user.id?.toString() || '';
-//     try {
-//         await userStore.deleteUser(userId);
-//     } catch (error) {
-//         console.error(error);
-//     }
-// };
 
 </script>
