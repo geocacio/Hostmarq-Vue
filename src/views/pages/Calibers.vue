@@ -11,28 +11,16 @@
 
                 <div class="mb-3">
                     <LabelComponent text="Calibre" />
-                    <InputComponent type="text" placeholder="Nome" v-model="form.name" :validation="true" :error="errors.name" :error-message="'Por favor, insira um nome de usuário.'" @input="errors.name = false" />
+                    <InputComponent type="text" placeholder="Calibre" v-model="form.name" :validation="true" :error="errors.name" :error-message="'Por favor, insira um nome de usuário.'" @input="errors.name = false" />
                 </div>
 
                 <div class="mb-3">
-                    <LabelComponent text="Tipo de usuário" />
-                    <select class="form-control" v-model="form.role_id">
+                    <LabelComponent text="Tipo" />
+                    <select class="form-control" v-model="form.type">
                         <option value="">Selecione o tipo de usuário</option>
-                        <option value="2">Admin</option>
-                        <option value="3">Dono de um clube(ClubMaster)</option>
-                        <option value="4">Funcionario do clube(ClubAdmin)</option>
-                        <option value="5">Usuário</option>
+                        <option value="permitted">Permitido</option>
+                        <option value="restricted">Restrito</option>
                     </select>
-                </div>
-
-                <div class="mb-3">
-                    <LabelComponent text="E-mail" />
-                    <InputComponent type="email" placeholder="E-mail" v-model="form.email" :validation="true" :error="errors.email" :error-message="'Por favor, insira um e-mail para o usuário.'" @input="errors.email = false" />
-                </div>
-
-                <div class="mb-3">
-                    <LabelComponent text="Senha" />
-                    <PasswordComponent placeholder="Senha" v-model="form.password" @keypress="submit" :validation="true" :error="errors.password" :error-message="'Por favor, insira sua senha.'" @input="errors.password = false" />
                 </div>
 
                 <div class="mb-3 text-center">
@@ -62,17 +50,12 @@ import BreadcrumbComponent from '@/components/BreadcrumbComponent.vue';
 import PaginationComponent from '@/components/PaginationComponent.vue';
 import InputComponent from '@/components/form/InputComponent.vue';
 import { ref, onMounted, reactive } from 'vue';
-// import { useUserStore } from '@/stores/modules/user';
 import type { User } from '@/types/userType';
 import ModalComponent from '@/components/ModalComponent.vue';
 import LabelComponent from '@/components/form/LabelComponent.vue';
-import PasswordComponent from '@/components/form/PasswordComponent.vue';
 import ButtonComponent from '@/components/ButtonComponent.vue';
 import TableComponent from '@/components/TableComponent.vue';
 import { useCaliberStore } from '@/stores/modules/caliber';
-
-// const userStore = useUserStore();
-// const users = ref<User[]>([]);
 
 const caliberStore = useCaliberStore();
 const calibers = ref<Caliber[]>([]);
@@ -86,36 +69,32 @@ const dataTable = ref<dataTable[]>([]);
 
 interface Form {
     name: string;
-    email: string;
-    password: string;
-    role_id: string;
+    type: string;
 }
 
-const form = reactive<User>({
-    name: 'Geovane',
-    email: 'geovane@hostmarq.com',
-    password: 'password',
-    role_id: '',
+const form = reactive<Form>({
+    name: '9mm',
+    type: ''
 });
 
 const search = ref('');
 
-const fetchPage = async (label: string) => {
-    let url = `users?page=${label}`;
-    url = search ? `${url}&search=${search.value}` : url;
-    try {
-        await userStore.fetchUsers(url);
-        users.value = userStore.getUsers;
-    } catch (error) {
-        console.error(error);
-    }
-};
+// const fetchPage = async (label: string) => {
+//     let url = `users?page=${label}`;
+//     url = search ? `${url}&search=${search.value}` : url;
+//     try {
+//         await userStore.fetchUsers(url);
+//         users.value = userStore.getUsers;
+//     } catch (error) {
+//         console.error(error);
+//     }
+// };
 
 const actions: Action[] = [
     {
         name: 'edit',
         action: (item) => {
-            console.log('Edit', item);
+            
         },
         icon: 'edit',
         class: 'light blue',
@@ -130,8 +109,8 @@ const actions: Action[] = [
     // },
     {
         name: 'delete',
-        action: (item) => {
-            // Código para a ação "Excluir"
+        action: (item: any) => {
+            removeCaliber(item.slug);
         },
         icon: 'trash',
         class: 'light red',
@@ -146,20 +125,28 @@ const actions: Action[] = [
     // },
 ];
 
+const removeCaliber = async(itemSlug: string) => {
+    await caliberStore.deleteCaliber("itaberaba-ct", itemSlug)
+}
+
+const editCaliber = async(item: object) => {
+    
+}
+
 onMounted(async () => {
     try {
-        await caliberStore.fetchCalibers('carcara');
+        await caliberStore.fetchCalibers('itaberaba-ct');
         calibers.value = caliberStore.getCalibers;
 
         // await userStore.fetchUsers('users');
         // users.value = userStore.getUsers;
         // console.log('passou aqui', users.value.data)
         dataTable.value = calibers.value.map((item) => {
-        //     console.log('passou aqui', item)
             return {
                 id: item.id,
                 'Nome': item.name,
                 'Tipo': item.type,
+                slug: item.slug
             }
         })
     } catch (error) {
@@ -169,27 +156,25 @@ onMounted(async () => {
 
 const errors = reactive({
     name: false,
-    email: false,
-    password: false,
+    type: false,
 });
 
 const validateForm = () => {
     errors.name = !form.name;
-    errors.email = !form.email;
-    errors.password = !form.password;
+    errors.type = !form.type;
 
-    return !errors.name && !errors.email && !errors.password;
+    return !errors.name && !errors.type;
 };
 
 const submit = async () => {
 
     if (validateForm()) {
         try {
-            const newUser: any = await userStore.createUser(form);
-            //adicionar o usuário criado na lista de usuários
+            const newCaliber: any = await caliberStore.createCaliber("itaberaba-ct", form);
             document.getElementById('closeModal-new-user')?.click();
-            if (newUser){
-                users.value.data.push(newUser);
+            console.log(newCaliber);
+            if (newCaliber){
+                dataTable.value.push(newCaliber);
             }
         } catch (error) {
             console.error(error);
