@@ -45,7 +45,7 @@
 
     <div class="row row-gap-15">
 
-        <TableComponent :items="users" :actions="actions"/>
+        <TableComponent :items="dataTable" :actions="actions"/>
 
         <!-- <div class="col-12 col-sm-6 col-md-4 col-lg-3" v-for="(person, index) in users.data" :key="index">
             <PersonComponent :data="person" @update="updateuser" @delete="deleteUser" />
@@ -54,7 +54,7 @@
     </div>
 
     <!-- <PaginationComponent class="mt-5" :links="users.links" :currentPage="users.current_page" @update:pageUrl="fetchPage" /> -->
-    <PaginationComponent class="mt-5" :data="users" @update:pageUrl="fetchPage" />
+    <!-- <PaginationComponent class="mt-5" :data="users" @update:pageUrl="fetchPage" /> -->
 </template>
 
 <script setup lang="ts">
@@ -62,18 +62,27 @@ import BreadcrumbComponent from '@/components/BreadcrumbComponent.vue';
 import PaginationComponent from '@/components/PaginationComponent.vue';
 import InputComponent from '@/components/form/InputComponent.vue';
 import { ref, onMounted, reactive } from 'vue';
-import { useUserStore } from '@/stores/modules/user';
+// import { useUserStore } from '@/stores/modules/user';
 import type { User } from '@/types/userType';
 import ModalComponent from '@/components/ModalComponent.vue';
 import LabelComponent from '@/components/form/LabelComponent.vue';
 import PasswordComponent from '@/components/form/PasswordComponent.vue';
 import ButtonComponent from '@/components/ButtonComponent.vue';
 import TableComponent from '@/components/TableComponent.vue';
+import { useCaliberStore } from '@/stores/modules/caliber';
 
-const userStore = useUserStore();
-const users = ref<User[]>([]);
+// const userStore = useUserStore();
+// const users = ref<User[]>([]);
 
-const dataTable = ref([]);
+const caliberStore = useCaliberStore();
+const calibers = ref<Caliber[]>([]);
+
+interface dataTable {
+    id: number;
+    name: string;
+    type: string;
+}
+const dataTable = ref<dataTable[]>([]);
 
 interface Form {
     name: string;
@@ -139,16 +148,20 @@ const actions: Action[] = [
 
 onMounted(async () => {
     try {
-        await userStore.fetchUsers('users');
-        users.value = userStore.getUsers;
-        // dataTable.value = users.value.map((item) => {
+        await caliberStore.fetchCalibers('carcara');
+        calibers.value = caliberStore.getCalibers;
+
+        // await userStore.fetchUsers('users');
+        // users.value = userStore.getUsers;
+        // console.log('passou aqui', users.value.data)
+        dataTable.value = calibers.value.map((item) => {
         //     console.log('passou aqui', item)
-        //     return {
-        //         id: item.id,
-        //         name: item.name,
-        //         email: item.email   
-        //     }
-        // })
+            return {
+                id: item.id,
+                'Nome': item.name,
+                'Tipo': item.type,
+            }
+        })
     } catch (error) {
         console.error(error);
     }
