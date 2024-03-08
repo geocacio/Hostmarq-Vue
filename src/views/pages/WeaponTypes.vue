@@ -117,9 +117,9 @@ const validateForm = () => {
 };
 
 const submit = async () => {
-    console.log('passou aqui')
+    
     if (validateForm()) {
-        console.log('passou aqui')
+
         try {
             const newWeaponType: any = await weaponTypeStore.createWeaponType("carcara", form);
             document.getElementById('closeModal-new-user')?.click();
