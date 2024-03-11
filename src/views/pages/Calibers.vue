@@ -87,40 +87,21 @@ interface Form {
 }
 
 const form = reactive<Form>({
-    name: '9mm',
+    name: '',
     type: ''
 });
 
 const search = ref('');
 
-// const fetchPage = async (label: string) => {
-//     let url = `users?page=${label}`;
-//     url = search ? `${url}&search=${search.value}` : url;
-//     try {
-//         await userStore.fetchUsers(url);
-//         users.value = userStore.getUsers;
-//     } catch (error) {
-//         console.error(error);
-//     }
-// };
-
 const actions: Action[] = [
     {
         name: 'edit',
         action: (item: any) => {
-            
+            //chamar modal de edição
         },
         icon: 'edit',
         class: 'light blue',
     },
-    // {
-    //     name: 'view',
-    //     action: (item) => {
-    //         // Código para a ação "Visualizar"
-    //     },
-    //     icon: 'eye',
-    //     class: 'light orange',
-    // },
     {
         name: 'delete',
         action: (item: any) => {
@@ -129,14 +110,6 @@ const actions: Action[] = [
         icon: 'trash',
         class: 'light red',
     },
-    // {
-    //     name: 'settings',
-    //     action: (item) => {
-    //         // Código para a ação "Configurações"
-    //     },
-    //     icon: 'settings',
-    //     class: 'light green',
-    // },
 ];
 
 const removeCaliber = async(itemSlug: string) => {
@@ -195,6 +168,8 @@ const submit = async () => {
             }
             if (caliber){
                 dataTable.value.push(caliber);
+                //limpar o formulário
+                clearForm();
             }
         } catch (error) {
             console.error(error);
@@ -203,38 +178,13 @@ const submit = async () => {
 
 };
 
-// const searchSubmit = async (event: any) => {
-//     //buscar somente se tiver mais de 3 caracteres, a não ser que seja para apagar a busca
-//     if (event.target.value.length < 3 && event.target.value.length > 0) {
-//         return;
-//     }
-
-//     const url = `users?page=${users.value.current_page}&search=${event.target.value}`;
-
-//     try {
-//         await userStore.fetchUsers(url);
-//         users.value = userStore.getUsers;
-//     } catch (error) {
-//         console.error(error);
-//     }
-// };
-
-// const updateuser = async (user: User) => {
-//     try {
-//         await userStore.updateUser(user);
-//     } catch (error) {
-//         console.error(error);
-//     }
-// };
-
-// const deleteUser = async (user: User) => {
-//     let userId = user.id?.toString() || '';
-//     try {
-//         await userStore.deleteUser(userId);
-//     } catch (error) {
-//         console.error(error);
-//     }
-// };
+//funçõ para limpar o formulário
+const clearForm = () => {
+    form.name = '';
+    form.type = '';
+    errors.name = false;
+    errors.type = false;
+};
 
 </script>
 
