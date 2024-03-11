@@ -2,7 +2,8 @@ import { defineStore } from "pinia";
 import { index, store, update, destroy } from '@/api/generalAPI';
 
 const endpoint = {
-    index: 'clubs/{clubId}/calibres',
+    index: 'clubs/{clubSlug}/calibres',
+    sud: 'clubs/{clubSlug}/calibres/{caliberSlug}',
 }
 
 export const useCaliberStore = defineStore('caliber', {
@@ -16,36 +17,36 @@ export const useCaliberStore = defineStore('caliber', {
     },
 
     actions: {
-        async fetchCalibers(clubId: string) {
+        async fetchCalibers(clubSlug: string) {
             try {
-                let caliberData = await index(endpoint.index.replace('{clubId}', clubId));
+                let caliberData = await index(endpoint.index.replace('{clubSlug}', clubSlug));
                 this.calibers = caliberData;
             } catch (error) {
                 throw error;
             }
         },
 
-        async createCaliber(clubId: string, form: any) {
+        async createCaliber(clubSlug: string, form: any) {
             try {
-                let result = await store(endpoint.index.replace('{clubId}', clubId), form);
+                let result = await store(endpoint.index.replace('{clubSlug}', clubSlug), form);
                 return result.data;
             } catch (error) {
                 throw error;
             }
         },
 
-        async updateCaliber(clubId: string, form: any) {
+        async updateCaliber(clubSlug: string, form: any) {
             try {
-                let result = await update(endpoint.index.replace('{clubId}', clubId), form);
+                let result = await update(endpoint.sud.replace('{clubSlug}', clubSlug).replace('{caliberSlug}', form.slug), form);
                 return result.data;
             } catch (error) {
                 throw error;
             }
         },
 
-        async deleteCaliber(clubId: string, caliberId: string) {
+        async deleteCaliber(clubSlug: string, caliberId: string) {
             try {
-                let result = await destroy(endpoint.index.replace('{clubId}', clubId) + `/${caliberId}`);
+                let result = await destroy(endpoint.index.replace('{clubSlug}', clubSlug) + `/${caliberId}`);
                 return result.data;
             } catch (error) {
                 throw error;

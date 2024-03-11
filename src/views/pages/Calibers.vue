@@ -12,7 +12,9 @@
 
                 <div class="mb-3">
                     <LabelComponent text="Calibre" />
-                    <InputComponent type="text" placeholder="Calibre" v-model="form.name" :validation="true" :error="errors.name" :error-message="'Por favor, insira um nome de usuário.'" @input="errors.name = false" />
+                    <InputComponent type="text" placeholder="Calibre" v-model="form.name" :validation="true"
+                        :error="errors.name" :error-message="'Por favor, insira um nome de usuário.'"
+                        @input="errors.name = false" />
                 </div>
 
                 <div class="mb-3">
@@ -32,12 +34,37 @@
                 </div>
 
             </ModalComponent>
+
+            <NewModalComponent :isOpen="isOpenEditModal" @update:isOpen="closeEdtModal">
+                <div class="mb-3">
+                    <LabelComponent text="Calibre" />
+                    <InputComponent type="text" placeholder="Calibre" v-model="form.name" :validation="true"
+                        :error="errors.name" :error-message="'Por favor, insira um nome de usuário.'"
+                        @input="errors.name = false" />
+                </div>
+
+                <div class="mb-3">
+                    <LabelComponent text="Tipo" />
+                    <select class="form-control" v-model="form.type">
+                        <option value="">Selecione o tipo</option>
+                        <option value="permitted">Permitido</option>
+                        <option value="restricted">Restrito</option>
+                    </select>
+                    <div v-if="errors.type" class="error-message">
+                        Por favor, selecione um tipo.
+                    </div>
+                </div>
+
+                <div class="mb-3 text-center">
+                    <ButtonComponent buttonClass="dark-blue" @click="update" text="Atualizar" />
+                </div>
+            </NewModalComponent>
         </div>
     </div>
 
     <div class="row row-gap-15">
 
-        <TableComponent :items="dataTable" :actions="actions"/>
+        <TableComponent :items="dataTable" :actions="actions" />
 
         <!-- <div class="col-12 col-sm-6 col-md-4 col-lg-3" v-for="(person, index) in users.data" :key="index">
             <PersonComponent :data="person" @update="updateuser" @delete="deleteUser" />
@@ -55,6 +82,7 @@ import PaginationComponent from '@/components/PaginationComponent.vue';
 import InputComponent from '@/components/form/InputComponent.vue';
 import { ref, onMounted, reactive } from 'vue';
 
+import NewModalComponent from '@/components/NewModalComponent.vue';
 import ModalComponent from '@/components/ModalComponent.vue';
 import LabelComponent from '@/components/form/LabelComponent.vue';
 import ButtonComponent from '@/components/ButtonComponent.vue';
@@ -82,8 +110,10 @@ interface dataTable {
 const dataTable = ref<dataTable[]>([]);
 
 interface Form {
+    id?: number | string;
     name: string;
     type: string;
+    slug?: string;
 }
 
 const form = reactive<Form>({
@@ -98,6 +128,7 @@ const actions: Action[] = [
         name: 'edit',
         action: (item: any) => {
             //chamar modal de edição
+            showdataCaliber(item);
         },
         icon: 'edit',
         class: 'light blue',
@@ -112,7 +143,7 @@ const actions: Action[] = [
     },
 ];
 
-const removeCaliber = async(itemSlug: string) => {
+const removeCaliber = async (itemSlug: string) => {
     await caliberStore.deleteCaliber(clubSlug, itemSlug)
     const index = dataTable.value.findIndex((item: any) => item.slug === itemSlug);
     if (index !== -1) {
@@ -120,15 +151,15 @@ const removeCaliber = async(itemSlug: string) => {
     }
 }
 
-const editCaliber = async(item: object) => {
-    
+const editCaliber = async (item: object) => {
+
 }
 
 onMounted(async () => {
     try {
         await caliberStore.fetchCalibers(clubSlug);
         calibers.value = caliberStore.getCalibers;
-        
+
         dataTable.value = calibers.value.map((item: any) => {
             return {
                 id: item.id,
@@ -166,7 +197,7 @@ const submit = async () => {
                 'Tipo': newCaliber.type,
                 slug: newCaliber.slug
             }
-            if (caliber){
+            if (caliber) {
                 dataTable.value.push(caliber);
                 //limpar o formulário
                 clearForm();
@@ -178,12 +209,60 @@ const submit = async () => {
 
 };
 
+//constante para abrir o modal de edição
+const isOpenEditModal = ref(false);
+//constante para fechar o modal de edição
+const closeEdtModal = () => {
+    
+    isOpenEditModal.value = false;
+
+    //limpar o formulário
+    clearForm();
+};
+
+//função para mostrar os dados do calibre no modal de edição
+const showdataCaliber = (item: any) => {
+    console.log('passou aqui')
+    form.id = item['id'];
+    form.name = item['Nome'];
+    form.type = item['Tipo'];
+    form.slug = item['slug'];
+
+    //abrindo o modal de edição
+    isOpenEditModal.value = true;
+};
+
 //funçõ para limpar o formulário
 const clearForm = () => {
     form.name = '';
     form.type = '';
     errors.name = false;
     errors.type = false;
+};
+
+//atualizar o calibre
+const update = async () => {
+    if (validateForm()) {
+        try {
+            const updatedCaliber: any = await caliberStore.updateCaliber(clubSlug, form);
+            //fechar o modal de edição
+            closeEdtModal();
+
+            let caliber = {
+                id: updatedCaliber.id,
+                'Nome': updatedCaliber.name,
+                'Tipo': updatedCaliber.type,
+                slug: updatedCaliber.slug
+            }
+            if (caliber) {
+                dataTable.value.push(caliber);
+                //limpar o formulário
+                clearForm();
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
 };
 
 </script>
