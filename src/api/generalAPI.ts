@@ -18,11 +18,9 @@ export const store = async (url: string, TypeData: any) => {
     try {
         let link = url != '' ? `${url}` : ``;
         const response = await axiosInstance.post(link, TypeData);
+        
         if(response.data.success){
-            
-            toast.success(response.data.message);
-        }else{
-            toast.error(response.data.message);
+            toast.success(response.data.success);
         }
         
         return response.data;
