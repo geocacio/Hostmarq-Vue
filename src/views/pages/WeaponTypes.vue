@@ -65,7 +65,7 @@ const search = ref('');
 const actions: Action[] = [
     {
         name: 'edit',
-        action: (item) => {
+        action: (item: any) => {
             
         },
         icon: 'edit',
@@ -82,7 +82,9 @@ const actions: Action[] = [
 ];
 
 const removeWeaponType = async(itemSlug: string) => {
-    await weaponTypeStore.deleteWeaponType("carcara", itemSlug)
+    await weaponTypeStore.deleteWeaponType("itaberaba-ct", itemSlug)
+    let index = dataTable.value.findIndex((item) => item.id === itemSlug)
+    dataTable.value.splice(index, 1);
 }
 
 const editCaliber = async(item: object) => {
@@ -91,7 +93,7 @@ const editCaliber = async(item: object) => {
 
 onMounted(async () => {
     try {
-        await weaponTypeStore.fetchWeaponTypes('carcara');
+        await weaponTypeStore.fetchWeaponTypes('itaberaba-ct');
         weaponTypes.value = weaponTypeStore.getWeaponTypes;
 
         dataTable.value = weaponTypes.value.map((item) => {
@@ -121,11 +123,15 @@ const submit = async () => {
     if (validateForm()) {
 
         try {
-            const newWeaponType: any = await weaponTypeStore.createWeaponType("carcara", form);
+            const newWeaponType: any = await weaponTypeStore.createWeaponType("itaberaba-ct", form);
             document.getElementById('closeModal-new-user')?.click();
+            const weapontType = {
+                id: newWeaponType.id,
+                name: newWeaponType.name
+            }
             
-            if (newWeaponType){
-                dataTable.value.push(newWeaponType);
+            if (weapontType){
+                dataTable.value.push(weapontType);
             }
         } catch (error) {
             console.error(error);

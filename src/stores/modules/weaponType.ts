@@ -26,7 +26,8 @@ export const useWeaponTypeStore = defineStore('weaponType', {
 
         async createWeaponType(clubId: string, form: any) {
             try {
-                this.weaponTypes = await store(endpoint.index.replace('{clubId}', clubId), form);
+                let result = await store(endpoint.index.replace('{clubId}', clubId), form);
+                return result.type;
             } catch (error) {
                 throw error;
             }
@@ -34,7 +35,8 @@ export const useWeaponTypeStore = defineStore('weaponType', {
 
         async deleteWeaponType(clubId: string, weaponTypeId: string) {
             try {
-                this.weaponTypes = await destroy(endpoint.index.replace('{clubId}', clubId) + `/${weaponTypeId}`);
+                let result = await destroy(endpoint.index.replace('{clubId}', clubId) + `/${weaponTypeId}`);
+                return result.type;
             } catch (error) {
                 throw error;
             }
