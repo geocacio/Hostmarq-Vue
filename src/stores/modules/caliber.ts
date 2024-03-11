@@ -10,6 +10,7 @@ export const useCaliberStore = defineStore('caliber', {
         calibers: [],
     }),
 
+
     getters: {
         getCalibers: (state) => state.calibers,
     },
@@ -26,7 +27,8 @@ export const useCaliberStore = defineStore('caliber', {
 
         async createCaliber(clubId: string, form: any) {
             try {
-                this.calibers = await store(endpoint.index.replace('{clubId}', clubId), form);
+                let result = await store(endpoint.index.replace('{clubId}', clubId), form);
+                return result.data;
             } catch (error) {
                 throw error;
             }
@@ -34,7 +36,8 @@ export const useCaliberStore = defineStore('caliber', {
 
         async updateCaliber(clubId: string, form: any) {
             try {
-                this.calibers = await update(endpoint.index.replace('{clubId}', clubId), form);
+                let result = await update(endpoint.index.replace('{clubId}', clubId), form);
+                return result.data;
             } catch (error) {
                 throw error;
             }
@@ -42,7 +45,8 @@ export const useCaliberStore = defineStore('caliber', {
 
         async deleteCaliber(clubId: string, caliberId: string) {
             try {
-                this.calibers = await destroy(endpoint.index.replace('{clubId}', clubId) + `/${caliberId}`);
+                let result = await destroy(endpoint.index.replace('{clubId}', clubId) + `/${caliberId}`);
+                return result.data;
             } catch (error) {
                 throw error;
             }

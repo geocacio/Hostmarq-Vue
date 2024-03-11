@@ -17,10 +17,13 @@
                 <div class="mb-3">
                     <LabelComponent text="Tipo" />
                     <select class="form-control" v-model="form.type">
-                        <option value="">Selecione o tipo de usuário</option>
+                        <option value="">Selecione o tipo</option>
                         <option value="permitted">Permitido</option>
                         <option value="restricted">Restrito</option>
                     </select>
+                    <div v-if="errors.type" class="error-message">
+                        Por favor, selecione um tipo.
+                    </div>
                 </div>
 
                 <div class="mb-3 text-center">
@@ -126,7 +129,11 @@ const actions: Action[] = [
 ];
 
 const removeCaliber = async(itemSlug: string) => {
-    await caliberStore.deleteCaliber("carcara", itemSlug)
+    await caliberStore.deleteCaliber("itaberaba-ct", itemSlug)
+    const index = dataTable.value.findIndex((item) => item.slug === itemSlug);
+    if (index !== -1) {
+        dataTable.value.splice(index, 1);
+    }
 }
 
 const editCaliber = async(item: object) => {
@@ -135,7 +142,7 @@ const editCaliber = async(item: object) => {
 
 onMounted(async () => {
     try {
-        await caliberStore.fetchCalibers('carcara');
+        await caliberStore.fetchCalibers('itaberaba-ct');
         calibers.value = caliberStore.getCalibers;
 
         // await userStore.fetchUsers('users');
@@ -161,7 +168,7 @@ const errors = reactive({
 
 const validateForm = () => {
     errors.name = !form.name;
-    errors.type = !form.type;
+    errors.type = !form.type || form.type === "";
 
     return !errors.name && !errors.type;
 };
@@ -172,9 +179,14 @@ const submit = async () => {
         try {
             const newCaliber: any = await caliberStore.createCaliber("itaberaba-ct", form);
             document.getElementById('closeModal-new-user')?.click();
-            console.log(newCaliber);
-            if (newCaliber){
-                dataTable.value.push(newCaliber);
+            let caliber = {
+                id: newCaliber.id,
+                'Nome': newCaliber.name,
+                'Tipo': newCaliber.type,
+                slug: newCaliber.slug
+            }
+            if (caliber){
+                dataTable.value.push(caliber);
             }
         } catch (error) {
             console.error(error);
@@ -217,3 +229,9 @@ const searchSubmit = async (event: any) => {
 // };
 
 </script>
+
+<style scoped>
+.error-message {
+    color: red;
+}
+</style>
