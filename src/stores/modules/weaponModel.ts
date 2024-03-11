@@ -26,7 +26,8 @@ export const useWeaponModelStore = defineStore('weaponModel', {
 
         async createWeaponModel(clubId: string, form: any) {
             try {
-                this.weaponModels = await store(endpoint.index.replace('{clubId}', clubId), form);
+                let result = await store(endpoint.index.replace('{clubId}', clubId), form);
+                return result.model;
             } catch (error) {
                 throw error;
             }
