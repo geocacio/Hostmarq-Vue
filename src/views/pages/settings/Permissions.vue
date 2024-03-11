@@ -85,7 +85,7 @@ const togglePermission = async (roleId: number, permissionId: number, isChecked)
     const payload = {
         'clubs_id': clubsId,
         'permission_id': permissionId,
-        'action': isChecked ? 'attach' : 'detach'
+        // 'action': isChecked ? 'attach' : 'detach'
     };
     
     await roleStore.addPermission(roleId, payload);
