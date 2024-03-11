@@ -254,8 +254,14 @@ const update = async () => {
                 'Tipo': updatedCaliber.type,
                 slug: updatedCaliber.slug
             }
+            
             if (caliber) {
-                dataTable.value.push(caliber);
+
+                const index = dataTable.value.findIndex((item: any) => item.slug === updatedCaliber.slug);
+                if (index !== -1) {
+                    dataTable.value[index] = caliber;
+                }
+
                 //limpar o formulário
                 clearForm();
             }
