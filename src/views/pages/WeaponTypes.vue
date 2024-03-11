@@ -3,7 +3,8 @@
 
     <div class="dashboard-header flex-horizontal">
         <div class="search-container">
-            <InputComponent type="text" placeholder="Pesquisar" v-model="search" @input="searchSubmit" />
+            <InputComponent type="text" placeholder="Pesquisar" v-model="search" />
+            <!-- <InputComponent type="text" placeholder="Pesquisar" v-model="search" @input="searchSubmit" /> -->
         </div>
         <div class="dashboard-actions">
 
@@ -42,13 +43,21 @@ import LabelComponent from '@/components/form/LabelComponent.vue';
 import ButtonComponent from '@/components/ButtonComponent.vue';
 import TableComponent from '@/components/TableComponent.vue';
 import { useWeaponTypeStore } from '@/stores/modules/weaponType';
+import type { Action } from '@/types/actionType';
+
+// Acessar os dados do usuário conectado
+import { useAuthStore } from '@/stores/modules/auth';
+const authStore = useAuthStore();
+const loggedInuser = authStore.getUser;
+// Acessar o slug do clube do usuário conectado
+const clubSlug = (loggedInuser as { club?: { slug: string } })?.club?.slug ?? '';
 
 const weaponTypeStore = useWeaponTypeStore();
 const weaponTypes = ref([]);
 
 interface dataTable {
-    id: number;
-    name: string;
+    id: number | string;
+    'Nome': string;
 }
 const dataTable = ref<dataTable[]>([]);
 
@@ -82,26 +91,22 @@ const actions: Action[] = [
 ];
 
 const removeWeaponType = async(itemSlug: string) => {
-    await weaponTypeStore.deleteWeaponType("itaberaba-ct", itemSlug)
+    await weaponTypeStore.deleteWeaponType(clubSlug, itemSlug)
     let index = dataTable.value.findIndex((item) => item.id === itemSlug)
     dataTable.value.splice(index, 1);
 }
 
-const editCaliber = async(item: object) => {
-    
-}
-
 onMounted(async () => {
     try {
-        await weaponTypeStore.fetchWeaponTypes('itaberaba-ct');
+        await weaponTypeStore.fetchWeaponTypes(clubSlug);
         weaponTypes.value = weaponTypeStore.getWeaponTypes;
 
-        dataTable.value = weaponTypes.value.map((item) => {
+        dataTable.value = weaponTypes.value.map((item: any) => {
             return {
                 id: item.id,
                 'Nome': item.name,
-            }
-        })
+            };
+        });
     } catch (error) {
         console.error(error);
     }
@@ -123,11 +128,11 @@ const submit = async () => {
     if (validateForm()) {
 
         try {
-            const newWeaponType: any = await weaponTypeStore.createWeaponType("itaberaba-ct", form);
+            const newWeaponType: any = await weaponTypeStore.createWeaponType(clubSlug, form);
             document.getElementById('closeModal-new-user')?.click();
             const weapontType = {
                 id: newWeaponType.id,
-                name: newWeaponType.name
+                'Nome': newWeaponType.name
             }
             
             if (weapontType){
@@ -140,20 +145,20 @@ const submit = async () => {
 
 };
 
-const searchSubmit = async (event: any) => {
-    //buscar somente se tiver mais de 3 caracteres, a não ser que seja para apagar a busca
-    if (event.target.value.length < 3 && event.target.value.length > 0) {
-        return;
-    }
+// const searchSubmit = async (event: any) => {
+//     //buscar somente se tiver mais de 3 caracteres, a não ser que seja para apagar a busca
+//     if (event.target.value.length < 3 && event.target.value.length > 0) {
+//         return;
+//     }
 
-    const url = `users?page=${users.value.current_page}&search=${event.target.value}`;
+//     const url = `users?page=${users.value.current_page}&search=${event.target.value}`;
 
-    try {
-        await userStore.fetchUsers(url);
-        users.value = userStore.getUsers;
-    } catch (error) {
-        console.error(error);
-    }
-};
+//     try {
+//         await userStore.fetchUsers(url);
+//         users.value = userStore.getUsers;
+//     } catch (error) {
+//         console.error(error);
+//     }
+// };
 
 </script>

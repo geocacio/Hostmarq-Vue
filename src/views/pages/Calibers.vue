@@ -155,16 +155,13 @@ onMounted(async () => {
     try {
         await caliberStore.fetchCalibers(clubSlug);
         calibers.value = caliberStore.getCalibers;
-
-        // await userStore.fetchUsers('users');
-        // users.value = userStore.getUsers;
-        // console.log('passou aqui', users.value.data)
-        dataTable.value = calibers.value.map((item) => {
+        
+        dataTable.value = calibers.value.map((item: any) => {
             return {
-                id: item.id ?? '',
-                'Nome': item.name ?? '',
-                'Tipo': item.type ?? '',
-                slug: item.slug ?? '',
+                id: item.id,
+                'Nome': item.name,
+                'Tipo': item.type,
+                slug: item.slug,
             }
         })
     } catch (error) {
