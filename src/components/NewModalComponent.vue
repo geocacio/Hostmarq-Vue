@@ -1,12 +1,13 @@
 <template>
-    
-    <div class="custom-modal" v-if="isOpen">
-        <div class="custom-modal-content">
-            <button class="close" @click="closeModal">&times;</button>
-            <slot></slot>
+    <transition name="fade-transition">
+        <div class="custom-modal" :class="{ 'show' : isOpen }" v-show="isOpen">
+            <div class="custom-modal-content">
+                <button class="close" @click="closeModal">&times;</button>
+                <slot></slot>
 
+            </div>
         </div>
-    </div>
+    </transition>
 
 </template>
 <script setup lang="ts">
