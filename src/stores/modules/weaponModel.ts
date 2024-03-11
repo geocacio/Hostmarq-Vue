@@ -35,7 +35,8 @@ export const useWeaponModelStore = defineStore('weaponModel', {
 
         async deleteWeaponModel(clubId: string, weaponModelId: string) {
             try {
-                this.weaponModels = await destroy(endpoint.index.replace('{clubId}', clubId) + `/${weaponModelId}`);
+                let result = await destroy(endpoint.index.replace('{clubId}', clubId) + `/${weaponModelId}`);
+                return result.model;
             } catch (error) {
                 throw error;
             }

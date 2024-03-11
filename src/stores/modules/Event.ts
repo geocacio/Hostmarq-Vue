@@ -26,7 +26,8 @@ export const useEventStore = defineStore('event', {
 
         async createEvent(clubId: string, form: any) {
             try {
-                this.events = await store(endpoint.index.replace('{clubId}', clubId), form);
+                let result = await store(endpoint.index.replace('{clubId}', clubId), form);
+                return result.event;
             } catch (error) {
                 throw error;
             }
@@ -34,7 +35,7 @@ export const useEventStore = defineStore('event', {
 
         async deleteEvent(clubId: string, eventId: string) {
             try {
-                this.events = await destroy(endpoint.index.replace('{clubId}', clubId) + `/${eventId}`);
+                let result = await destroy(endpoint.index.replace('{clubId}', clubId) + `/${eventId}`);
             } catch (error) {
                 throw error;
             }

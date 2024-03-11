@@ -82,7 +82,9 @@ const actions: Action[] = [
 ];
 
 const removeWeaponType = async(itemSlug: string) => {
-    await eventStore.deleteEvent("carcara", itemSlug)
+    await eventStore.deleteEvent("itaberaba-ct", itemSlug)
+    const index = dataTable.value.findIndex((item) => item.id === itemSlug);
+    dataTable.value.splice(index, 1);
 }
 
 const editCaliber = async(item: object) => {
@@ -91,7 +93,7 @@ const editCaliber = async(item: object) => {
 
 onMounted(async () => {
     try {
-        await eventStore.fetchEvents('carcara');
+        await eventStore.fetchEvents('itaberaba-ct');
         events.value = eventStore.getEvents;
 
         dataTable.value = events.value.map((item) => {
@@ -121,11 +123,15 @@ const submit = async () => {
     if (validateForm()) {
 
         try {
-            const newWeaponType: any = await eventStore.createEvent("carcara", form);
+            const newEvents: any = await eventStore.createEvent("itaberaba-ct", form);
             document.getElementById('closeModal-new-user')?.click();
+            const event = {
+                id: newEvents.id,
+                'Nome': newEvents.name
+            }
             
-            if (newWeaponType){
-                dataTable.value.push(newWeaponType);
+            if (event){
+                dataTable.value.push(event);
             }
         } catch (error) {
             console.error(error);
