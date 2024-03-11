@@ -1,8 +1,9 @@
 <template>
     <transition name="fade-transition">
-        <div class="custom-modal" :class="{ 'show' : isOpen }" v-show="isOpen">
+        <div class="custom-modal" :class="{ 'show': isOpen }" v-show="isOpen">
             <div class="custom-modal-content">
-                <button class="close" @click="closeModal">&times;</button>
+                <button class="btn-close" @click="closeModal"></button>
+
                 <slot></slot>
 
             </div>
