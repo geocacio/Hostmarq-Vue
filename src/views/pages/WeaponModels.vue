@@ -10,17 +10,8 @@
             <ModalComponent id="new-user" buttonText="Novo">
 
                 <div class="mb-3">
-                    <LabelComponent text="Calibre" />
-                    <InputComponent type="text" placeholder="Calibre" v-model="form.name" :validation="true" :error="errors.name" :error-message="'Por favor, insira um nome de usuário.'" @input="errors.name = false" />
-                </div>
-
-                <div class="mb-3">
-                    <LabelComponent text="Tipo" />
-                    <select class="form-control" v-model="form.type">
-                        <option value="">Selecione o tipo de usuário</option>
-                        <option value="permitted">Permitido</option>
-                        <option value="restricted">Restrito</option>
-                    </select>
+                    <LabelComponent text="Nome" />
+                    <InputComponent type="text" placeholder="Nome" v-model="form.name" :validation="true" :error="errors.name" :error-message="'Por favor, insira um nome.'" @input="errors.name = false" />
                 </div>
 
                 <div class="mb-3 text-center">
@@ -35,10 +26,6 @@
 
         <TableComponent :items="dataTable" :actions="actions"/>
 
-        <!-- <div class="col-12 col-sm-6 col-md-4 col-lg-3" v-for="(person, index) in users.data" :key="index">
-            <PersonComponent :data="person" @update="updateuser" @delete="deleteUser" />
-        </div> -->
-
     </div>
 
     <!-- <PaginationComponent class="mt-5" :links="users.links" :currentPage="users.current_page" @update:pageUrl="fetchPage" /> -->
@@ -50,45 +37,30 @@ import BreadcrumbComponent from '@/components/BreadcrumbComponent.vue';
 import PaginationComponent from '@/components/PaginationComponent.vue';
 import InputComponent from '@/components/form/InputComponent.vue';
 import { ref, onMounted, reactive } from 'vue';
-import type { User } from '@/types/userType';
 import ModalComponent from '@/components/ModalComponent.vue';
 import LabelComponent from '@/components/form/LabelComponent.vue';
 import ButtonComponent from '@/components/ButtonComponent.vue';
 import TableComponent from '@/components/TableComponent.vue';
-import { useCaliberStore } from '@/stores/modules/caliber';
+import { useWeaponModelStore } from '@/stores/modules/weaponModel';
 
-const caliberStore = useCaliberStore();
-const calibers = ref<Caliber[]>([]);
+const weaponModelStore = useWeaponModelStore();
+const weaponModel = ref([]);
 
 interface dataTable {
     id: number;
     name: string;
-    type: string;
 }
 const dataTable = ref<dataTable[]>([]);
 
 interface Form {
     name: string;
-    type: string;
 }
 
 const form = reactive<Form>({
-    name: '9mm',
-    type: ''
+    name: '',
 });
 
 const search = ref('');
-
-// const fetchPage = async (label: string) => {
-//     let url = `users?page=${label}`;
-//     url = search ? `${url}&search=${search.value}` : url;
-//     try {
-//         await userStore.fetchUsers(url);
-//         users.value = userStore.getUsers;
-//     } catch (error) {
-//         console.error(error);
-//     }
-// };
 
 const actions: Action[] = [
     {
@@ -99,34 +71,18 @@ const actions: Action[] = [
         icon: 'edit',
         class: 'light blue',
     },
-    // {
-    //     name: 'view',
-    //     action: (item) => {
-    //         // Código para a ação "Visualizar"
-    //     },
-    //     icon: 'eye',
-    //     class: 'light orange',
-    // },
     {
         name: 'delete',
         action: (item: any) => {
-            removeCaliber(item.slug);
+            removeWeaponType(item.id);
         },
         icon: 'trash',
         class: 'light red',
     },
-    // {
-    //     name: 'settings',
-    //     action: (item) => {
-    //         // Código para a ação "Configurações"
-    //     },
-    //     icon: 'settings',
-    //     class: 'light green',
-    // },
 ];
 
-const removeCaliber = async(itemSlug: string) => {
-    await caliberStore.deleteCaliber("carcara", itemSlug)
+const removeWeaponType = async(itemSlug: string) => {
+    await weaponModelStore.deleteWeaponModel("carcara", itemSlug)
 }
 
 const editCaliber = async(item: object) => {
@@ -135,18 +91,13 @@ const editCaliber = async(item: object) => {
 
 onMounted(async () => {
     try {
-        await caliberStore.fetchCalibers('carcara');
-        calibers.value = caliberStore.getCalibers;
+        await weaponModelStore.fetchWeaponModels('carcara');
+        weaponModel.value = weaponModelStore.getWeaponModels;
 
-        // await userStore.fetchUsers('users');
-        // users.value = userStore.getUsers;
-        // console.log('passou aqui', users.value.data)
-        dataTable.value = calibers.value.map((item) => {
+        dataTable.value = weaponModel.value.map((item) => {
             return {
                 id: item.id,
                 'Nome': item.name,
-                'Tipo': item.type,
-                slug: item.slug
             }
         })
     } catch (error) {
@@ -161,20 +112,20 @@ const errors = reactive({
 
 const validateForm = () => {
     errors.name = !form.name;
-    errors.type = !form.type;
 
-    return !errors.name && !errors.type;
+    return !errors.name;
 };
 
 const submit = async () => {
-
+    
     if (validateForm()) {
+
         try {
-            const newCaliber: any = await caliberStore.createCaliber("itaberaba-ct", form);
+            const newWeaponType: any = await weaponModelStore.createWeaponModel("carcara", form);
             document.getElementById('closeModal-new-user')?.click();
-            console.log(newCaliber);
-            if (newCaliber){
-                dataTable.value.push(newCaliber);
+            
+            if (newWeaponType){
+                dataTable.value.push(newWeaponType);
             }
         } catch (error) {
             console.error(error);
@@ -198,22 +149,5 @@ const searchSubmit = async (event: any) => {
         console.error(error);
     }
 };
-
-// const updateuser = async (user: User) => {
-//     try {
-//         await userStore.updateUser(user);
-//     } catch (error) {
-//         console.error(error);
-//     }
-// };
-
-// const deleteUser = async (user: User) => {
-//     let userId = user.id?.toString() || '';
-//     try {
-//         await userStore.deleteUser(userId);
-//     } catch (error) {
-//         console.error(error);
-//     }
-// };
 
 </script>
