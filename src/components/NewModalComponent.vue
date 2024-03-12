@@ -1,11 +1,14 @@
 <template>
     <transition name="fade-transition">
         <div class="custom-modal" :class="{ 'show': isOpen }" v-show="isOpen">
-            <div class="custom-modal-content">
+            <div class="modal-body-style">
                 <button class="btn-close" @click="closeModal"></button>
+                <div class="custom-modal-content">
+                    <div class="content-margin">
 
-                <slot></slot>
-
+                        <slot></slot>
+                    </div>
+                </div>
             </div>
         </div>
     </transition>

@@ -780,14 +780,63 @@ a{
 
 .custom-modal{
     position: fixed;
-    top: 30%;
-    left: 21%;
-    min-width: 75%;
-    z-index: 2222;
-    background: #f8f9fe;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 0 2rem 0 rgba(136,152,170,.15);
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 15px;
+
+    &:before{
+        content: "";
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background: #000;
+        opacity: 0.5;
+        z-index: -1;
+    }
+
+    .modal-body-style{
+        background: #f8f9fe;
+        padding: 20px;
+        padding-right: 0;
+        border-radius: 15px;
+        box-shadow: 0 0 2rem 0 rgba(136,152,170,.15);
+        min-width: 70%;
+        max-height: calc(100vh - 40px);
+        position: relative;
+
+        .btn-close{
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 14px;
+            transition: 0.3s;
+
+            &:focus{
+                outline: none;
+                box-shadow: none;
+            }
+        }
+
+        .custom-modal-content{
+            overflow-y: auto;
+            max-height: calc(100vh - 80px);
+            scrollbar-width: thin;
+            scrollbar-color: var(--semi-dark) transparent;
+
+            .content-margin{
+                padding-right: 20px;
+            }
+        }
+    }
 }
 
 //classe do vue para animar o modal
