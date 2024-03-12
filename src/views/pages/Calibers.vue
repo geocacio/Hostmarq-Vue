@@ -3,8 +3,8 @@
 
     <div class="dashboard-header flex-horizontal">
         <div class="search-container">
-            <InputComponent type="text" placeholder="Pesquisar" v-model="search" />
-            <!-- <InputComponent type="text" placeholder="Pesquisar" v-model="search" @input="searchSubmit" /> -->
+            <!-- <InputComponent type="text" placeholder="Pesquisar" v-model="search" /> -->
+            <InputComponent type="text" placeholder="Pesquisar" v-model="search" @input="searchSubmit" />
         </div>
         <div class="dashboard-actions">
 
@@ -66,14 +66,10 @@
 
         <TableComponent :items="dataTable" :actions="actions" />
 
-        <!-- <div class="col-12 col-sm-6 col-md-4 col-lg-3" v-for="(person, index) in users.data" :key="index">
-            <PersonComponent :data="person" @update="updateuser" @delete="deleteUser" />
-        </div> -->
-
     </div>
 
-    <!-- <PaginationComponent class="mt-5" :links="users.links" :currentPage="users.current_page" @update:pageUrl="fetchPage" /> -->
-    <!-- <PaginationComponent class="mt-5" :data="users" @update:pageUrl="fetchPage" /> -->
+    <!-- <PaginationComponent class="mt-5" :links="calibers.links" :currentPage="calibers.current_page" @update:pageUrl="fetchPage" /> -->
+    <PaginationComponent class="mt-5" :data="calibers" @update:pageUrl="fetchPage" />
 </template>
 
 <script setup lang="ts">
@@ -123,6 +119,27 @@ const form = reactive<Form>({
 
 const search = ref('');
 
+const fetchPage = async (label: string) => {
+    let url = `clubs/${clubSlug}/calibres?page=${label}`;
+    url = search.value ? `${url}&search=${search.value}` : url;
+    try {
+        await caliberStore.fetchCalibers(clubSlug, url);
+        calibers.value = caliberStore.getCalibers;
+
+        dataTable.value = calibers.value.data.map((item: any) => {
+            return {
+                id: item.id,
+                'Nome': item.name,
+                'Tipo': item.type,
+                slug: item.slug,
+            }
+        })
+        
+    } catch (error) {
+        console.error(error);
+    }
+};
+
 const actions: Action[] = [
     {
         name: 'edit',
@@ -160,7 +177,7 @@ onMounted(async () => {
         await caliberStore.fetchCalibers(clubSlug);
         calibers.value = caliberStore.getCalibers;
 
-        dataTable.value = calibers.value.map((item: any) => {
+        dataTable.value = calibers.value.data.map((item: any) => {
             return {
                 id: item.id,
                 'Nome': item.name,
@@ -270,6 +287,32 @@ const update = async () => {
         }
     }
 };
+
+const searchSubmit = async (event: any) => {
+    //buscar somente se tiver mais de 3 caracteres, a não ser que seja para apagar a busca
+    if(event.target.value.length < 3 && event.target.value.length > 0){
+        return;
+    }
+
+    //url da paginação
+    const url = `clubs/${clubSlug}/calibres?page=${calibers.value.current_page}&search=${event.target.value}`;
+
+    try {
+        await caliberStore.fetchCalibers(clubSlug, url);
+        calibers.value = caliberStore.getCalibers;
+
+        dataTable.value = calibers.value.data.map((item: any) => {
+            return {
+                id: item.id,
+                'Nome': item.name,
+                'Tipo': item.type,
+                slug: item.slug,
+            }
+        })
+    } catch (error) {
+        console.error(error);
+    }
+}
 
 </script>
 
