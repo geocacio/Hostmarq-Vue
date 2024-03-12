@@ -40,7 +40,7 @@
                 <div class="mb-3">
                     <LabelComponent text="Calibre" />
                     <InputComponent type="text" placeholder="Calibre" v-model="form.name" :validation="true"
-                        :error="errors.name" :error-message="'Por favor, insira um nome de usuário.'"
+                        :error="errors.name" :error-message="'Por favor, insira o calibre desejado.'"
                         @input="errors.name = false" />
                 </div>
 
@@ -56,7 +56,7 @@
                     </div>
                 </div>
 
-                <div class="mb-3 text-center">
+                <div class="text-center">
                     <ButtonComponent buttonClass="dark-blue" @click="update" text="Atualizar" />
                 </div>
             </NewModalComponent>
@@ -246,7 +246,6 @@ const closeEditModal = () => {
 
 //função para mostrar os dados do calibre no modal de edição
 const showdataCaliber = (item: any) => {
-    console.log('passou aqui')
     form.id = item['id'];
     form.name = item['Nome'];
     form.type = item['Tipo'];

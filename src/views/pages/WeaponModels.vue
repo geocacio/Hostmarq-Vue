@@ -20,6 +20,17 @@
                 </div>
 
             </ModalComponent>
+
+            <NewModalComponent :isOpen="isOpenEditModal" @update:isOpen="closeEditModal">
+                <div class="mb-3">
+                    <LabelComponent text="Nome"/>
+                    <InputComponent type="text" placeholder="Nome" v-model="form.name" :validation="true"
+                        :error="errors.name" :error-message="'Porfavor, insira o modelo'" @input="errors.name = false"/>
+                </div>
+                <div class="text-center">
+                    <ButtonComponent button-class="dark-blue" @click="update" text="Atualizar"/>
+                </div>
+            </NewModalComponent>
         </div>
     </div>
 
@@ -47,6 +58,7 @@ import type { Action } from '@/types/actionType';
 
 // Acessar os dados do usuário conectado
 import { useAuthStore } from '@/stores/modules/auth';
+import NewModalComponent from '@/components/NewModalComponent.vue';
 const authStore = useAuthStore();
 const loggedInuser = authStore.getUser;
 // Acessar o slug do clube do usuário conectado
@@ -62,6 +74,7 @@ interface dataTable {
 const dataTable = ref<dataTable[]>([]);
 
 interface Form {
+    id?: number | string;
     name: string;
 }
 
@@ -75,7 +88,7 @@ const actions: Action[] = [
     {
         name: 'edit',
         action: (item) => {
-            
+            showDataCaliber(item);
         },
         icon: 'edit',
         class: 'light blue',
@@ -125,7 +138,6 @@ const errors = reactive({
 
 const validateForm = () => {
     errors.name = !form.name;
-
     return !errors.name;
 };
 
@@ -150,6 +162,61 @@ const submit = async () => {
     }
 
 };
+
+//const para abrir o modal de edição
+const isOpenEditModal = ref(false);
+
+//const para fechar o modal de edição
+const closeEditModal = () => {
+    isOpenEditModal.value = false;
+
+    //limpar o formulário
+    clearForm();
+}
+
+//Funcção para mostrar os dados do modelo no modal de edição
+const showDataCaliber = (item: any) => {
+    form.id = item['id']
+    form.name = item['Nome']
+
+    isOpenEditModal.value = true;
+};
+
+//Função para limpar o modal de edição
+const clearForm = () => {
+    form.name = '';
+    errors.name = false;
+};
+
+//Função para atualizar o Modelo da Arma
+const update = async () => {
+    if(validateForm()){
+        try{
+            const updateWeaponModel: any = await weaponModelStore.updateWeaponModel(clubSlug, form);
+
+            //Fechar o modal editar
+            closeEditModal();
+            
+            let weaponModel = { 
+                id: updateWeaponModel.id,
+                'Nome': updateWeaponModel.name
+            }
+
+            if(weaponModel){
+                const index = dataTable.value.findIndex((item) => item.id == updateWeaponModel.id);
+                if(index !== -1) {
+                    dataTable.value[index] = weaponModel;
+                }
+
+                //Limpar o formulário
+                clearForm();
+            }
+
+        }catch(error){
+            console.error(error);
+        }
+    }
+}
 
 // const searchSubmit = async (event: any) => {
 //     //buscar somente se tiver mais de 3 caracteres, a não ser que seja para apagar a busca

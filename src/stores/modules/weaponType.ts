@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia'
-import { store, index, destroy } from '@/api/generalAPI';
+import { store, index, destroy, update } from '@/api/generalAPI';
 
 const endpoint = {
-    index: 'clubs/{clubId}/weapon-types',
+    index: 'clubs/{clubSlug}/weapon-types',
+    sud: 'clubs/{clubSlug}/weapon-types/{weaponTypeId}',
 }
 
 export const useWeaponTypeStore = defineStore('weaponType', {
@@ -15,27 +16,40 @@ export const useWeaponTypeStore = defineStore('weaponType', {
     },
 
     actions: {
-        async fetchWeaponTypes(clubId: string) {
+        async fetchWeaponTypes(clubSlug: string) {
+            // eslint-disable-next-line no-useless-catch
             try {
-                let weaponTypeData = await index(endpoint.index.replace('{clubId}', clubId));
+                const weaponTypeData = await index(endpoint.index.replace('{clubSlug}', clubSlug));
                 this.weaponTypes = weaponTypeData;
             } catch (error) {
                 throw error;
             }
         },
 
-        async createWeaponType(clubId: string, form: any) {
+        async createWeaponType(clubSlug: string, form: any) {
+            // eslint-disable-next-line no-useless-catch
             try {
-                let result = await store(endpoint.index.replace('{clubId}', clubId), form);
+                const result = await store(endpoint.index.replace('{clubSlug}', clubSlug), form);
                 return result.type;
             } catch (error) {
                 throw error;
             }
         },
 
-        async deleteWeaponType(clubId: string, weaponTypeId: string) {
+        async updateWeaponType(clubSlug: string, form: any){
+            // eslint-disable-next-line no-useless-catch
+            try{
+                const result = await update(endpoint.sud.replace('{clubSlug}', clubSlug).replace('{weaponTypeId}', form.id), form);
+                return result.type;
+            }catch(error){
+                throw error;
+            }
+        },
+
+        async deleteWeaponType(clubSlug: string, weaponTypeId: string) {
+            // eslint-disable-next-line no-useless-catch
             try {
-                let result = await destroy(endpoint.index.replace('{clubId}', clubId) + `/${weaponTypeId}`);
+                const result = await destroy(endpoint.index.replace('{clubSlug}', clubSlug) + `/${weaponTypeId}`);
                 return result.type;
             } catch (error) {
                 throw error;
