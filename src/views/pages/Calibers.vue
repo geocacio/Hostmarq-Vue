@@ -1,9 +1,8 @@
 <template>
-    <BreadcrumbComponent title="Associados" />
+    <BreadcrumbComponent title="Calibres" />
 
     <div class="dashboard-header flex-horizontal">
         <div class="search-container">
-            <!-- <InputComponent type="text" placeholder="Pesquisar" v-model="search" /> -->
             <InputComponent type="text" placeholder="Pesquisar" v-model="search" @input="searchSubmit" />
         </div>
         <div class="dashboard-actions">
@@ -74,15 +73,18 @@
 
         </div>
     </div>
-
-    <div class="row row-gap-15">
+    
+    <div class="row row-gap-15" v-if="hasData()">
 
         <TableComponent :items="dataTable" :actions="actions" />
+        <PaginationComponent class="mt-5" :data="calibers" @update:pageUrl="fetchPage" />
 
     </div>
 
-    <!-- <PaginationComponent class="mt-5" :links="calibers.links" :currentPage="calibers.current_page" @update:pageUrl="fetchPage" /> -->
-    <PaginationComponent class="mt-5" :data="calibers" @update:pageUrl="fetchPage" />
+    <div class="empty-data" v-else>
+        <p>Nenhum calibre encontrado.</p>
+    </div>
+    
 </template>
 
 <script setup lang="ts">
@@ -129,6 +131,8 @@ const form = reactive<Form>({
     name: '',
     type: ''
 });
+
+const hasData = () => dataTable.value.length > 0;
 
 const search = ref('');
 
