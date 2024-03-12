@@ -35,7 +35,9 @@
 
             </ModalComponent>
 
-            <NewModalComponent :isOpen="isOpenEditModal" @update:isOpen="closeEdtModal">
+
+            <!-- Modal de editar -->
+            <NewModalComponent :isOpen="isOpenEditModal" @update:isOpen="closeEditModal">
                 <div class="mb-3">
                     <LabelComponent text="Calibre" />
                     <InputComponent type="text" placeholder="Calibre" v-model="form.name" :validation="true"
@@ -59,6 +61,17 @@
                     <ButtonComponent buttonClass="dark-blue" @click="update" text="Atualizar" />
                 </div>
             </NewModalComponent>
+
+            <!-- Modal de confirmação de exclusão -->
+            <NewModalComponent :isOpen="isOpenDeleteModal" @update:isOpen="closeDeleteModal">
+                <div class="mb-3">
+                    <p>Tem certeza que deseja excluir este calibre?</p>
+                </div>
+                <div>
+                    <ButtonComponent buttonClass="dark-blue" @click="removeCaliber" text="confirmar" />
+                </div>
+            </NewModalComponent>
+
         </div>
     </div>
 
@@ -134,7 +147,7 @@ const fetchPage = async (label: string) => {
                 slug: item.slug,
             }
         })
-        
+
     } catch (error) {
         console.error(error);
     }
@@ -153,24 +166,14 @@ const actions: Action[] = [
     {
         name: 'delete',
         action: (item: any) => {
-            removeCaliber(item.slug);
+            //chamar modal de confirmação
+            confirmDeleteItem(item);
+            // removeCaliber(item.slug);
         },
         icon: 'trash',
         class: 'light red',
     },
 ];
-
-const removeCaliber = async (itemSlug: string) => {
-    await caliberStore.deleteCaliber(clubSlug, itemSlug)
-    const index = dataTable.value.findIndex((item: any) => item.slug === itemSlug);
-    if (index !== -1) {
-        dataTable.value.splice(index, 1);
-    }
-}
-
-const editCaliber = async (item: object) => {
-
-}
 
 onMounted(async () => {
     try {
@@ -229,7 +232,7 @@ const submit = async () => {
 //constante para abrir o modal de edição
 const isOpenEditModal = ref(false);
 //constante para fechar o modal de edição
-const closeEdtModal = () => {
+const closeEditModal = () => {
     
     isOpenEditModal.value = false;
 
@@ -263,7 +266,7 @@ const update = async () => {
         try {
             const updatedCaliber: any = await caliberStore.updateCaliber(clubSlug, form);
             //fechar o modal de edição
-            closeEdtModal();
+            closeEditModal();
 
             let caliber = {
                 id: updatedCaliber.id,
@@ -312,6 +315,35 @@ const searchSubmit = async (event: any) => {
     } catch (error) {
         console.error(error);
     }
+}
+
+//constante para armazenar o calibre que será excluído
+const itemToDelete = ref(null);
+
+//constante para abrir o modal de confimação de exclusão
+const isOpenDeleteModal = ref(false);
+//constante para fechar o modal de confimação de exclusão
+const closeDeleteModal = () => isOpenDeleteModal.value = false;
+
+//função para confirmar a exclusão do calibre
+const confirmDeleteItem = (item: any) => {
+    itemToDelete.value = item;
+    isOpenDeleteModal.value = true;
+}
+
+const removeCaliber = async () => {
+    let itemSlug = itemToDelete.value.slug;
+    await caliberStore.deleteCaliber(clubSlug, itemSlug)
+    const index = dataTable.value.findIndex((item: any) => item.slug === itemSlug);
+    if (index !== -1) {
+        dataTable.value.splice(index, 1);
+    }
+
+    //limpar a constante
+    itemToDelete.value = null;
+
+    //fechar o modal de confirmação
+    closeDeleteModal();
 }
 
 </script>
