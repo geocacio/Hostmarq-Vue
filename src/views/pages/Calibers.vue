@@ -3,8 +3,8 @@
 
     <div class="dashboard-header flex-horizontal">
         <div class="search-container">
-            <InputComponent type="text" placeholder="Pesquisar" v-model="search" />
-            <!-- <InputComponent type="text" placeholder="Pesquisar" v-model="search" @input="searchSubmit" /> -->
+            <!-- <InputComponent type="text" placeholder="Pesquisar" v-model="search" /> -->
+            <InputComponent type="text" placeholder="Pesquisar" v-model="search" @input="searchSubmit" />
         </div>
         <div class="dashboard-actions">
 
@@ -35,7 +35,9 @@
 
             </ModalComponent>
 
-            <NewModalComponent :isOpen="isOpenEditModal" @update:isOpen="closeEdtModal">
+
+            <!-- Modal de editar -->
+            <NewModalComponent :isOpen="isOpenEditModal" @update:isOpen="closeEditModal">
                 <div class="mb-3">
                     <LabelComponent text="Calibre" />
                     <InputComponent type="text" placeholder="Calibre" v-model="form.name" :validation="true"
@@ -59,6 +61,17 @@
                     <ButtonComponent buttonClass="dark-blue" @click="update" text="Atualizar" />
                 </div>
             </NewModalComponent>
+
+            <!-- Modal de confirmação de exclusão -->
+            <NewModalComponent :isOpen="isOpenDeleteModal" @update:isOpen="closeDeleteModal">
+                <div class="mb-3">
+                    <p>Tem certeza que deseja excluir este calibre?</p>
+                </div>
+                <div>
+                    <ButtonComponent buttonClass="dark-blue" @click="removeCaliber" text="confirmar" />
+                </div>
+            </NewModalComponent>
+
         </div>
     </div>
 
@@ -66,14 +79,10 @@
 
         <TableComponent :items="dataTable" :actions="actions" />
 
-        <!-- <div class="col-12 col-sm-6 col-md-4 col-lg-3" v-for="(person, index) in users.data" :key="index">
-            <PersonComponent :data="person" @update="updateuser" @delete="deleteUser" />
-        </div> -->
-
     </div>
 
-    <!-- <PaginationComponent class="mt-5" :links="users.links" :currentPage="users.current_page" @update:pageUrl="fetchPage" /> -->
-    <!-- <PaginationComponent class="mt-5" :data="users" @update:pageUrl="fetchPage" /> -->
+    <!-- <PaginationComponent class="mt-5" :links="calibers.links" :currentPage="calibers.current_page" @update:pageUrl="fetchPage" /> -->
+    <PaginationComponent class="mt-5" :data="calibers" @update:pageUrl="fetchPage" />
 </template>
 
 <script setup lang="ts">
@@ -123,6 +132,27 @@ const form = reactive<Form>({
 
 const search = ref('');
 
+const fetchPage = async (label: string) => {
+    let url = `clubs/${clubSlug}/calibres?page=${label}`;
+    url = search.value ? `${url}&search=${search.value}` : url;
+    try {
+        await caliberStore.fetchCalibers(clubSlug, url);
+        calibers.value = caliberStore.getCalibers;
+
+        dataTable.value = calibers.value.data.map((item: any) => {
+            return {
+                id: item.id,
+                'Nome': item.name,
+                'Tipo': item.type,
+                slug: item.slug,
+            }
+        })
+
+    } catch (error) {
+        console.error(error);
+    }
+};
+
 const actions: Action[] = [
     {
         name: 'edit',
@@ -136,31 +166,21 @@ const actions: Action[] = [
     {
         name: 'delete',
         action: (item: any) => {
-            removeCaliber(item.slug);
+            //chamar modal de confirmação
+            confirmDeleteItem(item);
+            // removeCaliber(item.slug);
         },
         icon: 'trash',
         class: 'light red',
     },
 ];
 
-const removeCaliber = async (itemSlug: string) => {
-    await caliberStore.deleteCaliber(clubSlug, itemSlug)
-    const index = dataTable.value.findIndex((item: any) => item.slug === itemSlug);
-    if (index !== -1) {
-        dataTable.value.splice(index, 1);
-    }
-}
-
-const editCaliber = async (item: object) => {
-
-}
-
 onMounted(async () => {
     try {
         await caliberStore.fetchCalibers(clubSlug);
         calibers.value = caliberStore.getCalibers;
 
-        dataTable.value = calibers.value.map((item: any) => {
+        dataTable.value = calibers.value.data.map((item: any) => {
             return {
                 id: item.id,
                 'Nome': item.name,
@@ -212,8 +232,8 @@ const submit = async () => {
 //constante para abrir o modal de edição
 const isOpenEditModal = ref(false);
 //constante para fechar o modal de edição
-const closeEdtModal = () => {
-    
+const closeEditModal = () => {
+
     isOpenEditModal.value = false;
 
     //limpar o formulário
@@ -245,7 +265,7 @@ const update = async () => {
         try {
             const updatedCaliber: any = await caliberStore.updateCaliber(clubSlug, form);
             //fechar o modal de edição
-            closeEdtModal();
+            closeEditModal();
 
             let caliber = {
                 id: updatedCaliber.id,
@@ -253,7 +273,7 @@ const update = async () => {
                 'Tipo': updatedCaliber.type,
                 slug: updatedCaliber.slug
             }
-            
+
             if (caliber) {
 
                 const index = dataTable.value.findIndex((item: any) => item.slug === updatedCaliber.slug);
@@ -269,6 +289,63 @@ const update = async () => {
         }
     }
 };
+
+const searchSubmit = async (event: any) => {
+    //buscar somente se tiver mais de 3 caracteres, a não ser que seja para apagar a busca
+    if (event.target.value.length < 3 && event.target.value.length > 0) {
+        return;
+    }
+
+    //url da paginação
+    const url = `clubs/${clubSlug}/calibres?page=${calibers.value.current_page}&search=${event.target.value}`;
+
+    try {
+        await caliberStore.fetchCalibers(clubSlug, url);
+        calibers.value = caliberStore.getCalibers;
+
+        dataTable.value = calibers.value.data.map((item: any) => {
+            return {
+                id: item.id,
+                'Nome': item.name,
+                'Tipo': item.type,
+                slug: item.slug,
+            }
+        })
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+//constante para armazenar o calibre que será excluído
+const itemToDelete = ref(null);
+
+//constante para abrir o modal de confimação de exclusão
+const isOpenDeleteModal = ref(false);
+//constante para fechar o modal de confimação de exclusão
+const closeDeleteModal = () => {
+
+    //limpar a constante
+    itemToDelete.value = null;
+    isOpenDeleteModal.value = false;
+}
+
+//função para confirmar a exclusão do calibre
+const confirmDeleteItem = (item: any) => {
+    itemToDelete.value = item;
+    isOpenDeleteModal.value = true;
+}
+
+const removeCaliber = async () => {
+    let itemSlug = itemToDelete.value.slug;
+    await caliberStore.deleteCaliber(clubSlug, itemSlug)
+    const index = dataTable.value.findIndex((item: any) => item.slug === itemSlug);
+    if (index !== -1) {
+        dataTable.value.splice(index, 1);
+    }
+
+    //fechar o modal de confirmação
+    closeDeleteModal();
+}
 
 </script>
 

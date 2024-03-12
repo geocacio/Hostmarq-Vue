@@ -17,9 +17,9 @@ export const useCaliberStore = defineStore('caliber', {
     },
 
     actions: {
-        async fetchCalibers(clubSlug: string) {
+        async fetchCalibers(clubSlug: string, link: string = '') {
             try {
-                let caliberData = await index(endpoint.index.replace('{clubSlug}', clubSlug));
+                let caliberData = await index(link != '' ? link : endpoint.index.replace('{clubSlug}', clubSlug));
                 this.calibers = caliberData;
             } catch (error) {
                 throw error;
