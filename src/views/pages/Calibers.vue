@@ -172,7 +172,6 @@ const actions: Action[] = [
         action: (item: any) => {
             //chamar modal de confirmação
             confirmDeleteItem(item);
-            // removeCaliber(item.slug);
         },
         icon: 'trash',
         class: 'light red',
