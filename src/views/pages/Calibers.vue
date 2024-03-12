@@ -233,7 +233,7 @@ const submit = async () => {
 const isOpenEditModal = ref(false);
 //constante para fechar o modal de edição
 const closeEditModal = () => {
-    
+
     isOpenEditModal.value = false;
 
     //limpar o formulário
@@ -274,7 +274,7 @@ const update = async () => {
                 'Tipo': updatedCaliber.type,
                 slug: updatedCaliber.slug
             }
-            
+
             if (caliber) {
 
                 const index = dataTable.value.findIndex((item: any) => item.slug === updatedCaliber.slug);
@@ -293,7 +293,7 @@ const update = async () => {
 
 const searchSubmit = async (event: any) => {
     //buscar somente se tiver mais de 3 caracteres, a não ser que seja para apagar a busca
-    if(event.target.value.length < 3 && event.target.value.length > 0){
+    if (event.target.value.length < 3 && event.target.value.length > 0) {
         return;
     }
 
@@ -323,7 +323,12 @@ const itemToDelete = ref(null);
 //constante para abrir o modal de confimação de exclusão
 const isOpenDeleteModal = ref(false);
 //constante para fechar o modal de confimação de exclusão
-const closeDeleteModal = () => isOpenDeleteModal.value = false;
+const closeDeleteModal = () => {
+
+    //limpar a constante
+    itemToDelete.value = null;
+    isOpenDeleteModal.value = false;
+}
 
 //função para confirmar a exclusão do calibre
 const confirmDeleteItem = (item: any) => {
@@ -338,9 +343,6 @@ const removeCaliber = async () => {
     if (index !== -1) {
         dataTable.value.splice(index, 1);
     }
-
-    //limpar a constante
-    itemToDelete.value = null;
 
     //fechar o modal de confirmação
     closeDeleteModal();
