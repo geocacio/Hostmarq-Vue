@@ -16,10 +16,10 @@ export const useEventStore = defineStore('event', {
     },
 
     actions: {
-        async fetchEvents(clubSlug: string) {
+        async fetchEvents(clubSlug: string, link: string = '') {
             // eslint-disable-next-line no-useless-catch
             try {
-                const eventData = await index(endpoint.index.replace('{clubSlug}', clubSlug));
+                const eventData = await index(link != "" ? link : endpoint.index.replace('{clubSlug}', clubSlug));
                 this.events = eventData;
             } catch (error) {
                 throw error;
@@ -49,8 +49,8 @@ export const useEventStore = defineStore('event', {
         async deleteEvent(clubSlug: string, eventId: string) {
             // eslint-disable-next-line no-useless-catch
             try {
-                const result = await destroy(endpoint.sud.replace('{clubSlug}', clubSlug) + `/${eventId}`);
-                return result;
+                const result = await destroy(endpoint.index.replace('{clubSlug}', clubSlug) + `/${eventId}`);
+                return result.data;
             } catch (error) {
                 throw error;
             }

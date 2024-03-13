@@ -64,7 +64,7 @@
             <ModalConfirmationComponent
                 :isOpen="isOpenDeleteModal"
                 :closeDeleteModal="closeDeleteModal"
-                :removeCaliber="removeCaliber"
+                :confirmRemove="removeCaliber"
                 text="Tem certeza que deseja excluir este calibre?"/>
 
         </div>
@@ -324,6 +324,7 @@ const itemToDelete = ref(null);
 
 //constante para abrir o modal de confimação de exclusão
 const isOpenDeleteModal = ref(false);
+
 //constante para fechar o modal de confimação de exclusão
 const closeDeleteModal = () => {
 
