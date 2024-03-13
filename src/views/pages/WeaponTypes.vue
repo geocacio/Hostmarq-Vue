@@ -205,9 +205,6 @@ const update = async () => {
                 if(index !== -1){
                     dataTable.value[index] = weaponType;
                 }
-
-                //limpar o formulario
-                clearForm();
             }
 
         }catch(error){
