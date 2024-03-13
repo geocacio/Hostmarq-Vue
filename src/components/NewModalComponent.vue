@@ -1,6 +1,6 @@
 <template>
     <transition name="fade-transition">
-        <div class="custom-modal" :class="{ 'show': isOpen }" v-show="isOpen">
+        <div class="custom-modal" :class="[iClass, { 'show': isOpen }]" v-show="isOpen">
             <div class="modal-body-style">
                 <button class="btn-close" @click="closeModal"></button>
                 <div class="custom-modal-content">
@@ -18,7 +18,11 @@
 import { defineEmits, defineProps } from 'vue';
 
 const props = defineProps({
-    isOpen: Boolean
+    isOpen: Boolean,
+    iClass: {
+        type: String,
+        default: ''
+    }
 });
 
 const emit = defineEmits(['update:isOpen']);

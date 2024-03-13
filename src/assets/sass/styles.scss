@@ -548,6 +548,15 @@ a{
             color: #fff;
         }
     }
+    &.dark-blue-default{
+        color: #172b4d!important;
+        border-color: #172b4d;
+        background-color: transparent;
+        &:hover{
+            background-color: #172b4d;
+            color: #fff!important;
+        }
+    }
     &.light{
         background-color: transparent;
     }
@@ -834,6 +843,31 @@ a{
 
             .content-margin{
                 padding-right: 20px;
+            }
+        }
+    }
+
+    &.confirmation{
+        .modal-body-style{
+            max-width: 300px;
+            min-width: initial;
+            .content-margin{
+                .content-confirmation{
+                    span{
+                        margin: auto;
+                        text-align: center;
+                        display: block;
+                        margin-bottom: 15px;
+                        svg{
+                            width: 60px;
+                            height: 60px;
+                            margin: auto;
+                            fill: #4c5258;
+                        }
+                    }
+                    font-size: 16px;
+                    color: #4c5258;
+                }
             }
         }
     }

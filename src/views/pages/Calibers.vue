@@ -61,15 +61,11 @@
                 </div>
             </NewModalComponent>
 
-            <!-- Modal de confirmação de exclusão -->
-            <NewModalComponent :isOpen="isOpenDeleteModal" @update:isOpen="closeDeleteModal">
-                <div class="mb-3">
-                    <p>Tem certeza que deseja excluir este calibre?</p>
-                </div>
-                <div>
-                    <ButtonComponent buttonClass="dark-blue" @click="removeCaliber" text="confirmar" />
-                </div>
-            </NewModalComponent>
+            <ModalConfirmationComponent
+                :isOpen="isOpenDeleteModal"
+                :closeDeleteModal="closeDeleteModal"
+                :removeCaliber="removeCaliber"
+                text="Tem certeza que deseja excluir este calibre?"/>
 
         </div>
     </div>
@@ -104,6 +100,7 @@ import { useCaliberStore } from '@/stores/modules/caliber';
 import type { Caliber } from '@/types/caliberType';
 import type { Action } from '@/types/actionType';
 import BoxMessageComponent from '@/components/BoxMessageComponent.vue';
+import ModalConfirmationComponent from '@/components/ModalConfirmationComponent.vue';
 
 // Acessar os dados do usuário conectado
 import { useAuthStore } from '@/stores/modules/auth';
