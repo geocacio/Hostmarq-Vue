@@ -69,6 +69,11 @@ const router = createRouter({
           name: 'Eventos',
           component: () => import('@/views/pages/Events.vue'),
         },
+        {
+          path: 'location',
+          name: 'Localização',
+          component: () => import('@/views/pages/Location.vue'),
+        },
         // {
         //   path: 'settings',
         //   name: 'Settings',
