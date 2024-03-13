@@ -35,7 +35,7 @@
                 :isOpen="isOpenDeleteModal"
                 :closeDeleteModal="closeDeleteModal"
                 :confirmRemove="removeWeaponModel"
-                text="Tem certeza que deseja excluir este evento?"/>
+                text="Tem certeza que deseja excluir este modelo?"/>
         </div>
     </div>
 
