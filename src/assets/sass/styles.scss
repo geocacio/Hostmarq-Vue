@@ -851,3 +851,16 @@ a{
 .fade-transition-enter-active, .fade-transition-leave-active {
     transition: opacity .5s;
 }
+
+.empty-data{
+    color: #4c5258;
+    text-align: center;
+    font-size: 18px;
+
+    svg{
+        fill: #4c5258;
+        margin-bottom: 10px;
+        height: 60px;
+        width: 60px;
+    }
+}

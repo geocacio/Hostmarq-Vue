@@ -15,7 +15,7 @@
 
 </template>
 <script setup lang="ts">
-import { ref, defineEmits, defineProps } from 'vue';
+import { defineEmits, defineProps } from 'vue';
 
 const props = defineProps({
     isOpen: Boolean

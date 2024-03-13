@@ -81,9 +81,11 @@
 
     </div>
 
-    <div class="empty-data" v-else>
-        <p>Nenhum calibre encontrado.</p>
-    </div>
+    <BoxMessageComponent text="Nenhum calibre encontrado." icon="close-circle" v-else/>
+    <!-- <div class="empty-data" v-else>
+        <IconClose />
+        <p></p>
+    </div> -->
     
 </template>
 
@@ -101,6 +103,7 @@ import TableComponent from '@/components/TableComponent.vue';
 import { useCaliberStore } from '@/stores/modules/caliber';
 import type { Caliber } from '@/types/caliberType';
 import type { Action } from '@/types/actionType';
+import BoxMessageComponent from '@/components/BoxMessageComponent.vue';
 
 // Acessar os dados do usuário conectado
 import { useAuthStore } from '@/stores/modules/auth';
