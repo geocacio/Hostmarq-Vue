@@ -1,10 +1,9 @@
 <template>
-    <BreadcrumbComponent title="Associados" />
+    <BreadcrumbComponent title="Tipos de arma" />
 
     <div class="dashboard-header flex-horizontal">
         <div class="search-container">
-            <InputComponent type="text" placeholder="Pesquisar" v-model="search" />
-            <!-- <InputComponent type="text" placeholder="Pesquisar" v-model="search" @input="searchSubmit" /> -->
+            <InputComponent type="text" placeholder="Pesquisar" v-model="search" @input="searchSubmit" />
         </div>
         <div class="dashboard-actions">
 
@@ -30,17 +29,22 @@
                     <ButtonComponent button-class="dark-blue" @click="update" text="Atualizar" />
                 </div>
             </NewModalComponent>
+
+            <ModalConfirmationComponent
+                :isOpen="isOpenDeleteModal"
+                :closeDeleteModal="closeDeleteModal"
+                :confirmRemove="removeType"
+                text="Tem certeza que deseja excluir este tipo?"/>
+
         </div>
     </div>
 
     <div class="row row-gap-15">
 
         <TableComponent :items="dataTable" :actions="actions"/>
+        <PaginationComponent class="mt-5" :data="weaponTypes" @update:pageUrl="fetchPage" />
 
     </div>
-
-    <!-- <PaginationComponent class="mt-5" :links="users.links" :currentPage="users.current_page" @update:pageUrl="fetchPage" /> -->
-    <!-- <PaginationComponent class="mt-5" :data="users" @update:pageUrl="fetchPage" /> -->
 </template>
 
 <script setup lang="ts">
@@ -58,6 +62,7 @@ import NewModalComponent from '@/components/NewModalComponent.vue';
 
 // Acessar os dados do usuário conectado
 import { useAuthStore } from '@/stores/modules/auth';
+import ModalConfirmationComponent from '@/components/ModalConfirmationComponent.vue';
 
 
 const authStore = useAuthStore();
@@ -85,6 +90,27 @@ const form = reactive<Form>({
 
 const search = ref('');
 
+//Função da páginação
+const fetchPage = async (label: string) => {
+    let url = `clubs/${clubSlug}/weapon-types?page=${label}`;
+    url = search.value ? `${url}&search=${search.value}` : url;
+
+    // eslint-disable-next-line no-useless-catch
+    try{
+        await weaponTypeStore.fetchWeaponTypes(clubSlug, url);
+        weaponTypes.value = weaponTypeStore.getWeaponTypes;
+
+        dataTable.value = weaponTypes.value.data.map((item: { id: any; name: any; }) => {
+            return({
+                id: item.id,
+                "Nome": item.name
+            })
+        });
+    }catch(error){
+        throw error;
+    }
+}
+
 const actions: Action[] = [
     {
         name: 'edit',
@@ -97,25 +123,19 @@ const actions: Action[] = [
     {
         name: 'delete',
         action: (item: any) => {
-            removeWeaponType(item.id);
+            confirmDeleteItem(item.id);
         },
         icon: 'trash',
         class: 'light red',
     },
 ];
 
-const removeWeaponType = async(itemSlug: string) => {
-    await weaponTypeStore.deleteWeaponType(clubSlug, itemSlug)
-    let index = dataTable.value.findIndex((item) => item.id === itemSlug)
-    dataTable.value.splice(index, 1);
-}
-
 onMounted(async () => {
     try {
         await weaponTypeStore.fetchWeaponTypes(clubSlug);
         weaponTypes.value = weaponTypeStore.getWeaponTypes;
 
-        dataTable.value = weaponTypes.value.map((item: any) => {
+        dataTable.value = weaponTypes.value.data.map((item: any) => {
             return {
                 id: item.id,
                 'Nome': item.name,
@@ -152,6 +172,9 @@ const submit = async () => {
             if (weapontType){
                 dataTable.value.push(weapontType);
             }
+
+            clearForm();
+
         } catch (error) {
             console.error(error);
         }
@@ -213,20 +236,62 @@ const update = async () => {
     }
 }
 
-// const searchSubmit = async (event: any) => {
-//     //buscar somente se tiver mais de 3 caracteres, a não ser que seja para apagar a busca
-//     if (event.target.value.length < 3 && event.target.value.length > 0) {
-//         return;
-//     }
+const searchSubmit = async (event: any) => {
+    //Busca somente se tiver mais de 3 caracteres, a não ser que seja para apagar a busca
+    if(event.target.value.length < 3 && event.target.value.length > 0) {
+        return;
+    }
 
-//     const url = `users?page=${users.value.current_page}&search=${event.target.value}`;
+    console.log()
 
-//     try {
-//         await userStore.fetchUsers(url);
-//         users.value = userStore.getUsers;
-//     } catch (error) {
-//         console.error(error);
-//     }
-// };
+    const url = `clubs/${clubSlug}/weapon-types?page=${weaponTypes.value.current_page}&search=${event.target.value}`;
+
+    // eslint-disable-next-line no-useless-catch
+    try{
+        await weaponTypeStore.fetchWeaponTypes(clubSlug, url);
+        weaponTypes.value = weaponTypeStore.getWeaponTypes;
+        dataTable.value = weaponTypes.value.data.map((item: any) => {
+            return{
+                id: item.id,
+                "Nome": item.name
+            }
+        })
+    }catch(error){
+        throw error;
+    }
+}
+
+//constante para armazenar o calibre que será excluído
+const itemToDelete = ref(null);
+
+//constante para abrir o modal de confimação de exclusão
+const isOpenDeleteModal = ref(false);
+
+//função para confirmar a exclusão do calibre
+const confirmDeleteItem = (item: any) => {
+    itemToDelete.value = item;
+    isOpenDeleteModal.value = true;
+}
+
+//constante para fechar o modal de confimação de exclusão
+const closeDeleteModal = () => {
+
+    //limpar a constante
+    itemToDelete.value = null;
+    isOpenDeleteModal.value = false;
+}
+
+const removeType = async () => {
+    let itemId = itemToDelete.value;
+    await weaponTypeStore.deleteWeaponType(clubSlug, itemId);
+    const index = dataTable.value.findIndex((item: any) => item.id === itemId);
+    if (index !== -1) {
+        dataTable.value.splice(index, 1);
+    }
+
+    //fechar o modal de confirmação
+    closeDeleteModal();
+}
+
 
 </script>

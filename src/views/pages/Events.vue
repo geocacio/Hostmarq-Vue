@@ -3,7 +3,6 @@
 
     <div class="dashboard-header flex-horizontal">
         <div class="search-container">
-            <!-- <InputComponent type="text" placeholder="Pesquisar" v-model="search" /> -->
             <InputComponent type="text" placeholder="Pesquisar" v-model="search" @input="searchSubmit" />
         </div>
         <div class="dashboard-actions">
@@ -255,7 +254,6 @@ const searchSubmit = async (event: any) => {
     try{
         await eventStore.fetchEvents(clubSlug, url);
         events.value = eventStore.getEvents;
-        console.log(events)
         dataTable.value = events.value.data.map((item: any) => {
             return{
                 id: item.id,
