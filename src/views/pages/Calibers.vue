@@ -12,7 +12,7 @@
                 <div class="mb-3">
                     <LabelComponent text="Calibre" />
                     <InputComponent type="text" placeholder="Calibre" v-model="form.name" :validation="true"
-                        :error="errors.name" :error-message="'Por favor, insira um nome de usuário.'"
+                        :error="errors.name" :error-message="'Por favor, insira um calibre.'"
                         @input="errors.name = false" />
                 </div>
 

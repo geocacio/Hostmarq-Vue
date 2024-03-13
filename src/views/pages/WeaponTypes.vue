@@ -39,12 +39,12 @@
         </div>
     </div>
 
-    <div class="row row-gap-15">
-
+    <div class="row row-gap-15" v-if="hasData()">
         <TableComponent :items="dataTable" :actions="actions"/>
         <PaginationComponent class="mt-5" :data="weaponTypes" @update:pageUrl="fetchPage" />
-
     </div>
+
+    <BoxMessageComponent text="Nenhum tipo encontrado." icon="close-circle" v-else/>
 </template>
 
 <script setup lang="ts">
@@ -63,6 +63,7 @@ import NewModalComponent from '@/components/NewModalComponent.vue';
 // Acessar os dados do usuário conectado
 import { useAuthStore } from '@/stores/modules/auth';
 import ModalConfirmationComponent from '@/components/ModalConfirmationComponent.vue';
+import BoxMessageComponent from '@/components/BoxMessageComponent.vue';
 
 
 const authStore = useAuthStore();
@@ -87,6 +88,8 @@ interface Form {
 const form = reactive<Form>({
     name: '',
 });
+
+const hasData = () => dataTable.value.length > 0;
 
 const search = ref('');
 
@@ -171,9 +174,9 @@ const submit = async () => {
             
             if (weapontType){
                 dataTable.value.push(weapontType);
-            }
 
-            clearForm();
+                clearForm();
+            }
 
         } catch (error) {
             console.error(error);

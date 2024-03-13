@@ -1,5 +1,5 @@
 <template>
-    <BreadcrumbComponent title="Associados" />
+    <BreadcrumbComponent title="Eventos" />
 
     <div class="dashboard-header flex-horizontal">
         <div class="search-container">
@@ -177,6 +177,8 @@ const submit = async () => {
             
             if (event){
                 dataTable.value.push(event);
+
+                clearForm();
             }
         } catch (error) {
             console.error(error);

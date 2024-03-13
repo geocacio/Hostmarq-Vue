@@ -16,10 +16,10 @@ export const useWeaponModelStore = defineStore('weaponModel', {
     },
 
     actions: {
-        async fetchWeaponModels(clubSlug: string) {
+        async fetchWeaponModels(clubSlug: string, link: string = '') {
             // eslint-disable-next-line no-useless-catch
             try {
-                const weaponModelData = await index(endpoint.index.replace('{clubSlug}', clubSlug));
+                const weaponModelData = await index(link != '' ? link : endpoint.index.replace('{clubSlug}', clubSlug));
                 this.weaponModels = weaponModelData;
             } catch (error) {
                 throw error;
