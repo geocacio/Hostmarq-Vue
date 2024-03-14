@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia';
-import { index, store, update } from '@/api/generalAPI';
+import { index, store, update, show } from '@/api/generalAPI';
 import type { Club } from '@/types/clubType';
 
 const endpoint = {
     index: 'clubs',
-    show: '{clubId}',
+    sud: 'clubs/{clubSlug}',
     user: 'my-club',
     userUpdate: 'my-club/{club}',
 }
@@ -39,12 +39,10 @@ export const useClubStore = defineStore('club', {
             }
         },
 
-        async showClub(clubId: Club) {
+        async show(clubSlug: Club) {
             try {
-                console.log('essa é a rota', clubId);
-                let clubData = await show(endpoint.show.replace('{clubId}', clubId));
-                console.log(clubData);
-                // this.club = clubData.data;
+                let clubData = await show(endpoint.sud.replace('{clubSlug}', clubSlug));
+                this.club = clubData.data;
             } catch (error) {
                 throw error;
             }

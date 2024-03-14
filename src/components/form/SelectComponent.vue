@@ -1,5 +1,6 @@
 <template>
     <select class="form-control" :value="modelValue" @change="updateValue(($event.target as HTMLSelectElement)?.value)">
+        <option value="">{{ placeholder }}</option>
         <option v-for="(option, index) in options" :key="index" :value="option.value">
             {{ option.text }}
         </option>
@@ -19,6 +20,10 @@ const props = defineProps({
     options: {
         type: Array as () => Option[],
         required: true,
+    },
+    placeholder: {
+        type: String,
+        default: '',
     },
 });
 

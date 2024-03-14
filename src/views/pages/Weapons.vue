@@ -1,5 +1,5 @@
 <template>
-    <BreadcrumbComponent title="Tipos de arma" />
+    <BreadcrumbComponent title="Armas" />
 
     <div class="dashboard-header flex-horizontal">
         <div class="search-container">
@@ -11,15 +11,17 @@
 
                 <div class="mb-3">
                     <LabelComponent text="Sigma" />
-                    <InputComponent type="text" placeholder="Sigma" v-model="form.number_sigma" :validation="true" :error="errors.number_sigma" :error-message="'Por favor, o sigma da arma.'" @input="errors.number_sigma = false" />
+                    <InputComponent type="text" placeholder="Sigma" v-model="form.number_sigma" :validation="true"
+                        :error="errors.number_sigma" :error-message="'Por favor, o sigma da arma.'"
+                        @input="errors.number_sigma = false" />
                 </div>
 
                 <div class="mb-3">
                     <LabelComponent text="Origem" />
                     <select class="form-control" v-model="form.origin">
                         <option value="">Selecione a origem</option>
-                        <option value="permitted">Armamento do clube</option>
-                        <option value="restricted">Armamento do instrutor</option>
+                        <option value="Armamento do clube">Armamento do clube</option>
+                        <option value="Armamento do instrutor">Armamento do instrutor</option>
                     </select>
                     <div v-if="errors.origin" class="error-message">
                         Por favor, a origem.
@@ -27,26 +29,26 @@
                 </div>
 
                 <div class="mb-3">
-                    <LabelComponent text="Calibre" />
-                    <select class="form-control" v-model="form.caliber_id">
-                        <option value="">Selecione a origem</option>
-                        <option value="permitted">Armamento do clube</option>
-                        <option value="restricted">Armamento do instrutor</option>
-                    </select>
+                    <LabelComponent text="Tipo" />
+                    <SelectComponent :options="allTypes" v-model="form.type_id" placeholder="Selecione o Tipo" />
                     <div v-if="errors.caliber_id" class="error-message">
                         Por favor, o calibre.
                     </div>
                 </div>
 
                 <div class="mb-3">
-                    <LabelComponent text="Origem" />
-                    <select class="form-control" v-model="form.origin">
-                        <option value="">Selecione a origem</option>
-                        <option value="permitted">Armamento do clube</option>
-                        <option value="restricted">Armamento do instrutor</option>
-                    </select>
-                    <div v-if="errors.origin" class="error-message">
-                        Por favor, a origem.
+                    <LabelComponent text="Modelo" />
+                    <SelectComponent :options="allModels" v-model="form.model_id" />
+                    <div v-if="errors.caliber_id" class="error-message">
+                        Por favor, o calibre.
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <LabelComponent text="Calibre" />
+                    <SelectComponent :options="allCalibers" v-model="form.caliber_id" />
+                    <div v-if="errors.caliber_id" class="error-message">
+                        Por favor, o calibre.
                     </div>
                 </div>
 
@@ -57,8 +59,9 @@
             </ModalComponent>
             <NewModalComponent :isOpen="isOpenEditModal" @update:is-open="closeEditModal">
                 <div class="mb-3">
-                    <LabelComponent text="Nome"/>
-                    <InputComponent type="text" placeholder="Nome" v-model="form.name" :validation="true" :error="errors.name" :error-message="'Porfavor, insira o tipo'" @input="errors.name = false"/>
+                    <LabelComponent text="Nome" />
+                    <InputComponent type="text" placeholder="Nome" v-model="form.name" :validation="true"
+                        :error="errors.name" :error-message="'Porfavor, insira o tipo'" @input="errors.name = false" />
                 </div>
 
                 <div class="text-center">
@@ -66,21 +69,18 @@
                 </div>
             </NewModalComponent>
 
-            <ModalConfirmationComponent
-                :isOpen="isOpenDeleteModal"
-                :closeDeleteModal="closeDeleteModal"
-                :confirmRemove="removeType"
-                text="Tem certeza que deseja excluir este tipo?"/>
+            <ModalConfirmationComponent :isOpen="isOpenDeleteModal" :closeDeleteModal="closeDeleteModal"
+                :confirmRemove="removeType" text="Tem certeza que deseja excluir este tipo?" />
 
         </div>
     </div>
 
     <div class="row row-gap-15" v-if="hasData()">
-        <TableComponent :items="dataTable" :actions="actions"/>
-        <PaginationComponent class="mt-5" :data="weaponTypes" @update:pageUrl="fetchPage" />
+        <TableComponent :items="dataTable" :actions="actions" />
+        <PaginationComponent class="mt-5" :data="weapons" @update:pageUrl="fetchPage" />
     </div>
 
-    <BoxMessageComponent text="Nenhuma arma encontrada." icon="close-circle" v-else/>
+    <BoxMessageComponent text="Nenhuma arma encontrada." icon="close-circle" v-else />
 </template>
 
 <script setup lang="ts">
@@ -101,13 +101,13 @@ import { useAuthStore } from '@/stores/modules/auth';
 import ModalConfirmationComponent from '@/components/ModalConfirmationComponent.vue';
 import BoxMessageComponent from '@/components/BoxMessageComponent.vue';
 import useClubStore from '@/stores/modules/club';
+import SelectComponent from '@/components/form/SelectComponent.vue';
 
 
 const authStore = useAuthStore();
 const loggedInuser = authStore.getUser;
 // Acessar o slug do clube do usuário conectado
 const clubSlug = (loggedInuser as { club?: { slug: string } })?.club?.slug ?? '';
-const clubIdRequire = (loggedInuser as { club?: { id: string } })?.club?.id ?? '';
 
 const weaponStore = useWeaponStore();
 const weapons = ref([]);
@@ -150,17 +150,17 @@ const fetchPage = async (label: string) => {
     url = search.value ? `${url}&search=${search.value}` : url;
 
     // eslint-disable-next-line no-useless-catch
-    try{
+    try {
         await weaponStore.fetchWeapons(clubSlug, url);
         weapons.value = weaponStore.getWeapons;
 
         dataTable.value = weapons.value.data.map((item: { id: any; name: any; }) => {
-            return({
+            return ({
                 id: item.id,
-                "Nome": item.name
+                'Número do sigma': newWeapon.number_sigma
             })
         });
-    }catch(error){
+    } catch (error) {
         throw error;
     }
 }
@@ -186,15 +186,26 @@ const actions: Action[] = [
 
 onMounted(async () => {
     try {
-        const clubResponse = await clubStore.showClub(clubIdRequire);
-        console.log('passou aqui', clubResponse)
+        //Pega os dados do clube (calibres, modelos e tipos de armas)
+        const clubResponse = await clubStore.show(clubSlug);
+        club.value = clubStore.getClub;
+
+        //Prepara os dados do calibres para o select
+        allCalibers.value = getCalibersToSelectList();
+
+        //prepara os dados dos modelos para o select
+        allModels.value = getModelsToSelectList();
+
+        //prepara os dados dos tipos de armas para o select
+        allTypes.value = getTypesToSelectList();
+
         await weaponStore.fetchWeapons(clubSlug);
         weapons.value = weaponStore.getWeapons;
 
-        dataTable.value = weapons.value.map((item: any) => {
+        dataTable.value = weapons.value.data.map((item: any) => {
             return {
                 id: item.id,
-                'Nome': item.name,
+                'Número do sigma': item.number_sigma
             };
         });
     } catch (error) {
@@ -221,19 +232,19 @@ const validateForm = () => {
 };
 
 const submit = async () => {
-    
+
     if (validateForm()) {
 
         try {
-            const newWeaponType: any = await weaponTypeStore.createWeaponType(clubSlug, form);
+            const newWeapon: any = await weaponStore.createWeapon(clubSlug, form);
             document.getElementById('closeModal-new-user')?.click();
-            const weapontType = {
-                id: newWeaponType.id,
-                'Nome': newWeaponType.name
+            const weapon = {
+                id: newWeapon.id,
+                'Número do sigma': newWeapon.number_sigma
             }
-            
-            if (weapontType){
-                dataTable.value.push(weapontType);
+
+            if (weapon) {
+                dataTable.value.push(weapon);
 
                 clearForm();
             }
@@ -259,9 +270,9 @@ const closeEditModal = () => {
 //Função para mostrar os dados do tipo no modal de edição
 const showDataType = (item: any) => {
     form.id = item['id'],
-    form.name = item['Nome'],
+        form.name = item['Nome'],
 
-    isOpenEditModal.value = true;
+        isOpenEditModal.value = true;
 }
 
 //Função para limpar o modal editar
@@ -272,10 +283,10 @@ const clearForm = () => {
 
 //Função para atualizar o tipo da Arma
 const update = async () => {
-    if(validateForm()){
+    if (validateForm()) {
         // eslint-disable-next-line no-useless-catch
         try {
-            const updateWeaponType: any = await weaponTypeStore.updateWeaponType(clubSlug, form);
+            const updateWeaponType: any = await weaponStore.updateWeaponType(clubSlug, form);
 
             //Fechar o modal
             closeEditModal();
@@ -285,15 +296,15 @@ const update = async () => {
                 'Nome': updateWeaponType.name
             }
 
-            if(weaponType){
+            if (weaponType) {
                 const index = dataTable.value.findIndex((item) => item.id == updateWeaponType.id)
 
-                if(index !== -1){
+                if (index !== -1) {
                     dataTable.value[index] = weaponType;
                 }
             }
 
-        }catch(error){
+        } catch (error) {
             throw error;
         }
     }
@@ -301,25 +312,25 @@ const update = async () => {
 
 const searchSubmit = async (event: any) => {
     //Busca somente se tiver mais de 3 caracteres, a não ser que seja para apagar a busca
-    if(event.target.value.length < 3 && event.target.value.length > 0) {
+    if (event.target.value.length < 3 && event.target.value.length > 0) {
         return;
     }
 
     console.log()
 
-    const url = `clubs/${clubSlug}/weapon-types?page=${weaponTypes.value.current_page}&search=${event.target.value}`;
+    const url = `weapons?page=${weapons.value.current_page}&search=${event.target.value}`;
 
     // eslint-disable-next-line no-useless-catch
-    try{
-        await weaponTypeStore.fetchWeaponTypes(clubSlug, url);
-        weaponTypes.value = weaponTypeStore.getWeaponTypes;
-        dataTable.value = weaponTypes.value.data.map((item: any) => {
-            return{
+    try {
+        await weaponStore.fetchWeapons(clubSlug, url);
+        weapons.value = weaponStore.getWeapons;
+        dataTable.value = weapons.value.data.map((item: any) => {
+            return {
                 id: item.id,
-                "Nome": item.name
+                'Número do sigma': item.number_sigma
             }
         })
-    }catch(error){
+    } catch (error) {
         throw error;
     }
 }
@@ -346,7 +357,7 @@ const closeDeleteModal = () => {
 
 const removeType = async () => {
     let itemId = itemToDelete.value;
-    await weaponTypeStore.deleteWeaponType(clubSlug, itemId);
+    await weaponStore.deleteWeapon(clubSlug, itemId);
     const index = dataTable.value.findIndex((item: any) => item.id === itemId);
     if (index !== -1) {
         dataTable.value.splice(index, 1);
@@ -356,6 +367,15 @@ const removeType = async () => {
     closeDeleteModal();
 }
 
+const allCalibers = ref([]);
+const allModels = ref([]);
+const allTypes = ref([]);
+
+const getCalibersToSelectList = () => club.value.calibers.map((item: any) => ({ text: item.name, value: item.id }));
+
+const getModelsToSelectList = () => club.value.weapon_models.map((item: any) => ({ text: item.name, value: item.id }));
+
+const getTypesToSelectList = () => club.value.weapon_types.map((item: any) => ({ text: item.name, value: item.id }));
 
 </script>
 
