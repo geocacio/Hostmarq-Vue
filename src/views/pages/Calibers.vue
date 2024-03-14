@@ -213,10 +213,8 @@ const submit = async () => {
             const newCaliber: any = await caliberStore.createCaliber(clubSlug, form);
             document.getElementById('closeModal-new-user')?.click();
             let caliber = {
-                id: newCaliber.id,
                 'Nome': newCaliber.name,
                 'Tipo': newCaliber.type,
-                slug: newCaliber.slug
             }
             if (caliber) {
                 dataTable.value.push(caliber);
@@ -267,7 +265,6 @@ const update = async () => {
             const updatedCaliber: any = await caliberStore.updateCaliber(clubSlug, form);
             //fechar o modal de edição
             closeEditModal();
-            console.log(updatedCaliber);
 
             let caliber = {
                 'Nome': updatedCaliber.name,
@@ -281,7 +278,6 @@ const update = async () => {
                 
                 if (index !== -1) {
                     dataTable.value[index] = caliber;
-                    console.log('data deóis: ',dataTable.value[index])
                 }
 
                 //limpar o formulário
@@ -341,7 +337,7 @@ const confirmDeleteItem = (item: any) => {
 const removeCaliber = async () => {
     let itemSlug = itemToDelete.value.slug;
     await caliberStore.deleteCaliber(clubSlug, itemSlug)
-    const index = dataTable.value.findIndex((item: any) => item.slug === itemSlug);
+    const index = dataTable.value.findIndex((item: any) => item.allData.slug === itemSlug);
     if (index !== -1) {
         dataTable.value.splice(index, 1);
     }

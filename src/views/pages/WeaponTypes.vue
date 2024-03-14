@@ -245,8 +245,6 @@ const searchSubmit = async (event: any) => {
         return;
     }
 
-    console.log()
-
     const url = `clubs/${clubSlug}/weapon-types?page=${weaponTypes.value.current_page}&search=${event.target.value}`;
 
     // eslint-disable-next-line no-useless-catch

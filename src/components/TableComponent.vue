@@ -26,7 +26,7 @@
                                 :key="key" 
                                 :buttonClass="action.class" 
                                 :icon="action.icon" 
-                                @click="action.action(item.allData)" 
+                                @click="action.action(item.allData ?? item)" 
                             />
                         </td>
 
