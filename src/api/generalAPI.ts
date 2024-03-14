@@ -16,7 +16,7 @@ export const index = async (url: string) => {
 
 export const store = async (url: string, TypeData: any) => {
     try {
-        let link = url != '' ? `${url}` : ``;
+        const link = url != '' ? `${url}` : ``;
         const response = await axiosInstance.post(link, TypeData);
         
         if(response.data.success){

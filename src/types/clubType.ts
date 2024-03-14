@@ -1,5 +1,6 @@
 export interface Club {
     id?: number;
+    clubId?: number;
     name: string;
     slug?: string;
     acronym?: string;

@@ -4,6 +4,7 @@ import type { Club } from '@/types/clubType';
 
 const endpoint = {
     index: 'clubs',
+    show: '{clubId}',
     user: 'my-club',
     userUpdate: 'my-club/{club}',
 }
@@ -33,6 +34,17 @@ export const useClubStore = defineStore('club', {
             try {
                 let clubData = await index(endpoint.user);
                 this.club = clubData.data;
+            } catch (error) {
+                throw error;
+            }
+        },
+
+        async showClub(clubId: Club) {
+            try {
+                console.log('essa é a rota', clubId);
+                let clubData = await show(endpoint.show.replace('{clubId}', clubId));
+                console.log(clubData);
+                // this.club = clubData.data;
             } catch (error) {
                 throw error;
             }
