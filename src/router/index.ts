@@ -41,7 +41,7 @@ const router = createRouter({
           path: 'habituality',
           name: 'Habitualidade',
           component: () => import('@/views/pages/Habituality.vue'),
-          meta: { requiresAuth: true, requiresRole:['Master', 'Admin', 'ClubMaster', 'ClubAdmin', 'User'] },
+          // meta: { requiresAuth: true, requiresRole:['Master', 'Admin', 'ClubMaster', 'ClubAdmin', 'User'] },
         },
         {
           path: 'permissions',
