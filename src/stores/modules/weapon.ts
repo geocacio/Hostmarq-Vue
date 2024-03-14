@@ -3,7 +3,7 @@ import { store, index, destroy, update } from '@/api/generalAPI';
 
 const endpoint = {
     index: 'weapons',
-    sud: 'clubs/{clubSlug}/weapons/{weaponId}',
+    sud: '/weapons/{weaponId}',
 }
 
 export const useWeaponStore = defineStore('weapons', {
@@ -36,10 +36,10 @@ export const useWeaponStore = defineStore('weapons', {
             }
         },
 
-        async updateWeapon(clubSlug: string, form: any){
+        async updateWeapon(form: any){
             // eslint-disable-next-line no-useless-catch
             try{
-                const result = await update(endpoint.sud.replace('{clubSlug}', clubSlug).replace('{weaponId}', form.id), form);
+                const result = await update(endpoint.sud.replace('{weaponId}', form.id), form);
                 return result.weapon;
             }catch(error){
                 throw error;

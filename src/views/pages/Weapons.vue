@@ -18,11 +18,7 @@
 
                 <div class="mb-3">
                     <LabelComponent text="Origem" />
-                    <select class="form-control" v-model="form.origin">
-                        <option value="">Selecione a origem</option>
-                        <option value="Armamento do clube">Armamento do clube</option>
-                        <option value="Armamento do instrutor">Armamento do instrutor</option>
-                    </select>
+                    <SelectComponent :options="origin" v-model="form.origin" placeholder="Selecione a Origem" />
                     <div v-if="errors.origin" class="error-message">
                         Por favor, a origem.
                     </div>
@@ -38,7 +34,7 @@
 
                 <div class="mb-3">
                     <LabelComponent text="Modelo" />
-                    <SelectComponent :options="allModels" v-model="form.model_id" />
+                    <SelectComponent :options="allModels" v-model="form.model_id" placeholder="Selecione o Modelo" />
                     <div v-if="errors.caliber_id" class="error-message">
                         Por favor, o calibre.
                     </div>
@@ -46,7 +42,7 @@
 
                 <div class="mb-3">
                     <LabelComponent text="Calibre" />
-                    <SelectComponent :options="allCalibers" v-model="form.caliber_id" />
+                    <SelectComponent :options="allCalibers" v-model="form.caliber_id" placeholder="Selecione o Calibre" />
                     <div v-if="errors.caliber_id" class="error-message">
                         Por favor, o calibre.
                     </div>
@@ -58,10 +54,44 @@
 
             </ModalComponent>
             <NewModalComponent :isOpen="isOpenEditModal" @update:is-open="closeEditModal">
+
                 <div class="mb-3">
-                    <LabelComponent text="Nome" />
-                    <InputComponent type="text" placeholder="Nome" v-model="form.name" :validation="true"
-                        :error="errors.name" :error-message="'Porfavor, insira o tipo'" @input="errors.name = false" />
+                    <LabelComponent text="Sigma" />
+                    <InputComponent type="text" placeholder="Sigma" v-model="form.number_sigma" :validation="true"
+                        :error="errors.number_sigma" :error-message="'Por favor, o sigma da arma.'"
+                        @input="errors.number_sigma = false" />
+                </div>
+
+                <div class="mb-3">
+                    <LabelComponent text="Origem" />
+                    <SelectComponent :options="origin" v-model="form.origin" placeholder="Selecione a Origem" />
+                    <div v-if="errors.origin" class="error-message">
+                        Por favor, a origem.
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <LabelComponent text="Tipo" />
+                    <SelectComponent :options="allTypes" v-model="form.type_id" placeholder="Selecione o Tipo" />
+                    <div v-if="errors.caliber_id" class="error-message">
+                        Por favor, o calibre.
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <LabelComponent text="Modelo" />
+                    <SelectComponent :options="allModels" v-model="form.model_id" placeholder="Selecione o Modelo" />
+                    <div v-if="errors.caliber_id" class="error-message">
+                        Por favor, o calibre.
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <LabelComponent text="Calibre" />
+                    <SelectComponent :options="allCalibers" v-model="form.caliber_id" placeholder="Selecione o Calibre" />
+                    <div v-if="errors.caliber_id" class="error-message">
+                        Por favor, o calibre.
+                    </div>
                 </div>
 
                 <div class="text-center">
@@ -70,7 +100,7 @@
             </NewModalComponent>
 
             <ModalConfirmationComponent :isOpen="isOpenDeleteModal" :closeDeleteModal="closeDeleteModal"
-                :confirmRemove="removeType" text="Tem certeza que deseja excluir este tipo?" />
+                :confirmRemove="removeWeapon" text="Tem certeza que deseja excluir este tipo?" />
 
         </div>
     </div>
@@ -156,8 +186,12 @@ const fetchPage = async (label: string) => {
 
         dataTable.value = weapons.value.data.map((item: { id: any; name: any; }) => {
             return ({
-                id: item.id,
-                'Número do sigma': newWeapon.number_sigma
+                'Número do sigma': item.number_sigma,
+                'Origem': item.origin,
+                'Calibre': item.caliber_id,
+                'Modelo': item.model_id,
+                'Tipo': item.type_id,
+                allData: item
             })
         });
     } catch (error) {
@@ -169,7 +203,7 @@ const actions: Action[] = [
     {
         name: 'edit',
         action: (item: any) => {
-            showDataType(item);
+            showDataWeapon(item);
         },
         icon: 'edit',
         class: 'light blue',
@@ -187,7 +221,7 @@ const actions: Action[] = [
 onMounted(async () => {
     try {
         //Pega os dados do clube (calibres, modelos e tipos de armas)
-        const clubResponse = await clubStore.show(clubSlug);
+        await clubStore.show(clubSlug);
         club.value = clubStore.getClub;
 
         //Prepara os dados do calibres para o select
@@ -204,8 +238,12 @@ onMounted(async () => {
 
         dataTable.value = weapons.value.data.map((item: any) => {
             return {
-                id: item.id,
-                'Número do sigma': item.number_sigma
+                'Número do sigma': item.number_sigma,
+                'Origem': item.origin,
+                'Calibre': item.caliber.name,
+                'Modelo': item.model.name,
+                'Tipo': item.type.name,
+                allData: item
             };
         });
     } catch (error) {
@@ -268,17 +306,30 @@ const closeEditModal = () => {
 }
 
 //Função para mostrar os dados do tipo no modal de edição
-const showDataType = (item: any) => {
+const showDataWeapon = (item: any) => {
     form.id = item['id'],
-        form.name = item['Nome'],
+    form.number_sigma = item['number_sigma'],
+    form.origin = item['origin'],
+    form.caliber_id = item['caliber_id'],
+    form.model_id = item['model_id'],
+    form.type_id = item['type_id']
 
-        isOpenEditModal.value = true;
+    isOpenEditModal.value = true;
 }
 
 //Função para limpar o modal editar
 const clearForm = () => {
-    form.name = '';
-    errors.name = false;
+    form.number_sigma = '',
+    form.origin = '',
+    form.caliber_id = '',
+    form.model_id = '',
+    form.type_id = ''
+
+    errors.number_sigma = false;
+    errors.origin = false;
+    errors.caliber_id = false;
+    errors.model_id = false;
+    errors.type_id = false;
 }
 
 //Função para atualizar o tipo da Arma
@@ -286,23 +337,30 @@ const update = async () => {
     if (validateForm()) {
         // eslint-disable-next-line no-useless-catch
         try {
-            const updateWeaponType: any = await weaponStore.updateWeaponType(clubSlug, form);
+            const updateWeapon: any = await weaponStore.updateWeapon(form);
 
             //Fechar o modal
             closeEditModal();
-
-            let weaponType = {
-                id: updateWeaponType.id,
-                'Nome': updateWeaponType.name
+            
+            let weapon = {
+                'Número do sigma': updateWeapon.number_sigma,
+                'Origem': updateWeapon.origin,
+                'Calibre': updateWeapon.caliber.name,
+                'Modelo': updateWeapon.model.name,
+                'Tipo': updateWeapon.type.name,
+                allData: updateWeapon
             }
 
-            if (weaponType) {
-                const index = dataTable.value.findIndex((item) => item.id == updateWeaponType.id)
+            if (weapon) {
+                const index = dataTable.value.findIndex((item) => item.allData.id == updateWeapon.id)
 
                 if (index !== -1) {
-                    dataTable.value[index] = weaponType;
+                    dataTable.value[index] = weapon;
                 }
             }
+
+            //Limpar o modal
+            clearForm();
 
         } catch (error) {
             throw error;
@@ -326,8 +384,12 @@ const searchSubmit = async (event: any) => {
         weapons.value = weaponStore.getWeapons;
         dataTable.value = weapons.value.data.map((item: any) => {
             return {
-                id: item.id,
-                'Número do sigma': item.number_sigma
+                'Número do sigma': item.number_sigma,
+                'Origem': item.origin,
+                'Calibre': item.caliber.name,
+                'Modelo': item.model.name,
+                'Tipo': item.type.name,
+                allData: item
             }
         })
     } catch (error) {
@@ -355,10 +417,10 @@ const closeDeleteModal = () => {
     isOpenDeleteModal.value = false;
 }
 
-const removeType = async () => {
+const removeWeapon = async () => {
     let itemId = itemToDelete.value;
     await weaponStore.deleteWeapon(clubSlug, itemId);
-    const index = dataTable.value.findIndex((item: any) => item.id === itemId);
+    const index = dataTable.value.findIndex((item: any) => item.allData.id === itemId);
     if (index !== -1) {
         dataTable.value.splice(index, 1);
     }
@@ -366,6 +428,17 @@ const removeType = async () => {
     //fechar o modal de confirmação
     closeDeleteModal();
 }
+
+const origin = [
+    {
+        value: 'Armamento do clube',
+        text: 'Armamento do Clube'
+    },
+    {
+        value: 'Armamento do instrutor',
+        text: 'Armamento do Instrutor'
+    }
+]
 
 const allCalibers = ref([]);
 const allModels = ref([]);

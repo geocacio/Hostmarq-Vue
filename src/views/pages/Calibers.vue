@@ -145,10 +145,9 @@ const fetchPage = async (label: string) => {
 
         dataTable.value = calibers.value.data.map((item: any) => {
             return {
-                id: item.id,
                 'Nome': item.name,
                 'Tipo': item.type,
-                slug: item.slug,
+                allData: item
             }
         })
 
@@ -185,10 +184,9 @@ onMounted(async () => {
 
         dataTable.value = calibers.value.data.map((item: any) => {
             return {
-                id: item.id,
                 'Nome': item.name,
                 'Tipo': item.type,
-                slug: item.slug,
+                allData: item
             }
         })
     } catch (error) {
@@ -246,8 +244,8 @@ const closeEditModal = () => {
 //função para mostrar os dados do calibre no modal de edição
 const showdataCaliber = (item: any) => {
     form.id = item['id'];
-    form.name = item['Nome'];
-    form.type = item['Tipo'];
+    form.name = item['name'];
+    form.type = item['type'];
     form.slug = item['slug'];
 
     //abrindo o modal de edição
@@ -269,19 +267,21 @@ const update = async () => {
             const updatedCaliber: any = await caliberStore.updateCaliber(clubSlug, form);
             //fechar o modal de edição
             closeEditModal();
+            console.log(updatedCaliber);
 
             let caliber = {
-                id: updatedCaliber.id,
                 'Nome': updatedCaliber.name,
                 'Tipo': updatedCaliber.type,
-                slug: updatedCaliber.slug
+                allData: updatedCaliber
             }
 
             if (caliber) {
 
-                const index = dataTable.value.findIndex((item: any) => item.slug === updatedCaliber.slug);
+                const index = dataTable.value.findIndex((item: any) => item.allData.slug === updatedCaliber.slug);
+                
                 if (index !== -1) {
                     dataTable.value[index] = caliber;
+                    console.log('data deóis: ',dataTable.value[index])
                 }
 
                 //limpar o formulário
@@ -308,10 +308,9 @@ const searchSubmit = async (event: any) => {
 
         dataTable.value = calibers.value.data.map((item: any) => {
             return {
-                id: item.id,
                 'Nome': item.name,
                 'Tipo': item.type,
-                slug: item.slug,
+                allData: item
             }
         })
     } catch (error) {

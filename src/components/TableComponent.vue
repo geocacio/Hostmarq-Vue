@@ -5,7 +5,9 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th v-for="(value, key) in items[0]" :key="key">{{ key }}</th>
+                        <template v-for="(value, key) in items[0]" :key="key">
+                            <th v-if="key != 'allData'">{{ key }}</th>
+                        </template>
 
                         <th v-if="actions && actions.length > 0">Ações</th>
                         
@@ -13,8 +15,10 @@
                 </thead>
                 <tbody>
                     <tr v-for="(item, index) in items" :key="index">
-
-                        <td v-for="(value, key) in item" :key="key">{{ value }}</td>
+                        
+                        <template v-for="(value, key) in item" :key="key">
+                            <td v-if="key != 'allData'">{{ value }}</td>
+                        </template>
 
                         <td class="td-actions" v-if="actions && actions.length > 0">
                             <ButtonComponent 
@@ -22,7 +26,7 @@
                                 :key="key" 
                                 :buttonClass="action.class" 
                                 :icon="action.icon" 
-                                @click="action.action(item)" 
+                                @click="action.action(item.allData)" 
                             />
                         </td>
 
