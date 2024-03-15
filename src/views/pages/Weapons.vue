@@ -100,7 +100,7 @@
             </NewModalComponent>
 
             <ModalConfirmationComponent :isOpen="isOpenDeleteModal" :closeDeleteModal="closeDeleteModal"
-                :confirmRemove="removeWeapon" text="Tem certeza que deseja excluir este tipo?" />
+                :confirmRemove="removeWeapon" text="Tem certeza que deseja excluir esta arma?" />
 
         </div>
     </div>
@@ -153,7 +153,7 @@ interface dataTable {
 const dataTable = ref<dataTable[]>([]);
 
 interface Form {
-    id?: number | string;
+    id?: number | string,
     user_id?: number | string,
     number_sigma: string;
     origin: string,
@@ -163,6 +163,7 @@ interface Form {
 }
 
 const form = reactive<Form>({
+    id: '',
     number_sigma: '',
     origin: '',
     caliber_id: '',
@@ -277,10 +278,14 @@ const submit = async () => {
             const newWeapon: any = await weaponStore.createWeapon(clubSlug, form);
             document.getElementById('closeModal-new-user')?.click();
             const weapon = {
-                id: newWeapon.id,
-                'Número do sigma': newWeapon.number_sigma
+                'Número do sigma': newWeapon.number_sigma,
+                'Origem': newWeapon.origin,
+                'Calibre': newWeapon.caliber.name,
+                'Modelo': newWeapon.model.name,
+                'Tipo': newWeapon.type.name,
+                allData: newWeapon
             }
-
+            
             if (weapon) {
                 dataTable.value.push(weapon);
 
