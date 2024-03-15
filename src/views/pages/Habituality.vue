@@ -10,34 +10,63 @@
             <ModalComponent id="new-user" buttonText="Novo">
 
                 <div class="mb-3">
-                    <LabelComponent text="Origem" />
-                    <SelectComponent :options="origin" v-model="form.origin" placeholder="Selecione a Origem" />
+                    <LabelComponent text="Data e hora" />
+                    <InputComponent type="text" placeholder="Data e hora" v-model="form.date_time" />
+                    <div v-if="errors.date_time" class="error-message">
+                        Por favor, Insira uma data e hora.
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <LabelComponent text="Local" />
+                    <SelectComponent :options="allLocations" v-model="form.location_id" placeholder="Selecione um local" />
+                    <div v-if="errors.location_id" class="error-message">
+                        Por favor, Selecione um local.
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <LabelComponent text="Evento" />
+                    <SelectComponent :options="allEvents" v-model="form.event_id" placeholder="Selecione um evento" />
+                    <div v-if="errors.event_id" class="error-message">
+                        Por favor, Selecione um evento.
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <LabelComponent text="Origem da arma" />
+                    <SelectComponent :options="origin" placeholder="Selecione a origem da Arma" />
+                </div>
+
+                <div class="mb-3">
+                    <LabelComponent text="Arma" />
+                    <SelectComponent :options="allCalibers" v-model="form.weapon_id" placeholder="Selecione uma arma" />
+                    <div v-if="errors.weapon_id" class="error-message">
+                        Por favor, Selecione uma arma.
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <LabelComponent text="Quantidade" />
+                    <InputComponent type="number" placeholder="Quantidade de tiros" v-model="form.quantity" />
+                    <div v-if="errors.quantity" class="error-message">
+                        Por favor, Insira a quantidade de tiros.
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <LabelComponent text="Origem da munição" />
+                    <SelectComponent :options="originOfAmmunition" v-model="form.origin" placeholder="Origem da munição" />
                     <div v-if="errors.origin" class="error-message">
-                        Por favor, a origem.
+                        Por favor, Selecione a Origem da munição.
                     </div>
                 </div>
 
                 <div class="mb-3">
-                    <LabelComponent text="Tipo" />
-                    <SelectComponent :options="allTypes" v-model="form.type_id" placeholder="Selecione o Tipo" />
-                    <div v-if="errors.caliber_id" class="error-message">
-                        Por favor, o calibre.
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <LabelComponent text="Modelo" />
-                    <SelectComponent :options="allModels" v-model="form.model_id" placeholder="Selecione o Modelo" />
-                    <div v-if="errors.caliber_id" class="error-message">
-                        Por favor, o calibre.
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <LabelComponent text="Calibre" />
-                    <SelectComponent :options="allCalibers" v-model="form.caliber_id" placeholder="Selecione o Calibre" />
-                    <div v-if="errors.caliber_id" class="error-message">
-                        Por favor, o calibre.
+                    <LabelComponent text="Tipo de Munição" />
+                    <SelectComponent :options="typeAmmunition" v-model="form.type" placeholder="Tipo de Munição" />
+                    <div v-if="errors.type" class="error-message">
+                        Por favor, Selecione o Tipo de Munição.
                     </div>
                 </div>
 
@@ -138,6 +167,12 @@ const habitualities = ref([]);
 const clubStore = useClubStore();
 const club = ref([]);
 
+//armas do club
+const clubWeapons = ref([]);
+
+//armas do usuário
+const userWeapons = ref([]);
+
 
 interface dataTable {
     id: number | string;
@@ -155,8 +190,8 @@ const dataTable = ref<dataTable[]>([]);
 interface Form {
     id?: number | string;
     weapon_id: number | string,
-    data_time: string;
-    event_id: string,
+    date_time: string;
+    event_id: string | number,
     location_id: number | string,
     quantity: number | string,
     origin: string,
@@ -164,13 +199,13 @@ interface Form {
 }
 
 const form = reactive<Form>({
-    weapon_id: '',
-    data_time: '',
+    weapon_id: 3,
+    date_time: "2022-03-01T14:30:00",
     event_id: '',
     location_id: '',
-    quantity: '',
-    origin: '',
-    type: '',
+    quantity: 10,
+    origin: "Clube",
+    type: "Original"
 });
 
 const hasData = () => dataTable.value.length > 0;
@@ -227,25 +262,25 @@ onMounted(async () => {
         await clubStore.show(clubSlug);
         club.value = clubStore.getClub;
 
-        //Prepara os dados do calibres para o select
-        // allCalibers.value = getWeaponToSelectList();
-        // console.log(allCalibers.value);
+        //Peprar os dados dos eventos para o select
+        allEvents.value = allEventsToSelectList();
 
-        //prepara os dados dos modelos para o select
-        // allModels.value = getModelsToSelectList();
+        //Prepara os dados dos locais para o select
+        allLocations.value = allLocationsToSelectList();
 
-        //prepara os dados dos tipos de armas para o select
-        // allTypes.value = getTypesToSelectList();
+
         await habitualityStore.fetchHabitualities(clubSlug);
         habitualities.value = habitualityStore.getHabitualities;
+        console.log(habitualities.value.data);
         
         dataTable.value = habitualities.value.data.map((item: any) => {
             return {
-                'Arma': item.allData.weapon_id,
+                'Data e hora': item.date_time,
+                'Evento': item.event.name,
+                'Local': item.location.name,
+                'Quantidade': item.quantity,
                 'Origem': item.origin,
-                'Calibre': item.caliber.name,
-                'Modelo': item.model.name,
-                'Tipo': item.type.name,
+                'Tipo': item.type,
                 allData: item
             };
         });
@@ -273,19 +308,19 @@ const validateForm = () => {
 };
 
 const submit = async () => {
-
-    if (validateForm()) {
-
+    console.log('passou pela função submit')
+    // if (validateForm()) {
+        console.log('passou pela validação')
         try {
-            const newWeapon: any = await weaponStore.createWeapon(clubSlug, form);
+            const newHabituality: any = await habitualityStore.creatingHabituality(clubSlug, form);
             document.getElementById('closeModal-new-user')?.click();
-            const weapon = {
-                id: newWeapon.id,
-                'Número do sigma': newWeapon.number_sigma
+            const habituality = {
+                'Data e hora': newHabituality.date_time,
+                allData: newHabituality
             }
 
-            if (weapon) {
-                dataTable.value.push(weapon);
+            if (habituality) {
+                dataTable.value.push(habituality);
 
                 clearForm();
             }
@@ -293,7 +328,7 @@ const submit = async () => {
         } catch (error) {
             console.error(error);
         }
-    }
+    // }
 
 };
 
@@ -443,15 +478,34 @@ const origin = [
     }
 ]
 
-const allCalibers = ref([]);
-const allModels = ref([]);
-const allTypes = ref([]);
+const allEvents = ref([]);
+const allLocations = ref([]);
+const originOfAmmunition = [
+    {
+        value: 'clube',
+        text: 'Clube'
+    },
+    {
+        value: 'Atirador',
+        text: 'Atirador'
+    }
 
-// const getWeaponToSelectList = () => club.value.weapon.map((item: any) => ({ text: item.name, value: item.id }));
+];
 
-// const getModelsToSelectList = () => club.value.weapon.map((item: any) => ({ text: item.name, value: item.id }));
+const typeAmmunition = [
+    {
+        value: 'Original',
+        text: 'Original'
+    },
+    {
+        value: 'Recarregada',
+        text: 'Recarregada'
+    }
+]
 
-// const getTypesToSelectList = () => club.value.weapon_types.map((item: any) => ({ text: item.name, value: item.id }));
+const allEventsToSelectList = () => club.value.events.map((item: any) => ({ text: item.name, value: item.id }));
+
+const allLocationsToSelectList = () => club.value.locations.map((item: any) => ({ text: item.name, value: item.id }));
 
 </script>
 
